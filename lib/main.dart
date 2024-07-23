@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final PageController _pageController = PageController();
 
   void _onItemTapped(int index) {
-    _pageController.jumpToPage(index); // ページを即座にジャンプ
+    _pageController.jumpToPage(index);
   }
 
   @override
@@ -51,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         toolbarHeight: 60,
+        elevation: 4,
         title: Image.asset(
           'assets/title.webp',
           height: 28,

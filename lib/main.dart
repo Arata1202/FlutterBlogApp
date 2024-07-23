@@ -30,60 +30,91 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int selectedIndex = 0;
+  final PageController _pageController = PageController();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _onItemTapped(int index) {
+    _pageController.jumpToPage(index); // ページを即座にジャンプ
   }
 
-  // フッター関連
-  int selectedIndex = 0;
-  // List<Widget> display = [main(), Notice(), MyPage()];
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // ヘッダー
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.transparent,
-          toolbarHeight: 60,
-          title: Image.asset(
-            'assets/title.webp',
-            height: 28,
-          ),
+      // ヘッダー
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 60,
+        title: Image.asset(
+          'assets/title.webp',
+          height: 28,
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ],
-          ),
-        ),
-        // フッター
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: '検索'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'メニュー'),
-          ],
-          currentIndex: selectedIndex,
-          elevation: 4,
-          backgroundColor: Colors.white,
-          onTap: (int index) {
+      ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
             selectedIndex = index;
-            setState(() {});
-          },
-          fixedColor: Colors.blue,
-        ));
+          });
+        },
+        children: const <Widget>[
+          HomeTab(),
+          SearchTab(),
+          MenuTab(),
+        ],
+      ),
+      // フッター
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: '検索'),
+          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'メニュー'),
+        ],
+        currentIndex: selectedIndex,
+        elevation: 4,
+        backgroundColor: Colors.white,
+        onTap: _onItemTapped,
+        fixedColor: Colors.blue,
+      ),
+    );
+  }
+}
+
+class HomeTab extends StatelessWidget {
+  const HomeTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Home Page'),
+    );
+  }
+}
+
+class SearchTab extends StatelessWidget {
+  const SearchTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Search Page'),
+    );
+  }
+}
+
+class MenuTab extends StatelessWidget {
+  const MenuTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Menu Page'),
+    );
   }
 }

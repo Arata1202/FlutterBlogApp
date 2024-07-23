@@ -38,32 +38,52 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // フッター関連
+  int selectedIndex = 0;
+  // List<Widget> display = [main(), Notice(), MyPage()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 76,
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
+        // ヘッダー
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
+          toolbarHeight: 60,
+          title: Image.asset(
+            'assets/title.webp',
+            height: 28,
+          ),
         ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ],
+          ),
+        ),
+        // フッター
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: '検索'),
+            BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'メニュー'),
           ],
-        ),
-      ),
-    );
+          currentIndex: selectedIndex,
+          elevation: 4,
+          backgroundColor: Colors.white,
+          onTap: (int index) {
+            selectedIndex = index;
+            setState(() {});
+          },
+          fixedColor: Colors.blue,
+        ));
   }
 }

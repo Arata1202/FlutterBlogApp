@@ -7,7 +7,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://webviewblogapp.netlify.app'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app'));
     return DefaultTabController(
       initialIndex: 0, // 最初に表示するタブ
       length: 8, // タブの数
@@ -52,7 +52,7 @@ class NewPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://webviewblogapp.netlify.app'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app'));
     return MaterialApp(
       home: WebViewWidget(controller: controller),
     );
@@ -65,8 +65,8 @@ class ProgrammingPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
-      ..loadRequest(
-          Uri.parse('https://webviewblogapp.netlify.app/category/programming'));
+      ..loadRequest(Uri.parse(
+          'https://web-view-blog-app.vercel.app/category/programming'));
     return MaterialApp(
       home: WebViewWidget(controller: controller),
     );
@@ -79,8 +79,8 @@ class UniversityPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
-      ..loadRequest(
-          Uri.parse('https://webviewblogapp.netlify.app/category/university'));
+      ..loadRequest(Uri.parse(
+          'https://web-view-blog-app.vercel.app/category/university'));
     return MaterialApp(
       home: WebViewWidget(controller: controller),
     );
@@ -94,7 +94,7 @@ class TravelPostTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..loadRequest(
-          Uri.parse('https://webviewblogapp.netlify.app/category/travel'));
+          Uri.parse('https://web-view-blog-app.vercel.app/category/travel'));
     return MaterialApp(
       home: WebViewWidget(controller: controller),
     );
@@ -108,7 +108,7 @@ class BlogPostTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..loadRequest(
-          Uri.parse('https://webviewblogapp.netlify.app/category/blog'));
+          Uri.parse('https://web-view-blog-app.vercel.app/category/blog'));
     return MaterialApp(
       home: WebViewWidget(controller: controller),
     );

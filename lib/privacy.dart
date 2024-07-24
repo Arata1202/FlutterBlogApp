@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class Privacy extends StatelessWidget {
+  const Privacy({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/profile'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/privacy'));
     return Scaffold(
       appBar: AppBar(
-        title: const Text('筆者について'),
+        title: const Text('プライバシーポリシー'),
       ),
       body: WebViewWidget(controller: controller),
     );

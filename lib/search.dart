@@ -8,6 +8,7 @@ class Search extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('検索'),
+        surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.white,
         elevation: 4,
       ),

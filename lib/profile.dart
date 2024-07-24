@@ -10,6 +10,8 @@ class Profile extends StatelessWidget {
       ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/profile'));
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
         title: const Text('筆者について'),
       ),
       body: WebViewWidget(controller: controller),

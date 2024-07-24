@@ -7,6 +7,8 @@ class Notice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
         title: const Text('筆者について'),
       ),
       body: const Center(

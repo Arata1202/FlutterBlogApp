@@ -10,6 +10,8 @@ class Privacy extends StatelessWidget {
       ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/privacy'));
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
         title: const Text('プライバシーポリシー'),
       ),
       body: WebViewWidget(controller: controller),

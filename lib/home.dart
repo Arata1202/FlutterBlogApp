@@ -6,11 +6,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app'));
     return DefaultTabController(
-      initialIndex: 0, // 最初に表示するタブ
-      length: 8, // タブの数
+      initialIndex: 0,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -22,7 +20,7 @@ class Home extends StatelessWidget {
             height: 28,
           ),
           bottom: const TabBar(
-            isScrollable: true, // スクロールを有効化
+            isScrollable: true,
             tabs: <Widget>[
               Tab(text: '最新記事'),
               Tab(text: 'プログラミング'),
@@ -51,11 +49,7 @@ class NewPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app'));
-    return MaterialApp(
-      home: WebViewWidget(controller: controller),
-    );
+    return WebViewTab(url: 'https://web-view-blog-app.vercel.app');
   }
 }
 
@@ -64,12 +58,8 @@ class ProgrammingPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(Uri.parse(
-          'https://web-view-blog-app.vercel.app/category/programming'));
-    return MaterialApp(
-      home: WebViewWidget(controller: controller),
-    );
+    return WebViewTab(
+        url: 'https://web-view-blog-app.vercel.app/category/programming');
   }
 }
 
@@ -78,12 +68,8 @@ class UniversityPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(Uri.parse(
-          'https://web-view-blog-app.vercel.app/category/university'));
-    return MaterialApp(
-      home: WebViewWidget(controller: controller),
-    );
+    return WebViewTab(
+        url: 'https://web-view-blog-app.vercel.app/category/university');
   }
 }
 
@@ -92,12 +78,8 @@ class TravelPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(
-          Uri.parse('https://web-view-blog-app.vercel.app/category/travel'));
-    return MaterialApp(
-      home: WebViewWidget(controller: controller),
-    );
+    return WebViewTab(
+        url: 'https://web-view-blog-app.vercel.app/category/travel');
   }
 }
 
@@ -106,11 +88,82 @@ class BlogPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(
-          Uri.parse('https://web-view-blog-app.vercel.app/category/blog'));
+    return WebViewTab(
+        url: 'https://web-view-blog-app.vercel.app/category/blog');
+  }
+}
+
+class WebViewTab extends StatelessWidget {
+  final String url;
+
+  const WebViewTab({super.key, required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = WebViewController();
+    controller.setNavigationDelegate(
+      NavigationDelegate(
+        onNavigationRequest: (NavigationRequest request) {
+          if (request.url.contains('/article')) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ArticlePage(url: request.url),
+              ),
+            );
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        },
+      ),
+    );
+    controller.loadRequest(Uri.parse(url));
+
+    return WebViewWidget(controller: controller);
+  }
+}
+
+class ArticlePage extends StatelessWidget {
+  final String url;
+
+  const ArticlePage({super.key, required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = WebViewController();
+    controller.loadRequest(Uri.parse(url));
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 60,
+        elevation: 4,
+        title: Image.asset(
+          'assets/title.webp',
+          height: 28,
+        ),
+      ),
+      body: WebViewWidget(controller: controller),
+    );
+  }
+}
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
-      home: WebViewWidget(controller: controller),
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const Home(),
     );
   }
 }

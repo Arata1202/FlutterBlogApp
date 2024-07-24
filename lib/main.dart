@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'search.dart';
+import 'menu.dart';
+import 'home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,15 +19,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -47,17 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ヘッダー
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 60,
-        elevation: 4,
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
-      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -66,12 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         children: const <Widget>[
-          HomeTab(),
-          SearchTab(),
-          MenuTab(),
+          Home(),
+          Search(),
+          Menu(),
         ],
       ),
-      // フッター
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),
@@ -84,41 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
         fixedColor: Colors.blue,
       ),
-    );
-  }
-}
-
-class HomeTab extends StatelessWidget {
-  const HomeTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://realunivlog.com'));
-    return MaterialApp(
-      home: WebViewWidget(controller: controller),
-    );
-  }
-}
-
-class SearchTab extends StatelessWidget {
-  const SearchTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Search Page'),
-    );
-  }
-}
-
-class MenuTab extends StatelessWidget {
-  const MenuTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Menu Page'),
     );
   }
 }

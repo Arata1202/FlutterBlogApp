@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int _currentIndex = 0;
+
+  final List<Widget> _tabs = [
+    const NewPostTab(),
+    const ProgrammingPostTab(),
+    const UniversityPostTab(),
+    const TravelPostTab(),
+    const BlogPostTab(),
+  ];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,25 +40,21 @@ class Home extends StatelessWidget {
             'assets/title.webp',
             height: 28,
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             isScrollable: true,
-            tabs: <Widget>[
+            tabs: const <Widget>[
               Tab(text: '最新記事'),
               Tab(text: 'プログラミング'),
               Tab(text: '大学生活'),
               Tab(text: '旅行'),
               Tab(text: 'ブログ'),
             ],
+            onTap: _onTabTapped,
           ),
         ),
-        body: const TabBarView(
-          children: <Widget>[
-            NewPostTab(),
-            ProgrammingPostTab(),
-            UniversityPostTab(),
-            TravelPostTab(),
-            BlogPostTab(),
-          ],
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _tabs,
         ),
       ),
     );
@@ -49,7 +66,7 @@ class NewPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewTab(url: 'https://web-view-blog-app.vercel.app');
+    return const WebViewTab(url: 'https://web-view-blog-app.vercel.app');
   }
 }
 
@@ -58,7 +75,7 @@ class ProgrammingPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewTab(
+    return const WebViewTab(
         url: 'https://web-view-blog-app.vercel.app/category/programming');
   }
 }
@@ -68,7 +85,7 @@ class UniversityPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewTab(
+    return const WebViewTab(
         url: 'https://web-view-blog-app.vercel.app/category/university');
   }
 }
@@ -78,7 +95,7 @@ class TravelPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewTab(
+    return const WebViewTab(
         url: 'https://web-view-blog-app.vercel.app/category/travel');
   }
 }
@@ -88,7 +105,7 @@ class BlogPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewTab(
+    return const WebViewTab(
         url: 'https://web-view-blog-app.vercel.app/category/blog');
   }
 }
@@ -100,24 +117,25 @@ class WebViewTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController();
-    controller.setNavigationDelegate(
-      NavigationDelegate(
-        onNavigationRequest: (NavigationRequest request) {
-          if (request.url.contains('/article')) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ArticlePage(url: request.url),
-              ),
-            );
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
-      ),
-    );
-    controller.loadRequest(Uri.parse(url));
+    final controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.contains('/article')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ArticlePage(url: request.url),
+                ),
+              );
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(url));
 
     return WebViewWidget(controller: controller);
   }
@@ -130,8 +148,9 @@ class ArticlePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = WebViewController();
-    controller.loadRequest(Uri.parse(url));
+    final controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(url));
 
     return Scaffold(
       appBar: AppBar(

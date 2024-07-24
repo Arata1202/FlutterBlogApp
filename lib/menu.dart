@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'profile.dart';
+import 'notice.dart';
+import 'privacy.dart';
 
 class Menu extends StatelessWidget {
   const Menu({super.key});
@@ -18,16 +21,25 @@ class Menu extends StatelessWidget {
           child: ListView(
             children: [
               _menuItem("筆者について", const Icon(Icons.person), () {
-                // Handle the tap event for "筆者について"
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
+                );
               }),
               _menuItem("プッシュ通知設定", const Icon(Icons.notifications), () {
-                // Handle the tap event for "プッシュ通知設定"
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Notice()),
+                );
               }),
               _menuItem("お問い合わせ", const Icon(Icons.email), () {
                 _launchMailApp();
               }),
               _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
-                // Handle the tap event for "プライバシーポリシー"
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Privacy()),
+                );
               }),
             ],
           ),

@@ -36,14 +36,12 @@ class Sns extends StatelessWidget {
         child: ListView(
           children: [
             _menuItem("X", const FaIcon(FontAwesomeIcons.twitter), () {
-              _launchURL('twitter://user?screen_name=Aokumoblog',
-                  'https://x.com/Aokumoblog');
+              _launchURL('https://x.com/Aokumoblog');
             }),
             _divider(),
             _menuItem("Instagram", const FaIcon(FontAwesomeIcons.instagram),
                 () {
-              _launchURL('instagram://user?username=ao_realstudent',
-                  'https://www.instagram.com/ao_realstudent/?hl=ja');
+              _launchURL('https://www.instagram.com/ao_realstudent/?hl=ja');
             }),
             _divider(),
           ],
@@ -88,15 +86,11 @@ class Sns extends StatelessWidget {
     );
   }
 
-  void _launchURL(String appUrl, String webUrl) async {
-    if (await canLaunch(appUrl)) {
-      await launch(appUrl);
+  void _launchURL(String webUrl) async {
+    if (await canLaunch(webUrl)) {
+      await launch(webUrl, forceSafariVC: false);
     } else {
-      if (await canLaunch(webUrl)) {
-        await launch(webUrl);
-      } else {
-        print('Could not launch $webUrl');
-      }
+      print('Could not launch $webUrl');
     }
   }
 }

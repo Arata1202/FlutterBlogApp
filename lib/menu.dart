@@ -45,22 +45,23 @@ class Menu extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const Profile()),
               );
             }),
-            _menuItem("筆者のSNS", const Icon(Icons.person), () {
+            _divider(),
+            _menuItem("筆者のSNS", const Icon(Icons.public), () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Sns()),
               );
             }),
             _divider(),
-            _menuItem("プッシュ通知設定", const Icon(Icons.notifications), () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Notice()),
-              );
-            }),
-            _divider(),
-            _menuItem("お問い合わせ", const Icon(Icons.email), () {
-              _launchMailApp();
+            // _menuItem("プッシュ通知設定", const Icon(Icons.notifications), () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => const Notice()),
+            //   );
+            // }),
+            // _divider(),
+            _menuItem("アプリをシェア", const Icon(Icons.share), () {
+              _shareApp();
             }),
             _divider(),
             _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
@@ -70,9 +71,10 @@ class Menu extends StatelessWidget {
               );
             }),
             _divider(),
-            _menuItem("アプリをシェア", const Icon(Icons.share), () {
-              _shareApp();
+            _menuItem("お問い合わせ", const Icon(Icons.email), () {
+              _launchMailApp();
             }),
+            _divider(),
           ],
         ),
       ),

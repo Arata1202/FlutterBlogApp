@@ -7,7 +7,7 @@ class Privacy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/privacy'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/privacy'));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

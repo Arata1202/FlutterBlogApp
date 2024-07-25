@@ -69,7 +69,7 @@ class NewPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const WebViewTab(url: 'https://web-view-blog-app.vercel.app');
+    return const WebViewTab(url: 'https://web-view-blog-app.netlify.app');
   }
 }
 
@@ -79,7 +79,7 @@ class ProgrammingPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/programming');
+        url: 'https://web-view-blog-app.netlify.app/category/programming');
   }
 }
 
@@ -89,7 +89,7 @@ class UniversityPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/university');
+        url: 'https://web-view-blog-app.netlify.app/category/university');
   }
 }
 
@@ -99,7 +99,7 @@ class TravelPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/travel');
+        url: 'https://web-view-blog-app.netlify.app/category/travel');
   }
 }
 
@@ -109,7 +109,7 @@ class BlogPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/blog');
+        url: 'https://web-view-blog-app.netlify.app/category/blog');
   }
 }
 
@@ -177,6 +177,7 @@ class ArticlePage extends StatelessWidget {
             // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
             if (request.url.contains('amazon.co.jp') ||
                 request.url.contains('rakuten.co.jp') ||
+                request.url.contains('google.com') ||
                 request.url.contains('yahoo.co.jp')) {
               if (await canLaunch(request.url)) {
                 await launch(request.url, forceSafariVC: false);

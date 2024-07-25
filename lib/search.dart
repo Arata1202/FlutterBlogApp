@@ -26,7 +26,7 @@ class Search extends StatelessWidget {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/keyword'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/keyword'));
 
     return Scaffold(
       appBar: AppBar(

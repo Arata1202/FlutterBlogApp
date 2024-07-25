@@ -7,7 +7,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
-      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/profile'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/profile'));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

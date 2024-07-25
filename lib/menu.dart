@@ -44,21 +44,25 @@ class Menu extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const Profile()),
               );
             }),
+            _divider(),
             _menuItem("プッシュ通知設定", const Icon(Icons.notifications), () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Notice()),
               );
             }),
+            _divider(),
             _menuItem("お問い合わせ", const Icon(Icons.email), () {
               _launchMailApp();
             }),
+            _divider(),
             _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Privacy()),
               );
             }),
+            _divider(),
             _menuItem("アプリをシェア", const Icon(Icons.share), () {
               _shareApp();
             }),
@@ -71,26 +75,36 @@ class Menu extends StatelessWidget {
   Widget _menuItem(String title, Icon icon, VoidCallback onTap) {
     return GestureDetector(
       child: Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: 1.0, color: Colors.white),
-          ),
-        ),
+        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 4.0),
         child: Row(
           children: <Widget>[
             Container(
-              margin: const EdgeInsets.all(10.0),
+              margin: const EdgeInsets.only(right: 10.0),
               child: icon,
             ),
-            Text(
-              title,
-              style: const TextStyle(color: Colors.black, fontSize: 18.0),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(color: Colors.black, fontSize: 15.0),
+              ),
             ),
+            const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20),
           ],
         ),
       ),
       onTap: onTap,
+    );
+  }
+
+  Widget _divider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: const Divider(
+        color: Colors.grey,
+        height: 1,
+        thickness: 0.5,
+      ),
     );
   }
 

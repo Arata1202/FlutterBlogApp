@@ -16,6 +16,20 @@ class Privacy extends StatelessWidget {
           'assets/title.webp',
           height: 28,
         ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(30.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: const Text(
+              'プライバシーポリシー',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
       ),
       body: WebViewWidget(controller: controller),
     );

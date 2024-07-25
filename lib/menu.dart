@@ -18,6 +18,20 @@ class Menu extends StatelessWidget {
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
           elevation: 4,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(30.0),
+            child: Container(
+              alignment: Alignment.center,
+              child: const Text(
+                'メニュー',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
         ),
         body: Container(
           color: Colors.white,

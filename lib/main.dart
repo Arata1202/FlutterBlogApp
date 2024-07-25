@@ -37,6 +37,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onItemTapped(int index) {
     _pageController.jumpToPage(index);
+    setState(() {
+      selectedIndex = index;
+    });
   }
 
   @override
@@ -50,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(), // 横スクロールを禁止
         onPageChanged: (index) {
           setState(() {
             selectedIndex = index;

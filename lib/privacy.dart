@@ -12,7 +12,10 @@ class Privacy extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
-        title: const Text('プライバシーポリシー'),
+        title: Image.asset(
+          'assets/title.webp',
+          height: 28,
+        ),
       ),
       body: WebViewWidget(controller: controller),
     );

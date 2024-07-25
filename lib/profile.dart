@@ -12,7 +12,10 @@ class Profile extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
-        title: const Text('筆者について'),
+        title: Image.asset(
+          'assets/title.webp',
+          height: 28,
+        ),
       ),
       body: WebViewWidget(controller: controller),
     );

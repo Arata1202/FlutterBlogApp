@@ -11,7 +11,10 @@ class Menu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('メニュー'),
+          title: Image.asset(
+            'assets/title.webp',
+            height: 28,
+          ),
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
           elevation: 4,

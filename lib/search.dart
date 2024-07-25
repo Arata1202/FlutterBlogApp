@@ -32,7 +32,10 @@ class Search extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
-        title: const Text('キーワードで探す'),
+        title: Image.asset(
+          'assets/title.webp',
+          height: 28,
+        ),
       ),
       body: WebViewWidget(controller: controller),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 import 'profile.dart';
 import 'notice.dart';
 import 'privacy.dart';
@@ -10,57 +11,61 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Image.asset(
-            'assets/title.webp',
-            height: 28,
-          ),
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.transparent,
-          elevation: 4,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(30.0),
-            child: Container(
-              alignment: Alignment.center,
-              child: const Text(
-                'メニュー',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+      appBar: AppBar(
+        title: Image.asset(
+          'assets/title.webp',
+          height: 28,
+        ),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        elevation: 4,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(40.0),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: const Text(
+              'メニュー',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
-        body: Container(
-          color: Colors.white,
-          child: ListView(
-            children: [
-              _menuItem("筆者について", const Icon(Icons.person), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profile()),
-                );
-              }),
-              _menuItem("プッシュ通知設定", const Icon(Icons.notifications), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Notice()),
-                );
-              }),
-              _menuItem("お問い合わせ", const Icon(Icons.email), () {
-                _launchMailApp();
-              }),
-              _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Privacy()),
-                );
-              }),
-            ],
-          ),
-        ));
+      ),
+      body: Container(
+        color: Colors.white,
+        child: ListView(
+          children: [
+            _menuItem("筆者について", const Icon(Icons.person), () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Profile()),
+              );
+            }),
+            _menuItem("プッシュ通知設定", const Icon(Icons.notifications), () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Notice()),
+              );
+            }),
+            _menuItem("お問い合わせ", const Icon(Icons.email), () {
+              _launchMailApp();
+            }),
+            _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Privacy()),
+              );
+            }),
+            _menuItem("アプリをシェア", const Icon(Icons.share), () {
+              _shareApp();
+            }),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _menuItem(String title, Icon icon, VoidCallback onTap) {
@@ -102,5 +107,12 @@ class Menu extends StatelessWidget {
     } else {
       print('Could not launch $url');
     }
+  }
+
+  void _shareApp() {
+    Share.share(
+      'Check out this awesome app: [App Link]',
+      subject: 'Awesome App',
+    );
   }
 }

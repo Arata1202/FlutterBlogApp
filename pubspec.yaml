@@ -58,6 +58,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/title.webp
+    - assets/icon-512x512.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

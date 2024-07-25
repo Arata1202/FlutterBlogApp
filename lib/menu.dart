@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import 'profile.dart';
 import 'notice.dart';
 import 'privacy.dart';
+import 'sns.dart';
 
 class Menu extends StatelessWidget {
   const Menu({super.key});
@@ -42,6 +43,12 @@ class Menu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Profile()),
+              );
+            }),
+            _menuItem("筆者のSNS", const Icon(Icons.person), () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Sns()),
               );
             }),
             _divider(),

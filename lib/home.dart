@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -123,7 +124,7 @@ class WebViewTab extends StatelessWidget {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) {
+          onNavigationRequest: (NavigationRequest request) async {
             if (request.url.contains('/article') && request.url != url) {
               Navigator.push(
                 context,
@@ -132,6 +133,15 @@ class WebViewTab extends StatelessWidget {
                 ),
               );
               return NavigationDecision.prevent;
+            }
+            // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
+            if (request.url.contains('amazon.co.jp') ||
+                request.url.contains('rakuten.co.jp') ||
+                request.url.contains('yahoo.co.jp')) {
+              if (await canLaunch(request.url)) {
+                await launch(request.url, forceSafariVC: false);
+                return NavigationDecision.prevent;
+              }
             }
             return NavigationDecision.navigate;
           },
@@ -154,7 +164,7 @@ class ArticlePage extends StatelessWidget {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) {
+          onNavigationRequest: (NavigationRequest request) async {
             if (request.url.contains('/article') && request.url != url) {
               Navigator.push(
                 context,
@@ -163,6 +173,15 @@ class ArticlePage extends StatelessWidget {
                 ),
               );
               return NavigationDecision.prevent;
+            }
+            // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
+            if (request.url.contains('amazon.co.jp') ||
+                request.url.contains('rakuten.co.jp') ||
+                request.url.contains('yahoo.co.jp')) {
+              if (await canLaunch(request.url)) {
+                await launch(request.url, forceSafariVC: false);
+                return NavigationDecision.prevent;
+              }
             }
             return NavigationDecision.navigate;
           },

@@ -41,6 +41,8 @@ class _HomeState extends State<Home> {
             height: 28,
           ),
           bottom: TabBar(
+            indicatorColor: Colors.blue,
+            labelColor: Colors.blue,
             isScrollable: true,
             tabs: const <Widget>[
               Tab(text: '最新記事'),
@@ -122,7 +124,7 @@ class WebViewTab extends StatelessWidget {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.contains('/article')) {
+            if (request.url.contains('/article') && request.url != url) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -150,6 +152,22 @@ class ArticlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.contains('/article') && request.url != url) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ArticlePage(url: request.url),
+                ),
+              );
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
       ..loadRequest(Uri.parse(url));
 
     return Scaffold(

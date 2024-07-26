@@ -51,10 +51,11 @@ class Sns extends StatelessWidget {
   }
 
   Widget _menuItem(String title, Widget icon, VoidCallback onTap) {
-    return GestureDetector(
+    return InkWell(
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16.0),
-        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 4.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 4.0),
         child: Row(
           children: <Widget>[
             Container(
@@ -71,7 +72,6 @@ class Sns extends StatelessWidget {
           ],
         ),
       ),
-      onTap: onTap,
     );
   }
 

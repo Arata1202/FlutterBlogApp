@@ -1,16 +1,15 @@
-# flutterblogapp
+## 最低限整った
 
-A new Flutter project.
+### ホームページ
+![1](https://github.com/user-attachments/assets/ccdfebaf-eddb-41fb-88ed-9894e65f1c27)
 
-## Getting Started
+### 検索ページ
+![2](https://github.com/user-attachments/assets/50214b24-17a5-426e-b888-1790971cf13d)
 
-This project is a starting point for a Flutter application.
+### オープニング・メニューページ
+![3](https://github.com/user-attachments/assets/a1344fef-c9c5-4c09-9bc9-eb2b4d08a42f)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 今後
+- AdMobの設置
+- プッシュ通知追加
+- 記事内シェアボタン

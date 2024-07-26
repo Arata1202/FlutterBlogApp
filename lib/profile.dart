@@ -7,7 +7,10 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
       ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/profile'));
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -31,6 +34,7 @@ class Profile extends StatelessWidget {
           ),
         ),
       ),
+      backgroundColor: Colors.white,
       body: WebViewWidget(controller: controller),
     );
   }

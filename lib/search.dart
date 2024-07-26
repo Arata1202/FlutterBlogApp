@@ -9,6 +9,7 @@ class Search extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
@@ -50,6 +51,7 @@ class Search extends StatelessWidget {
           ),
         ),
       ),
+      backgroundColor: Colors.white,
       body: WebViewWidget(controller: controller),
     );
   }
@@ -64,6 +66,7 @@ class SearchResultsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
@@ -104,6 +107,7 @@ class SearchResultsPage extends StatelessWidget {
           ),
         ),
       ),
+      backgroundColor: Colors.white,
       body: WebViewWidget(controller: controller),
     );
   }
@@ -118,6 +122,7 @@ class ArticlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
@@ -157,6 +162,7 @@ class ArticlePage extends StatelessWidget {
           height: 28,
         ),
       ),
+      backgroundColor: Colors.white,
       body: WebViewWidget(controller: controller),
     );
   }

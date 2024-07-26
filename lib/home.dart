@@ -122,6 +122,7 @@ class WebViewTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
@@ -149,7 +150,10 @@ class WebViewTab extends StatelessWidget {
       )
       ..loadRequest(Uri.parse(url));
 
-    return WebViewWidget(controller: controller);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: WebViewWidget(controller: controller),
+    );
   }
 }
 
@@ -162,6 +166,7 @@ class ArticlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
@@ -201,6 +206,7 @@ class ArticlePage extends StatelessWidget {
           height: 28,
         ),
       ),
+      backgroundColor: Colors.white,
       body: WebViewWidget(controller: controller),
     );
   }

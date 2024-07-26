@@ -9,6 +9,7 @@ class Privacy extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
@@ -45,6 +46,7 @@ class Privacy extends StatelessWidget {
           ),
         ),
       ),
+      backgroundColor: Colors.white,
       body: WebViewWidget(controller: controller),
     );
   }

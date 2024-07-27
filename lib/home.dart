@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
@@ -12,6 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
+  String? _lastUrl;
 
   final List<Widget> _tabs = [
     const NewPostTab(),
@@ -20,6 +22,27 @@ class _HomeState extends State<Home> {
     const TravelPostTab(),
     const BlogPostTab(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLastUrl();
+  }
+
+  void _loadLastUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _lastUrl = prefs.getString('lastUrl');
+    });
+    if (_lastUrl != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ArticlePage(url: _lastUrl!),
+        ),
+      );
+    }
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -174,6 +197,7 @@ class _ArticlePageState extends State<ArticlePage> {
   void initState() {
     super.initState();
     Wakelock.enable();
+    _saveLastUrl(widget.url);
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -205,6 +229,11 @@ class _ArticlePageState extends State<ArticlePage> {
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
+  }
+
+  void _saveLastUrl(String url) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('lastUrl', url);
   }
 
   @override

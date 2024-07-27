@@ -258,12 +258,14 @@ class ArticlePage extends StatefulWidget {
 
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     Wakelock.enable();
     _saveLastUrl(widget.url);
+    _createBannerAd();
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -271,7 +273,6 @@ class _ArticlePageState extends State<ArticlePage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
             if (request.url.contains('amazon.co.jp') ||
                 request.url.contains('rakuten.co.jp') ||
                 request.url.contains('google.com') ||
@@ -304,6 +305,24 @@ class _ArticlePageState extends State<ArticlePage> {
       ..loadRequest(Uri.parse(widget.url));
   }
 
+  void _createBannerAd() {
+    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_ARTICLE');
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {});
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+      ),
+    )..load();
+  }
+
   void _saveLastUrl(String url) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('lastUrl', url);
@@ -316,7 +335,6 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   void dispose() {
-    // 自動ロックを有効化
     Wakelock.disable();
     _clearLastUrl();
     super.dispose();
@@ -336,10 +354,22 @@ class _ArticlePageState extends State<ArticlePage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 39.0),
-        // 3pxずらした
-        child: WebViewWidget(controller: _controller),
+      body: Column(
+        children: [
+          if (_bannerAd != null)
+            Container(
+              color: Colors.white,
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 39.0),
+              child: WebViewWidget(controller: _controller),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -30,13 +30,33 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _loadLastUrl();
-    _createBannerAd();
+    _createBannerAd(_currentIndex);
   }
 
-  void _createBannerAd() {
+  void _createBannerAd(int index) {
+    String adUnitId;
+    switch (index) {
+      case 0:
+        adUnitId = dotenv.get('TEST_BANNER_AD_ID_NEW_POST');
+        break;
+      case 1:
+        adUnitId = dotenv.get('TEST_BANNER_AD_ID_PROGRAMMING');
+        break;
+      case 2:
+        adUnitId = dotenv.get('TEST_BANNER_AD_ID_UNIVERSITY');
+        break;
+      case 3:
+        adUnitId = dotenv.get('TEST_BANNER_AD_ID_TRAVEL');
+        break;
+      case 4:
+        adUnitId = dotenv.get('TEST_BANNER_AD_ID_BLOG');
+        break;
+      default:
+        adUnitId = dotenv.get('TEST_BANNER_AD_ID_NEW_POST');
+    }
+
     _bannerAd = BannerAd(
-      // テストユニットID
-      adUnitId: (dotenv.get('TEST_BANNER_AD_ID')),
+      adUnitId: adUnitId,
       size: AdSize.banner,
       request: AdRequest(),
       listener: BannerAdListener(
@@ -74,6 +94,7 @@ class _HomeState extends State<Home> {
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+      _createBannerAd(index);
     });
   }
 
@@ -110,6 +131,7 @@ class _HomeState extends State<Home> {
           children: [
             if (_bannerAd != null)
               Container(
+                color: Colors.white,
                 width: _bannerAd!.size.width.toDouble(),
                 height: _bannerAd!.size.height.toDouble(),
                 child: AdWidget(ad: _bannerAd!),

@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'home.dart';
 
-class Search extends StatelessWidget {
+class Search extends StatefulWidget {
   const Search({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
+  _SearchState createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  late WebViewController _controller;
+  BannerAd? _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _createBannerAd();
+
+    _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
@@ -28,7 +41,28 @@ class Search extends StatelessWidget {
         ),
       )
       ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/keyword'));
+  }
 
+  void _createBannerAd() {
+    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_SEARCH');
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {});
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+      ),
+    )..load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -52,19 +86,43 @@ class Search extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      body: WebViewWidget(controller: controller),
+      body: Column(
+        children: [
+          if (_bannerAd != null)
+            Container(
+              color: Colors.white,
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
+          Expanded(
+            child: WebViewWidget(controller: _controller),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class SearchResultsPage extends StatelessWidget {
+class SearchResultsPage extends StatefulWidget {
   final String url;
 
   const SearchResultsPage({super.key, required this.url});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
+  _SearchResultsPageState createState() => _SearchResultsPageState();
+}
+
+class _SearchResultsPageState extends State<SearchResultsPage> {
+  late WebViewController _controller;
+  BannerAd? _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _createBannerAd();
+
+    _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
@@ -83,8 +141,29 @@ class SearchResultsPage extends StatelessWidget {
           },
         ),
       )
-      ..loadRequest(Uri.parse(url));
+      ..loadRequest(Uri.parse(widget.url));
+  }
 
+  void _createBannerAd() {
+    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_SEARCH_RESULT');
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {});
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+      ),
+    )..load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -108,62 +187,20 @@ class SearchResultsPage extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      body: WebViewWidget(controller: controller),
-    );
-  }
-}
-
-class ArticlePage extends StatelessWidget {
-  final String url;
-
-  const ArticlePage({super.key, required this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.transparent)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('/article') && request.url != url) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ArticlePage(url: request.url),
-                ),
-              );
-              return NavigationDecision.prevent;
-            }
-            // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
-            if (request.url.contains('amazon.co.jp') ||
-                request.url.contains('rakuten.co.jp') ||
-                request.url.contains('google.com') ||
-                request.url.contains('yahoo.co.jp')) {
-              if (await canLaunch(request.url)) {
-                await launch(request.url, forceSafariVC: false);
-                return NavigationDecision.prevent;
-              }
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(url));
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 60,
-        elevation: 4,
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
+      body: Column(
+        children: [
+          if (_bannerAd != null)
+            Container(
+              color: Colors.white,
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
+          Expanded(
+            child: WebViewWidget(controller: _controller),
+          ),
+        ],
       ),
-      backgroundColor: Colors.white,
-      body: WebViewWidget(controller: controller),
     );
   }
 }

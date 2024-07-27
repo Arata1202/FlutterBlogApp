@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wakelock/wakelock.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -157,20 +158,30 @@ class WebViewTab extends StatelessWidget {
   }
 }
 
-class ArticlePage extends StatelessWidget {
+class ArticlePage extends StatefulWidget {
   final String url;
 
   const ArticlePage({super.key, required this.url});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
+  _ArticlePageState createState() => _ArticlePageState();
+}
+
+class _ArticlePageState extends State<ArticlePage> {
+  late WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    Wakelock.enable();
+
+    _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('/article') && request.url != url) {
+            if (request.url.contains('/article') && request.url != widget.url) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -193,8 +204,18 @@ class ArticlePage extends StatelessWidget {
           },
         ),
       )
-      ..loadRequest(Uri.parse(url));
+      ..loadRequest(Uri.parse(widget.url));
+  }
 
+  @override
+  void dispose() {
+    // 自動ロックを有効化
+    Wakelock.disable();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -207,26 +228,7 @@ class ArticlePage extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      body: WebViewWidget(controller: controller),
-    );
-  }
-}
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Home(),
+      body: WebViewWidget(controller: _controller),
     );
   }
 }

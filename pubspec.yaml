@@ -40,6 +40,7 @@ dependencies:
   share_plus: ^4.0.4
   font_awesome_flutter: ^10.1.0
   flutter_launcher_icons: ^0.13.1
+  wakelock: ^0.6.0
 
 dev_dependencies:
   flutter_test:

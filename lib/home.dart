@@ -17,6 +17,8 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   String? _lastUrl;
   BannerAd? _bannerAd;
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
 
   final List<Widget> _tabs = [
     const NewPostTab(),
@@ -31,6 +33,7 @@ class _HomeState extends State<Home> {
     super.initState();
     _loadLastUrl();
     _createBannerAd(_currentIndex);
+    _loadInterstitialAd();
   }
 
   void _createBannerAd(int index) {
@@ -77,18 +80,46 @@ class _HomeState extends State<Home> {
       _lastUrl = prefs.getString('lastUrl');
     });
     if (_lastUrl != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ArticlePage(url: _lastUrl!),
-        ),
-      ).then((_) => _clearLastUrl());
+      _showInterstitialAd().then((_) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ArticlePage(url: _lastUrl!),
+          ),
+        ).then((_) => _clearLastUrl());
+      });
     }
   }
 
   void _clearLastUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('lastUrl');
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+          _interstitialAd?.setImmersiveMode(true);
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+          _isInterstitialAdReady = false;
+        },
+      ),
+    );
+  }
+
+  Future<void> _showInterstitialAd() async {
+    if (_isInterstitialAdReady) {
+      await _interstitialAd?.show();
+    } else {
+      print('Interstitial ad is not ready yet');
+    }
   }
 
   void _onTabTapped(int index) {
@@ -198,20 +229,33 @@ class BlogPostTab extends StatelessWidget {
   }
 }
 
-class WebViewTab extends StatelessWidget {
+class WebViewTab extends StatefulWidget {
   final String url;
 
   const WebViewTab({super.key, required this.url});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = WebViewController()
+  _WebViewTabState createState() => _WebViewTabState();
+}
+
+class _WebViewTabState extends State<WebViewTab> {
+  late WebViewController _controller;
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInterstitialAd();
+
+    _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('/article') && request.url != url) {
+            if (request.url.contains('/article') && request.url != widget.url) {
+              await _showInterstitialAd();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -220,7 +264,6 @@ class WebViewTab extends StatelessWidget {
               ).then((_) => _clearLastUrl());
               return NavigationDecision.prevent;
             }
-            // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
             if (request.url.contains('amazon.co.jp') ||
                 request.url.contains('rakuten.co.jp') ||
                 request.url.contains('yahoo.co.jp')) {
@@ -233,17 +276,46 @@ class WebViewTab extends StatelessWidget {
           },
         ),
       )
-      ..loadRequest(Uri.parse(url));
+      ..loadRequest(Uri.parse(widget.url));
+  }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: WebViewWidget(controller: controller),
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+          _interstitialAd?.setImmersiveMode(true);
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+          _isInterstitialAdReady = false;
+        },
+      ),
     );
+  }
+
+  Future<void> _showInterstitialAd() async {
+    if (_isInterstitialAdReady) {
+      await _interstitialAd?.show();
+    } else {
+      print('Interstitial ad is not ready yet');
+    }
   }
 
   void _clearLastUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('lastUrl');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: WebViewWidget(controller: _controller),
+    );
   }
 }
 
@@ -259,6 +331,8 @@ class ArticlePage extends StatefulWidget {
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
   BannerAd? _bannerAd;
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
@@ -266,6 +340,7 @@ class _ArticlePageState extends State<ArticlePage> {
     Wakelock.enable();
     _saveLastUrl(widget.url);
     _createBannerAd();
+    _loadInterstitialAd();
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -290,6 +365,7 @@ class _ArticlePageState extends State<ArticlePage> {
               }
             }
             if (request.url.contains('/article') && request.url != widget.url) {
+              await _showInterstitialAd();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -321,6 +397,32 @@ class _ArticlePageState extends State<ArticlePage> {
         },
       ),
     )..load();
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+          _interstitialAd?.setImmersiveMode(true);
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+          _isInterstitialAdReady = false;
+        },
+      ),
+    );
+  }
+
+  Future<void> _showInterstitialAd() async {
+    if (_isInterstitialAdReady) {
+      await _interstitialAd?.show();
+    } else {
+      print('Interstitial ad is not ready yet');
+    }
   }
 
   void _saveLastUrl(String url) async {

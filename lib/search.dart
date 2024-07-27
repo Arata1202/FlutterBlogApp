@@ -116,11 +116,14 @@ class SearchResultsPage extends StatefulWidget {
 class _SearchResultsPageState extends State<SearchResultsPage> {
   late WebViewController _controller;
   BannerAd? _bannerAd;
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
     _createBannerAd();
+    _loadInterstitialAd();
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -129,12 +132,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('/article')) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ArticlePage(url: request.url),
-                ),
-              );
+              _showInterstitialAd(() {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ArticlePage(url: request.url),
+                  ),
+                );
+              });
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -160,6 +165,46 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         },
       ),
     )..load();
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdReady = true;
+          _interstitialAd?.setImmersiveMode(true);
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+          _isInterstitialAdReady = false;
+        },
+      ),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed) {
+    if (_isInterstitialAdReady) {
+      _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (InterstitialAd ad) {
+          ad.dispose();
+          onAdClosed();
+        },
+        onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+          ad.dispose();
+          print('Ad failed to show: $error');
+          onAdClosed();
+        },
+      );
+      _interstitialAd?.show();
+      _interstitialAd = null;
+      _isInterstitialAdReady = false;
+    } else {
+      print('Interstitial ad is not ready yet');
+      onAdClosed();
+    }
   }
 
   @override

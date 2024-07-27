@@ -215,6 +215,23 @@ class _ArticlePageState extends State<ArticlePage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
+            // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
+            if (request.url.contains('amazon.co.jp') ||
+                request.url.contains('rakuten.co.jp') ||
+                request.url.contains('google.com') ||
+                request.url.contains('x.com') ||
+                request.url.contains('facebook.com') ||
+                request.url.contains('line.me') ||
+                request.url.contains('b.hatena.ne.jp') ||
+                request.url.contains('pinterest.jp') ||
+                request.url.contains('reddit.com') ||
+                request.url.contains('linkedin.com') ||
+                request.url.contains('yahoo.co.jp')) {
+              if (await canLaunch(request.url)) {
+                await launch(request.url, forceSafariVC: false);
+                return NavigationDecision.prevent;
+              }
+            }
             if (request.url.contains('/article') && request.url != widget.url) {
               Navigator.push(
                 context,
@@ -223,16 +240,6 @@ class _ArticlePageState extends State<ArticlePage> {
                 ),
               ).then((_) => _clearLastUrl());
               return NavigationDecision.prevent;
-            }
-            // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
-            if (request.url.contains('amazon.co.jp') ||
-                request.url.contains('rakuten.co.jp') ||
-                request.url.contains('google.com') ||
-                request.url.contains('yahoo.co.jp')) {
-              if (await canLaunch(request.url)) {
-                await launch(request.url, forceSafariVC: false);
-                return NavigationDecision.prevent;
-              }
             }
             return NavigationDecision.navigate;
           },
@@ -273,7 +280,11 @@ class _ArticlePageState extends State<ArticlePage> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: WebViewWidget(controller: _controller),
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 39.0),
+        // 3pxずらした
+        child: WebViewWidget(controller: _controller),
+      ),
     );
   }
 }

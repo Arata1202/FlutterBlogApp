@@ -1,13 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'profile.dart';
 import 'notice.dart';
 import 'privacy.dart';
 import 'sns.dart';
 
-class Menu extends StatelessWidget {
+class Menu extends StatefulWidget {
   const Menu({super.key});
+
+  @override
+  _MenuState createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
+  BannerAd? _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_MENU');
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {});
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+      ),
+    )..load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,48 +68,54 @@ class Menu extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        child: ListView(
-          children: [
-            _menuItem("筆者について", const Icon(Icons.person), () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Profile()),
-              );
-            }),
-            _divider(),
-            _menuItem("筆者のSNS", const Icon(Icons.public), () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Sns()),
-              );
-            }),
-            _divider(),
-            // _menuItem("プッシュ通知設定", const Icon(Icons.notifications), () {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => const Notice()),
-            //   );
-            // }),
-            // _divider(),
-            _menuItem("アプリをシェア", const Icon(Icons.share), () {
-              _shareApp();
-            }),
-            _divider(),
-            _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Privacy()),
-              );
-            }),
-            _divider(),
-            _menuItem("お問い合わせ", const Icon(Icons.email), () {
-              _launchMailApp();
-            }),
-            _divider(),
-          ],
-        ),
+      body: Column(
+        children: [
+          if (_bannerAd != null)
+            Container(
+              color: Colors.white,
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  _menuItem("筆者について", const Icon(Icons.person), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Profile()),
+                    );
+                  }),
+                  _divider(),
+                  _menuItem("筆者のSNS", const Icon(Icons.public), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Sns()),
+                    );
+                  }),
+                  _divider(),
+                  _menuItem("アプリをシェア", const Icon(Icons.share), () {
+                    _shareApp();
+                  }),
+                  _divider(),
+                  _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Privacy()),
+                    );
+                  }),
+                  _divider(),
+                  _menuItem("お問い合わせ", const Icon(Icons.email), () {
+                    _launchMailApp();
+                  }),
+                  _divider(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

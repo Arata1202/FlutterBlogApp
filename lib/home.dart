@@ -40,8 +40,13 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(
           builder: (context) => ArticlePage(url: _lastUrl!),
         ),
-      );
+      ).then((_) => _clearLastUrl());
     }
+  }
+
+  void _clearLastUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('lastUrl');
   }
 
   void _onTabTapped(int index) {
@@ -156,7 +161,7 @@ class WebViewTab extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ArticlePage(url: request.url),
                 ),
-              );
+              ).then((_) => _clearLastUrl());
               return NavigationDecision.prevent;
             }
             // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
@@ -178,6 +183,11 @@ class WebViewTab extends StatelessWidget {
       backgroundColor: Colors.white,
       body: WebViewWidget(controller: controller),
     );
+  }
+
+  void _clearLastUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('lastUrl');
   }
 }
 
@@ -211,7 +221,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 MaterialPageRoute(
                   builder: (context) => ArticlePage(url: request.url),
                 ),
-              );
+              ).then((_) => _clearLastUrl());
               return NavigationDecision.prevent;
             }
             // 外部リンク（Amazon、楽天、Yahoo）の場合は外部ブラウザで開く
@@ -236,10 +246,16 @@ class _ArticlePageState extends State<ArticlePage> {
     await prefs.setString('lastUrl', url);
   }
 
+  void _clearLastUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('lastUrl');
+  }
+
   @override
   void dispose() {
     // 自動ロックを有効化
     Wakelock.disable();
+    _clearLastUrl();
     super.dispose();
   }
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
   String? _lastUrl;
+  BannerAd? _bannerAd;
 
   final List<Widget> _tabs = [
     const NewPostTab(),
@@ -27,6 +30,25 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _loadLastUrl();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    _bannerAd = BannerAd(
+      // テストユニットID
+      adUnitId: (dotenv.get('TEST_BANNER_AD_ID')),
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {});
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+      ),
+    )..load();
   }
 
   void _loadLastUrl() async {
@@ -84,9 +106,21 @@ class _HomeState extends State<Home> {
             onTap: _onTabTapped,
           ),
         ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _tabs,
+        body: Column(
+          children: [
+            if (_bannerAd != null)
+              Container(
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd!),
+              ),
+            Expanded(
+              child: IndexedStack(
+                index: _currentIndex,
+                children: _tabs,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -43,6 +43,7 @@ dependencies:
   wakelock: ^0.6.0
   shared_preferences: ^2.0.6
   google_mobile_ads: ^2.0.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,7 @@ flutter:
   assets:
     - assets/title.webp
     - assets/icon-512x512.png
+    - .env
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

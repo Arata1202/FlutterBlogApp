@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'search.dart';
 import 'menu.dart';
 import 'home.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  await dotenv.load(fileName: '.env');
 }
 
 class MyApp extends StatelessWidget {

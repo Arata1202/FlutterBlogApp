@@ -1,9 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class Sns extends StatelessWidget {
+class Sns extends StatefulWidget {
   const Sns({super.key});
+
+  @override
+  _SnsState createState() => _SnsState();
+}
+
+class _SnsState extends State<Sns> {
+  BannerAd? _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_SNS');
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {});
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+      ),
+    )..load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +64,36 @@ class Sns extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        child: ListView(
-          children: [
-            _menuItem("X", const FaIcon(FontAwesomeIcons.twitter), () {
-              _launchURL('https://x.com/Aokumoblog');
-            }),
-            _divider(),
-            _menuItem("Instagram", const FaIcon(FontAwesomeIcons.instagram),
-                () {
-              _launchURL('https://www.instagram.com/ao_realstudent/?hl=ja');
-            }),
-            _divider(),
-          ],
-        ),
+      body: Column(
+        children: [
+          if (_bannerAd != null)
+            Container(
+              color: Colors.white,
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  _menuItem("X", const FaIcon(FontAwesomeIcons.twitter), () {
+                    _launchURL('https://x.com/Aokumoblog');
+                  }),
+                  _divider(),
+                  _menuItem(
+                      "Instagram", const FaIcon(FontAwesomeIcons.instagram),
+                      () {
+                    _launchURL(
+                        'https://www.instagram.com/ao_realstudent/?hl=ja');
+                  }),
+                  _divider(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

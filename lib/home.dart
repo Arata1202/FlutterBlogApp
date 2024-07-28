@@ -254,7 +254,8 @@ class _WebViewTabState extends State<WebViewTab> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('/article') && request.url != widget.url) {
+            if (request.url.contains('web-view-blog-app.netlify.app/article') &&
+                request.url != widget.url) {
               await _showInterstitialAd();
               Navigator.push(
                 context,
@@ -264,9 +265,7 @@ class _WebViewTabState extends State<WebViewTab> {
               ).then((_) => _clearLastUrl());
               return NavigationDecision.prevent;
             }
-            if (request.url.contains('amazon.co.jp') ||
-                request.url.contains('rakuten.co.jp') ||
-                request.url.contains('yahoo.co.jp')) {
+            if (!request.url.contains('web-view-blog-app.netlify.app')) {
               if (await canLaunch(request.url)) {
                 await launch(request.url, forceSafariVC: false);
                 return NavigationDecision.prevent;
@@ -348,23 +347,14 @@ class _ArticlePageState extends State<ArticlePage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('amazon.co.jp') ||
-                request.url.contains('rakuten.co.jp') ||
-                request.url.contains('google.com') ||
-                request.url.contains('x.com') ||
-                request.url.contains('facebook.com') ||
-                request.url.contains('line.me') ||
-                request.url.contains('b.hatena.ne.jp') ||
-                request.url.contains('pinterest.jp') ||
-                request.url.contains('reddit.com') ||
-                request.url.contains('linkedin.com') ||
-                request.url.contains('yahoo.co.jp')) {
+            if (!request.url.contains('web-view-blog-app.netlify.app')) {
               if (await canLaunch(request.url)) {
                 await launch(request.url, forceSafariVC: false);
                 return NavigationDecision.prevent;
               }
             }
-            if (request.url.contains('/article') && request.url != widget.url) {
+            if (request.url.contains('web-view-blog-app.netlify.app/article') &&
+                request.url != widget.url) {
               await _showInterstitialAd();
               Navigator.push(
                 context,

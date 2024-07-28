@@ -26,7 +26,7 @@ class _PrivacyState extends State<Privacy> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('google.com')) {
+            if (!request.url.contains('web-view-blog-app.netlify.app')) {
               if (await canLaunch(request.url)) {
                 await launch(request.url, forceSafariVC: false);
                 return NavigationDecision.prevent;

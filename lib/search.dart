@@ -26,8 +26,9 @@ class _SearchState extends State<Search> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.contains('/tag/') ||
-                request.url.contains('/search?q=')) {
+            if (request.url.contains('web-view-blog-app.netlify.app/tag/') ||
+                request.url
+                    .contains('web-view-blog-app.netlify.app/search?q=')) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -131,7 +132,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.contains('/article')) {
+            if (request.url.contains('web-view-blog-app.netlify.app/article')) {
               _showInterstitialAd(() {
                 Navigator.push(
                   context,

@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
 import '../search_result/index.dart';
+import '../../common/admob/banner/index.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -14,31 +15,11 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   late WebViewController _controller;
-  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
-    _createBannerAd();
     _initializeWebViewController();
-  }
-
-  void _createBannerAd() {
-    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH');
-    _bannerAd = BannerAd(
-      adUnitId: adUnitId,
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {});
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Ad failed to load: $error');
-        },
-      ),
-    )..load();
   }
 
   void _initializeWebViewController() {
@@ -93,13 +74,8 @@ class _SearchState extends State<Search> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          if (_bannerAd != null)
-            Container(
-              color: Colors.white,
-              width: _bannerAd!.size.width.toDouble(),
-              height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
-            ),
+          BannerAdWidget(
+              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH')), // 追加
           Expanded(
             child: WebViewWidget(controller: _controller),
           ),

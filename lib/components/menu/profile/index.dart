@@ -3,6 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../common/admob/banner/index.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -13,31 +14,11 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late WebViewController _controller;
-  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
-    _createBannerAd();
     _initializeWebViewController();
-  }
-
-  void _createBannerAd() {
-    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_PROFILE');
-    _bannerAd = BannerAd(
-      adUnitId: adUnitId,
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {});
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Ad failed to load: $error');
-        },
-      ),
-    )..load();
   }
 
   void _initializeWebViewController() {
@@ -88,13 +69,8 @@ class _ProfileState extends State<Profile> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          if (_bannerAd != null)
-            Container(
-              color: Colors.white,
-              width: _bannerAd!.size.width.toDouble(),
-              height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
-            ),
+          BannerAdWidget(
+              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PROFILE')), // 追加
           Expanded(
             child: WebViewWidget(controller: _controller),
           ),

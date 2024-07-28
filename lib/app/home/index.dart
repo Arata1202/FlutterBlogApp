@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
+import '../../common/admob/banner/index.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,7 +18,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
   String? _lastUrl;
-  BannerAd? _bannerAd;
   InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
@@ -33,27 +33,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _loadLastUrl();
-    _createBannerAd();
     _loadInterstitialAd();
-  }
-
-  void _createBannerAd() {
-    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_HOME');
-
-    _bannerAd = BannerAd(
-      adUnitId: adUnitId,
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {});
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Ad failed to load: $error');
-        },
-      ),
-    )..load();
   }
 
   void _loadLastUrl() async {
@@ -141,13 +121,8 @@ class _HomeState extends State<Home> {
         ),
         body: Column(
           children: [
-            if (_bannerAd != null)
-              Container(
-                color: Colors.white,
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd!),
-              ),
+            BannerAdWidget(
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')), // 追加
             Expanded(
               child: IndexedStack(
                 index: _currentIndex,

@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
@@ -260,7 +260,7 @@ class _WebViewTabState extends State<WebViewTab> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
@@ -371,7 +371,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {

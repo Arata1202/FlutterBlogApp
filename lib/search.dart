@@ -170,7 +170,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_SEARCH'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {

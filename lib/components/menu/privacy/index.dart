@@ -19,24 +19,7 @@ class _PrivacyState extends State<Privacy> {
   void initState() {
     super.initState();
     _createBannerAd();
-
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.transparent)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) async {
-            if (!request.url.contains('web-view-blog-app.netlify.app')) {
-              if (await canLaunch(request.url)) {
-                await launch(request.url, forceSafariVC: false);
-                return NavigationDecision.prevent;
-              }
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/privacy'));
+    _initializeWebViewController();
   }
 
   void _createBannerAd() {
@@ -55,6 +38,26 @@ class _PrivacyState extends State<Privacy> {
         },
       ),
     )..load();
+  }
+
+  void _initializeWebViewController() {
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) async {
+            if (!request.url.contains('web-view-blog-app.netlify.app')) {
+              if (await canLaunch(request.url)) {
+                await launch(request.url, forceSafariVC: false);
+                return NavigationDecision.prevent;
+              }
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/privacy'));
   }
 
   @override

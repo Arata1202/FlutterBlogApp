@@ -6,7 +6,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../util/last_article/index.dart';
 import '../../common/admob/interstitial/index.dart';
 import '../../common/admob/banner/index.dart';
-import '../../layout/appbar/index.dart';
 import '../../util/navigate_out/index.dart';
 import '../../util/wake_lock/index.dart';
 
@@ -83,7 +82,16 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(toolbarHeight: 60),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 60,
+        elevation: 4,
+        title: Image.asset(
+          'assets/title.webp',
+          height: 28,
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         children: [

@@ -5,7 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../components/article/index.dart';
+import '../article/index.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

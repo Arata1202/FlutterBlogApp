@@ -6,9 +6,11 @@ import 'app/menu/index.dart';
 import 'app/home/index.dart';
 import 'layout/footer/index.dart';
 import 'layout/splash/index.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   runApp(const MyApp());
+  MobileAds.instance.initialize();
   await dotenv.load(fileName: '.env');
 }
 

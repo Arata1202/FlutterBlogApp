@@ -3,10 +3,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'profile.dart';
-import 'notice.dart';
-import 'privacy.dart';
-import 'sns.dart';
+import '../../components/menu/profile/index.dart';
+import '../../components/menu/notice/index.dart';
+import '../../components/menu/privacy/index.dart';
+import '../../components/menu/sns/index.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});

@@ -40,22 +40,22 @@ class _HomeState extends State<Home> {
     String adUnitId;
     switch (index) {
       case 0:
-        adUnitId = dotenv.get('TEST_BANNER_AD_ID_NEW_POST');
+        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_NEW_POST');
         break;
       case 1:
-        adUnitId = dotenv.get('TEST_BANNER_AD_ID_PROGRAMMING');
+        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_PROGRAMMING');
         break;
       case 2:
-        adUnitId = dotenv.get('TEST_BANNER_AD_ID_UNIVERSITY');
+        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_UNIVERSITY');
         break;
       case 3:
-        adUnitId = dotenv.get('TEST_BANNER_AD_ID_TRAVEL');
+        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_TRAVEL');
         break;
       case 4:
-        adUnitId = dotenv.get('TEST_BANNER_AD_ID_BLOG');
+        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_BLOG');
         break;
       default:
-        adUnitId = dotenv.get('TEST_BANNER_AD_ID_NEW_POST');
+        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_NEW_POST');
     }
 
     _bannerAd = BannerAd(
@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
@@ -280,7 +280,7 @@ class _WebViewTabState extends State<WebViewTab> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
@@ -372,7 +372,7 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   void _createBannerAd() {
-    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_ARTICLE');
+    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE');
     _bannerAd = BannerAd(
       adUnitId: adUnitId,
       size: AdSize.banner,
@@ -391,7 +391,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {

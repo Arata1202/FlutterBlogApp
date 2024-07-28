@@ -40,7 +40,7 @@ class _PrivacyState extends State<Privacy> {
   }
 
   void _createBannerAd() {
-    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_PRIVACY');
+    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_PRIVACY');
     _bannerAd = BannerAd(
       adUnitId: adUnitId,
       size: AdSize.banner,

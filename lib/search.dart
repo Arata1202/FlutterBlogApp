@@ -45,7 +45,7 @@ class _SearchState extends State<Search> {
   }
 
   void _createBannerAd() {
-    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_SEARCH');
+    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH');
     _bannerAd = BannerAd(
       adUnitId: adUnitId,
       size: AdSize.banner,
@@ -151,7 +151,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   }
 
   void _createBannerAd() {
-    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_SEARCH_RESULT');
+    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT');
     _bannerAd = BannerAd(
       adUnitId: adUnitId,
       size: AdSize.banner,
@@ -170,7 +170,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: dotenv.get('TEST_INTERSTITIAL_AD_ID'),
+      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID'),
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {

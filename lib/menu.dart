@@ -25,7 +25,7 @@ class _MenuState extends State<Menu> {
   }
 
   void _createBannerAd() {
-    String adUnitId = dotenv.get('TEST_BANNER_AD_ID_MENU');
+    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_MENU');
     _bannerAd = BannerAd(
       adUnitId: adUnitId,
       size: AdSize.banner,

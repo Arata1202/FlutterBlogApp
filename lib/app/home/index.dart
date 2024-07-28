@@ -7,6 +7,7 @@ import 'package:wakelock/wakelock.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
 import '../../common/admob/banner/index.dart';
+import '../../common/admob/interstitial/index.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,7 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
   String? _lastUrl;
-  InterstitialAd? _interstitialAd;
+  late InterstitialAdManager _interstitialAdManager;
   bool _isInterstitialAdReady = false;
 
   final List<Widget> _tabs = [
@@ -32,6 +33,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    _interstitialAdManager = InterstitialAdManager();
     _loadLastUrl();
     _loadInterstitialAd();
   }
@@ -59,26 +61,15 @@ class _HomeState extends State<Home> {
   }
 
   void _loadInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
-          _interstitialAd?.setImmersiveMode(true);
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('InterstitialAd failed to load: $error');
-          _isInterstitialAdReady = false;
-        },
-      ),
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      () => setState(() => _isInterstitialAdReady = true),
     );
   }
 
   Future<void> _showInterstitialAd() async {
     if (_isInterstitialAdReady) {
-      await _interstitialAd?.show();
+      await _interstitialAdManager.showInterstitialAd();
     } else {
       print('Interstitial ad is not ready yet');
     }
@@ -122,7 +113,7 @@ class _HomeState extends State<Home> {
         body: Column(
           children: [
             BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')), // 追加
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')),
             Expanded(
               child: IndexedStack(
                 index: _currentIndex,
@@ -196,12 +187,13 @@ class WebViewTab extends StatefulWidget {
 
 class _WebViewTabState extends State<WebViewTab> {
   late WebViewController _controller;
-  InterstitialAd? _interstitialAd;
+  late InterstitialAdManager _interstitialAdManager;
   bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
+    _interstitialAdManager = InterstitialAdManager();
     _loadInterstitialAd();
 
     _controller = WebViewController()
@@ -235,26 +227,15 @@ class _WebViewTabState extends State<WebViewTab> {
   }
 
   void _loadInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
-          _interstitialAd?.setImmersiveMode(true);
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('InterstitialAd failed to load: $error');
-          _isInterstitialAdReady = false;
-        },
-      ),
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      () => setState(() => _isInterstitialAdReady = true),
     );
   }
 
   Future<void> _showInterstitialAd() async {
     if (_isInterstitialAdReady) {
-      await _interstitialAd?.show();
+      await _interstitialAdManager.showInterstitialAd();
     } else {
       print('Interstitial ad is not ready yet');
     }

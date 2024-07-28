@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../util/last_article/index.dart';
 import '../../common/admob/interstitial/index.dart';
@@ -20,6 +19,8 @@ class ArticlePage extends StatefulWidget {
 
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
+
+  // インタースティシャル
   late InterstitialAdManager _interstitialAdManager;
   bool _isInterstitialAdReady = false;
 
@@ -29,16 +30,14 @@ class _ArticlePageState extends State<ArticlePage> {
     WakelockManager.enable();
     LastUrlManager.saveLastUrl(widget.url);
 
-    _initializeInterstitialAd();
-    _initializeWebViewController();
-  }
-
-  void _initializeInterstitialAd() {
+    // インタースティシャル
     _interstitialAdManager = InterstitialAdManager();
     _interstitialAdManager.loadInterstitialAd(
       dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
       () => setState(() => _isInterstitialAdReady = true),
     );
+
+    _initializeWebViewController();
   }
 
   void _initializeWebViewController() {

@@ -45,41 +45,27 @@ class _MenuState extends State<Menu> {
       ),
       body: Column(
         children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_MENU')), // 追加
+          BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_MENU')),
           Expanded(
             child: Container(
               color: Colors.white,
               child: ListView(
                 children: [
                   _menuItem("筆者について", const Icon(Icons.person), () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Profile()),
-                    );
+                    _navigateTo(context, const Profile());
                   }),
                   _divider(),
                   _menuItem("筆者のSNS", const Icon(Icons.public), () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Sns()),
-                    );
+                    _navigateTo(context, const Sns());
                   }),
                   _divider(),
-                  _menuItem("アプリをシェア", const Icon(Icons.share), () {
-                    _shareApp();
-                  }),
+                  _menuItem("アプリをシェア", const Icon(Icons.share), _shareApp),
                   _divider(),
                   _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Privacy()),
-                    );
+                    _navigateTo(context, const Privacy());
                   }),
                   _divider(),
-                  _menuItem("お問い合わせ", const Icon(Icons.email), () {
-                    _launchMailApp();
-                  }),
+                  _menuItem("お問い合わせ", const Icon(Icons.email), _launchMailApp),
                   _divider(),
                 ],
               ),
@@ -145,6 +131,13 @@ class _MenuState extends State<Menu> {
     Share.share(
       'Check out this awesome app: [App Link]',
       subject: 'Awesome App',
+    );
+  }
+
+  void _navigateTo(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
     );
   }
 }

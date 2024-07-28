@@ -3,6 +3,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
+import '../../common/admob/interstitial/index.dart';
+import '../../common/admob/banner/index.dart';
 
 class SearchResultsPage extends StatefulWidget {
   final String url;
@@ -15,70 +17,32 @@ class SearchResultsPage extends StatefulWidget {
 
 class _SearchResultsPageState extends State<SearchResultsPage> {
   late WebViewController _controller;
-  BannerAd? _bannerAd;
-  InterstitialAd? _interstitialAd;
+  late InterstitialAdManager _interstitialAdManager;
   bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
-    _createBannerAd();
+    _interstitialAdManager = InterstitialAdManager();
     _loadInterstitialAd();
     _initializeWebViewController();
   }
 
-  void _createBannerAd() {
-    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT');
-    _bannerAd = BannerAd(
-      adUnitId: adUnitId,
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          setState(() {});
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Ad failed to load: $error');
-        },
-      ),
-    )..load();
-  }
-
   void _loadInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_SEARCH'),
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
-          _interstitialAd?.setImmersiveMode(true);
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('InterstitialAd failed to load: $error');
-          _isInterstitialAdReady = false;
-        },
-      ),
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_SEARCH'),
+      () => setState(() => _isInterstitialAdReady = true),
     );
   }
 
   void _showInterstitialAd(VoidCallback onAdClosed) {
     if (_isInterstitialAdReady) {
-      _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (InterstitialAd ad) {
-          ad.dispose();
-          onAdClosed();
-        },
-        onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-          ad.dispose();
-          print('Ad failed to show: $error');
-          onAdClosed();
-        },
-      );
-      _interstitialAd?.show();
-      _interstitialAd = null;
-      _isInterstitialAdReady = false;
+      _interstitialAdManager.showInterstitialAd().then((_) {
+        onAdClosed();
+      }).catchError((error) {
+        print('Failed to show interstitial ad: $error');
+        onAdClosed();
+      });
     } else {
       print('Interstitial ad is not ready yet');
       onAdClosed();
@@ -105,9 +69,24 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             }
             return NavigationDecision.navigate;
           },
+          onPageStarted: (String url) {
+            print('Page started loading: $url');
+          },
+          onPageFinished: (String url) {
+            print('Page finished loading: $url');
+          },
+          onWebResourceError: (WebResourceError error) {
+            print('Error occurred: $error');
+          },
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
+  }
+
+  @override
+  void dispose() {
+    _interstitialAdManager.dispose();
+    super.dispose();
   }
 
   @override
@@ -137,13 +116,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          if (_bannerAd != null)
-            Container(
-              color: Colors.white,
-              width: _bannerAd!.size.width.toDouble(),
-              height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
-            ),
+          BannerAdWidget(
+              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
           Expanded(
             child: WebViewWidget(controller: _controller),
           ),

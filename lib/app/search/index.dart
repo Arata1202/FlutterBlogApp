@@ -14,7 +14,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  late WebViewController _controller;
+  late WebViewController _webViewController;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _SearchState extends State<Search> {
   }
 
   void _initializeWebViewController() {
-    _controller = WebViewController()
+    _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
@@ -41,6 +41,15 @@ class _SearchState extends State<Search> {
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
+          },
+          onPageStarted: (String url) {
+            print('Page started loading: $url');
+          },
+          onPageFinished: (String url) {
+            print('Page finished loading: $url');
+          },
+          onWebResourceError: (WebResourceError error) {
+            print('Error occurred: $error');
           },
         ),
       )
@@ -75,9 +84,9 @@ class _SearchState extends State<Search> {
       body: Column(
         children: [
           BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH')), // 追加
+              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH')),
           Expanded(
-            child: WebViewWidget(controller: _controller),
+            child: WebViewWidget(controller: _webViewController),
           ),
         ],
       ),

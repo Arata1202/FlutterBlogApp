@@ -33,9 +33,16 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _interstitialAdManager = InterstitialAdManager();
+    _initializeInterstitialAdManager();
     _loadLastUrl();
-    _loadInterstitialAd();
+  }
+
+  void _initializeInterstitialAdManager() {
+    _interstitialAdManager = InterstitialAdManager();
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
   }
 
   void _loadLastUrl() async {
@@ -60,13 +67,6 @@ class _HomeState extends State<Home> {
     await prefs.remove('lastUrl');
   }
 
-  void _loadInterstitialAd() {
-    _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
-      () => setState(() => _isInterstitialAdReady = true),
-    );
-  }
-
   Future<void> _showInterstitialAd() async {
     if (_isInterstitialAdReady) {
       await _interstitialAdManager.showInterstitialAd();
@@ -79,6 +79,12 @@ class _HomeState extends State<Home> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  @override
+  void dispose() {
+    _interstitialAdManager.dispose();
+    super.dispose();
   }
 
   @override
@@ -193,9 +199,19 @@ class _WebViewTabState extends State<WebViewTab> {
   @override
   void initState() {
     super.initState();
-    _interstitialAdManager = InterstitialAdManager();
-    _loadInterstitialAd();
+    _initializeInterstitialAdManager();
+    _initializeWebViewController();
+  }
 
+  void _initializeInterstitialAdManager() {
+    _interstitialAdManager = InterstitialAdManager();
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
+  }
+
+  void _initializeWebViewController() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
@@ -226,13 +242,6 @@ class _WebViewTabState extends State<WebViewTab> {
       ..loadRequest(Uri.parse(widget.url));
   }
 
-  void _loadInterstitialAd() {
-    _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
-      () => setState(() => _isInterstitialAdReady = true),
-    );
-  }
-
   Future<void> _showInterstitialAd() async {
     if (_isInterstitialAdReady) {
       await _interstitialAdManager.showInterstitialAd();
@@ -244,6 +253,12 @@ class _WebViewTabState extends State<WebViewTab> {
   void _clearLastUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('lastUrl');
+  }
+
+  @override
+  void dispose() {
+    _interstitialAdManager.dispose();
+    super.dispose();
   }
 
   @override

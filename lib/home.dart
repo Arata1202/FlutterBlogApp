@@ -32,31 +32,12 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _loadLastUrl();
-    _createBannerAd(_currentIndex);
+    _createBannerAd();
     _loadInterstitialAd();
   }
 
-  void _createBannerAd(int index) {
-    String adUnitId;
-    switch (index) {
-      case 0:
-        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_NEW_POST');
-        break;
-      case 1:
-        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_PROGRAMMING');
-        break;
-      case 2:
-        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_UNIVERSITY');
-        break;
-      case 3:
-        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_TRAVEL');
-        break;
-      case 4:
-        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_BLOG');
-        break;
-      default:
-        adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_NEW_POST');
-    }
+  void _createBannerAd() {
+    String adUnitId = dotenv.get('PRODUCTION_BANNER_AD_ID_HOME');
 
     _bannerAd = BannerAd(
       adUnitId: adUnitId,
@@ -125,7 +106,6 @@ class _HomeState extends State<Home> {
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      _createBannerAd(index);
     });
   }
 

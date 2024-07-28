@@ -159,8 +159,8 @@ class _MenuState extends State<Menu> {
   void _launchMailApp() async {
     final Uri params = Uri(
       scheme: 'mailto',
-      path: 'example@example.com',
-      query: 'subject=問い合わせ&body=ここに本文を入力してください',
+      path: 'realunivlog@gmail.com',
+      query: 'subject=お問い合わせ&body=▼お問い合わせ内容を記入してください。',
     );
 
     var url = params.toString();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:io' show Platform;
 import 'package:webview_flutter/webview_flutter.dart';
 import 'app/search/index.dart';
 import 'app/menu/index.dart';
@@ -10,14 +9,9 @@ import 'layout/splash/index.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  if (Platform.isAndroid) {
-    await dotenv.load(fileName: '.android.env');
-  } else if (Platform.isIOS) {
-    await dotenv.load(fileName: '.ios.env');
-  }
   runApp(const MyApp());
+  MobileAds.instance.initialize();
+  await dotenv.load(fileName: '.env');
 }
 
 class MyApp extends StatelessWidget {

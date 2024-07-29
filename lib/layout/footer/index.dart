@@ -22,7 +22,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       elevation: 4,
       backgroundColor: Colors.white,
       onTap: onTap,
-      fixedColor: Colors.blue,
+      selectedItemColor: Colors.blue,
     );
   }
 }

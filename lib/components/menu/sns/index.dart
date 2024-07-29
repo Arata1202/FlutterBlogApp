@@ -21,33 +21,10 @@ class _SnsState extends State<Sns> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 4,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(40.0),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: const Text(
-              '筆者のSNS',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       body: Column(
         children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SNS')), // 追加
+          BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SNS')),
           Expanded(
             child: Container(
               color: Colors.white,
@@ -69,6 +46,32 @@ class _SnsState extends State<Sns> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
+      elevation: 4,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(40.0),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: const Text(
+            '筆者のSNS',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -109,11 +112,15 @@ class _SnsState extends State<Sns> {
     );
   }
 
-  void _launchURL(String webUrl) async {
-    if (await canLaunch(webUrl)) {
-      await launch(webUrl, forceSafariVC: false);
-    } else {
-      print('Could not launch $webUrl');
+  Future<void> _launchURL(String webUrl) async {
+    try {
+      if (await canLaunch(webUrl)) {
+        await launch(webUrl, forceSafariVC: false);
+      } else {
+        throw 'Could not launch $webUrl';
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

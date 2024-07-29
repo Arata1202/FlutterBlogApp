@@ -4,7 +4,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../components/menu/profile/index.dart';
-import '../../components/menu/notice/index.dart';
 import '../../components/menu/privacy/index.dart';
 import '../../components/menu/sns/index.dart';
 import '../../common/admob/banner/index.dart';

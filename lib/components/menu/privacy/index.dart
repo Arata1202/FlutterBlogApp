@@ -29,8 +29,7 @@ class _PrivacyState extends State<Privacy> {
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
             if (!request.url.contains('web-view-blog-app.netlify.app')) {
-              if (await canLaunch(request.url)) {
-                await launch(request.url, forceSafariVC: false);
+              if (await _handleExternalUrl(request.url)) {
                 return NavigationDecision.prevent;
               }
             }
@@ -41,30 +40,22 @@ class _PrivacyState extends State<Privacy> {
       ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/privacy'));
   }
 
+  Future<bool> _handleExternalUrl(String url) async {
+    try {
+      if (await canLaunch(url)) {
+        await launch(url, forceSafariVC: false);
+        return true;
+      }
+    } catch (e) {
+      print('Could not launch $url: $e');
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Center(
-            child: Text(
-              'プライバシーポリシー',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -74,6 +65,30 @@ class _PrivacyState extends State<Privacy> {
             child: WebViewWidget(controller: _controller),
           ),
         ],
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
+      title: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(30.0),
+        child: Center(
+          child: Text(
+            'プライバシーポリシー',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }

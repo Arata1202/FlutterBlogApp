@@ -28,53 +28,66 @@ class _ProfileState extends State<Profile> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (!request.url.contains('web-view-blog-app.netlify.app')) {
-              if (await canLaunch(request.url)) {
-                await launch(request.url, forceSafariVC: false);
-                return NavigationDecision.prevent;
-              }
-            }
-            return NavigationDecision.navigate;
+            return await _handleNavigationRequest(request);
           },
         ),
       )
       ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/profile'));
   }
 
+  Future<NavigationDecision> _handleNavigationRequest(
+      NavigationRequest request) async {
+    if (!request.url.contains('web-view-blog-app.netlify.app')) {
+      try {
+        if (await canLaunch(request.url)) {
+          await launch(request.url, forceSafariVC: false);
+          return NavigationDecision.prevent;
+        }
+      } catch (e) {
+        print('Could not launch ${request.url}: $e');
+      }
+    }
+    return NavigationDecision.navigate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(30.0),
-          child: Container(
-            alignment: Alignment.center,
-            child: const Text(
-              '筆者について',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       backgroundColor: Colors.white,
       body: Column(
         children: [
           BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PROFILE')), // 追加
+              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PROFILE')),
           Expanded(
             child: WebViewWidget(controller: _controller),
           ),
         ],
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.transparent,
+      title: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(30.0),
+        child: Container(
+          alignment: Alignment.center,
+          child: const Text(
+            '筆者について',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }

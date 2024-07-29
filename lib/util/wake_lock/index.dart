@@ -1,11 +1,19 @@
 import 'package:wakelock/wakelock.dart';
 
 class WakelockManager {
-  static void enable() {
-    Wakelock.enable();
+  static Future<void> enable() async {
+    try {
+      await Wakelock.enable();
+    } catch (e) {
+      print('Failed to enable wakelock: $e');
+    }
   }
 
-  static void disable() {
-    Wakelock.disable();
+  static Future<void> disable() async {
+    try {
+      await Wakelock.disable();
+    } catch (e) {
+      print('Failed to disable wakelock: $e');
+    }
   }
 }

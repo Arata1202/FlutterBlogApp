@@ -12,6 +12,7 @@ class BannerAdWidget extends StatefulWidget {
 
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
+  bool _isAdLoaded = false;
 
   @override
   void initState() {
@@ -26,11 +27,16 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) {
-          setState(() {});
+          setState(() {
+            _isAdLoaded = true;
+          });
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
           print('Ad failed to load: $error');
+          Future.delayed(Duration(seconds: 5), () {
+            _createBannerAd();
+          });
         },
       ),
     )..load();
@@ -44,13 +50,17 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _bannerAd != null
+    return _isAdLoaded
         ? Container(
             color: Colors.white,
             width: _bannerAd!.size.width.toDouble(),
             height: _bannerAd!.size.height.toDouble(),
             child: AdWidget(ad: _bannerAd!),
           )
-        : SizedBox.shrink();
+        : SizedBox(
+            width: AdSize.banner.width.toDouble(),
+            height: AdSize.banner.height.toDouble(),
+            child: Center(child: CircularProgressIndicator()),
+          );
   }
 }

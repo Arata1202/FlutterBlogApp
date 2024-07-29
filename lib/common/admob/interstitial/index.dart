@@ -25,6 +25,19 @@ class InterstitialAdManager {
 
   Future<void> showInterstitialAd() async {
     if (_isInterstitialAdReady) {
+      _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (InterstitialAd ad) {
+          ad.dispose();
+          _interstitialAd = null;
+          _isInterstitialAdReady = false;
+        },
+        onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+          print('Ad failed to show: $error');
+          ad.dispose();
+          _interstitialAd = null;
+          _isInterstitialAdReady = false;
+        },
+      );
       await _interstitialAd?.show();
     } else {
       print('Interstitial ad is not ready yet');

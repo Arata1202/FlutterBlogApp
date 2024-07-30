@@ -7,11 +7,19 @@ import 'app/home/index.dart';
 import 'layout/footer/index.dart';
 import 'layout/splash/index.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
   runApp(const MyApp());
   MobileAds.instance.initialize();
   await dotenv.load(fileName: '.env');
+  //Remove this method to stop OneSignal Debugging
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+
+  OneSignal.initialize(dotenv.get('ONESIGNAL_APP_ID'));
+
+  // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.Notifications.requestPermission(true);
 }
 
 class MyApp extends StatelessWidget {

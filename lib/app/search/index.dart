@@ -83,8 +83,8 @@ class _SearchState extends State<Search> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH')),
+          // BannerAdWidget(
+          //     adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH')),
           Expanded(
             child: WebViewWidget(controller: _webViewController),
           ),

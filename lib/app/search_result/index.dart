@@ -116,8 +116,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
+          // BannerAdWidget(
+          //     adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
           Expanded(
             child: WebViewWidget(controller: _controller),
           ),

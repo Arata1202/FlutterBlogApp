@@ -44,7 +44,7 @@ class _MenuState extends State<Menu> {
       ),
       body: Column(
         children: [
-          BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_MENU')),
+          // BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_MENU')),
           Expanded(
             child: Container(
               color: Colors.white,

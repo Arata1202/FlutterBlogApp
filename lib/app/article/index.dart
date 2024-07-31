@@ -94,8 +94,8 @@ class _ArticlePageState extends State<ArticlePage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
+          // BannerAdWidget(
+          //     adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 39.0),

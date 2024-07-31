@@ -57,8 +57,8 @@ class _ProfileState extends State<Profile> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PROFILE')),
+          // BannerAdWidget(
+          //     adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PROFILE')),
           Expanded(
             child: WebViewWidget(controller: _controller),
           ),

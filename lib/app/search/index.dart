@@ -29,9 +29,9 @@ class _SearchState extends State<Search> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.contains('web-view-blog-app.netlify.app/tag/') ||
+            if (request.url.contains('web-view-blog-app.vercel.app/tag/') ||
                 request.url
-                    .contains('web-view-blog-app.netlify.app/search?q=')) {
+                    .contains('web-view-blog-app.vercel.app/search?q=')) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -53,7 +53,7 @@ class _SearchState extends State<Search> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/keyword'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/keyword'));
   }
 
   @override

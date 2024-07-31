@@ -7,7 +7,7 @@ class NavigationHelper {
     String currentUrl,
     Future<void> Function()? onArticleNavigate,
   ) async {
-    if (!request.url.contains('web-view-blog-app.netlify.app')) {
+    if (!request.url.contains('web-view-blog-app.vercel.app')) {
       try {
         if (await canLaunch(request.url)) {
           await launch(request.url, forceSafariVC: false);
@@ -20,7 +20,7 @@ class NavigationHelper {
       return NavigationDecision.prevent;
     }
 
-    if (request.url.contains('web-view-blog-app.netlify.app/article') &&
+    if (request.url.contains('web-view-blog-app.vercel.app/article') &&
         request.url != currentUrl) {
       if (onArticleNavigate != null) {
         try {

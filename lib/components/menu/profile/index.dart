@@ -32,12 +32,12 @@ class _ProfileState extends State<Profile> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/profile'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/profile'));
   }
 
   Future<NavigationDecision> _handleNavigationRequest(
       NavigationRequest request) async {
-    if (!request.url.contains('web-view-blog-app.netlify.app')) {
+    if (!request.url.contains('web-view-blog-app.vercel.app')) {
       try {
         if (await canLaunch(request.url)) {
           await launch(request.url, forceSafariVC: false);

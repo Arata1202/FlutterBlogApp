@@ -56,7 +56,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.contains('web-view-blog-app.netlify.app/article')) {
+            if (request.url.contains('web-view-blog-app.vercel.app/article')) {
               _showInterstitialAd(() {
                 Navigator.push(
                   context,

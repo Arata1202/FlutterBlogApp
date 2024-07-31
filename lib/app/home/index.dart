@@ -138,7 +138,7 @@ class NewPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const WebViewTab(url: 'https://web-view-blog-app.netlify.app');
+    return const WebViewTab(url: 'https://web-view-blog-app.vercel.app');
   }
 }
 
@@ -148,7 +148,7 @@ class ProgrammingPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.netlify.app/category/programming');
+        url: 'https://web-view-blog-app.vercel.app/category/programming');
   }
 }
 
@@ -158,7 +158,7 @@ class UniversityPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.netlify.app/category/university');
+        url: 'https://web-view-blog-app.vercel.app/category/university');
   }
 }
 
@@ -168,7 +168,7 @@ class TravelPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.netlify.app/category/travel');
+        url: 'https://web-view-blog-app.vercel.app/category/travel');
   }
 }
 
@@ -178,7 +178,7 @@ class BlogPostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WebViewTab(
-        url: 'https://web-view-blog-app.netlify.app/category/blog');
+        url: 'https://web-view-blog-app.vercel.app/category/blog');
   }
 }
 
@@ -218,7 +218,7 @@ class _WebViewTabState extends State<WebViewTab> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('web-view-blog-app.netlify.app/article') &&
+            if (request.url.contains('web-view-blog-app.vercel.app/article') &&
                 request.url != widget.url) {
               await _showInterstitialAd();
               Navigator.push(
@@ -229,7 +229,7 @@ class _WebViewTabState extends State<WebViewTab> {
               ).then((_) => _clearLastUrl());
               return NavigationDecision.prevent;
             }
-            if (!request.url.contains('web-view-blog-app.netlify.app')) {
+            if (!request.url.contains('web-view-blog-app.vercel.app')) {
               if (await canLaunch(request.url)) {
                 await launch(request.url, forceSafariVC: false);
                 return NavigationDecision.prevent;

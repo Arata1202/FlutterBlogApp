@@ -28,7 +28,7 @@ class _PrivacyState extends State<Privacy> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
-            if (!request.url.contains('web-view-blog-app.netlify.app')) {
+            if (!request.url.contains('web-view-blog-app.vercel.app')) {
               if (await _handleExternalUrl(request.url)) {
                 return NavigationDecision.prevent;
               }
@@ -37,7 +37,7 @@ class _PrivacyState extends State<Privacy> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('https://web-view-blog-app.netlify.app/privacy'));
+      ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/privacy'));
   }
 
   Future<bool> _handleExternalUrl(String url) async {

@@ -38,3 +38,7 @@ chmod +x pod.sh
 ### オープニング・メニューページ
 
 ![3](https://github.com/user-attachments/assets/df419fbc-11cc-4e11-bf9f-071ea35d1550)
+
+### プッシュ通知
+
+![5](https://github.com/user-attachments/assets/2d7027b9-9370-4393-81cc-8090f25bf848)

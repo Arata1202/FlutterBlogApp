@@ -59,8 +59,8 @@ class _PrivacyState extends State<Privacy> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // BannerAdWidget(
-          //     adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PRIVACY')),
+          BannerAdWidget(
+              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PRIVACY')),
           Expanded(
             child: WebViewWidget(controller: _controller),
           ),

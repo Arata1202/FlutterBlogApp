@@ -128,8 +128,8 @@ class _MenuState extends State<Menu> {
 
   void _shareApp() {
     Share.share(
-      'Check out this awesome app: [App Link]',
-      subject: 'Awesome App',
+      'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103',
+      subject: 'リアル大学生',
     );
   }
 

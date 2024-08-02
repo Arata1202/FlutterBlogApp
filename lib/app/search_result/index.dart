@@ -17,37 +17,37 @@ class SearchResultsPage extends StatefulWidget {
 
 class _SearchResultsPageState extends State<SearchResultsPage> {
   late WebViewController _controller;
-  // late InterstitialAdManager _interstitialAdManager;
-  // bool _isInterstitialAdReady = false;
+  late InterstitialAdManager _interstitialAdManager;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
-    // _interstitialAdManager = InterstitialAdManager();
-    // _loadInterstitialAd();
+    _interstitialAdManager = InterstitialAdManager();
+    _loadInterstitialAd();
     _initializeWebViewController();
   }
 
-  // void _loadInterstitialAd() {
-  //   _interstitialAdManager.loadInterstitialAd(
-  //     dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_SEARCH'),
-  //     () => setState(() => _isInterstitialAdReady = true),
-  //   );
-  // }
+  void _loadInterstitialAd() {
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_SEARCH'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
+  }
 
-  // void _showInterstitialAd(VoidCallback onAdClosed) {
-  //   if (_isInterstitialAdReady) {
-  //     _interstitialAdManager.showInterstitialAd().then((_) {
-  //       onAdClosed();
-  //     }).catchError((error) {
-  //       print('Failed to show interstitial ad: $error');
-  //       onAdClosed();
-  //     });
-  //   } else {
-  //     print('Interstitial ad is not ready yet');
-  //     onAdClosed();
-  //   }
-  // }
+  void _showInterstitialAd(VoidCallback onAdClosed) {
+    if (_isInterstitialAdReady) {
+      _interstitialAdManager.showInterstitialAd().then((_) {
+        onAdClosed();
+      }).catchError((error) {
+        print('Failed to show interstitial ad: $error');
+        onAdClosed();
+      });
+    } else {
+      print('Interstitial ad is not ready yet');
+      onAdClosed();
+    }
+  }
 
   void _initializeWebViewController() {
     _controller = WebViewController()
@@ -57,14 +57,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('web-view-blog-app.vercel.app/article')) {
-              // _showInterstitialAd(() {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ArticlePage(url: request.url),
-                ),
-              );
-              // });
+              _showInterstitialAd(() {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ArticlePage(url: request.url),
+                  ),
+                );
+              });
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -85,7 +85,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   void dispose() {
-    // _interstitialAdManager.dispose();
+    _interstitialAdManager.dispose();
     super.dispose();
   }
 

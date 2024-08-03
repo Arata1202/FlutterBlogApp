@@ -21,8 +21,8 @@ class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
 
   // インタースティシャル
-  // late InterstitialAdManager _interstitialAdManager;
-  // bool _isInterstitialAdReady = false;
+  late InterstitialAdManager _interstitialAdManager;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
@@ -31,11 +31,11 @@ class _ArticlePageState extends State<ArticlePage> {
     LastUrlManager.saveLastUrl(widget.url);
 
     // インタースティシャル
-    // _interstitialAdManager = InterstitialAdManager();
-    // _interstitialAdManager.loadInterstitialAd(
-    //   dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
-    //   () => setState(() => _isInterstitialAdReady = true),
-    // );
+    _interstitialAdManager = InterstitialAdManager();
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
 
     _initializeWebViewController();
   }
@@ -51,7 +51,7 @@ class _ArticlePageState extends State<ArticlePage> {
               request,
               widget.url,
               () async {
-                // await _interstitialAdManager.showInterstitialAd();
+                await _interstitialAdManager.showInterstitialAd();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -74,7 +74,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   void _cleanupResources() {
     WakelockManager.disable();
-    // _interstitialAdManager.dispose();
+    _interstitialAdManager.dispose();
     LastUrlManager.clearLastUrl();
   }
 
@@ -94,8 +94,8 @@ class _ArticlePageState extends State<ArticlePage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // BannerAdWidget(
-          //     adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
+          BannerAdWidget(
+              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 39.0),

@@ -24,7 +24,7 @@ class _SnsState extends State<Sns> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          // BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SNS')),
+          BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SNS')),
           Expanded(
             child: Container(
               color: Colors.white,

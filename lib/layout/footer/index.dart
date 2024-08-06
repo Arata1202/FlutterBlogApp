@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -12,17 +12,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return CupertinoTabBar(
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: '検索'),
-        BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'メニュー'),
+        BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.compass), label: 'ホーム'),
+        BottomNavigationBarItem(icon: Icon(CupertinoIcons.search), label: '検索'),
+        BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.square_grid_2x2), label: 'メニュー'),
       ],
       currentIndex: currentIndex,
-      elevation: 4,
-      backgroundColor: Colors.white,
+      backgroundColor: CupertinoColors.white,
       onTap: onTap,
-      selectedItemColor: Colors.blue,
+      activeColor: CupertinoColors.activeBlue,
+      inactiveColor: CupertinoColors.inactiveGray,
     );
   }
 }

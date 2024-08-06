@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -21,47 +21,62 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Image.asset(
           'assets/title.webp',
           height: 28,
         ),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 4,
+        backgroundColor: CupertinoColors.white,
+        border: null,
       ),
-      body: Column(
+      child: Column(
         children: [
           BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_MENU')),
           Expanded(
             child: Container(
-              color: Colors.white,
-              child: ListView(
-                children: [
-                  _menuItem("筆者について", const Icon(Icons.person), () {
-                    _navigateTo(context, const Profile());
-                  }),
-                  _divider(),
-                  _menuItem("筆者のSNS", const Icon(Icons.public), () {
-                    _navigateTo(context, const Sns());
-                  }),
-                  _divider(),
-                  _menuItem("アプリをシェア", const Icon(Icons.share), _shareApp),
-                  _divider(),
-                  _menuItem("プライバシーポリシー", const Icon(Icons.privacy_tip), () {
-                    _navigateTo(context, const Privacy());
-                  }),
-                  _divider(),
-                  _menuItem("お問い合わせ", const Icon(Icons.email), _launchMailApp),
-                  _divider(),
-                  _menuItem("プッシュ通知設定", const Icon(Icons.notifications),
-                      _navigateToPushNotificationSettings),
-                  _divider(),
-                  _menuItem(
-                      "レビューを送信", const Icon(Icons.rate_review), _requestReview),
-                  _divider(),
-                ],
+              color: CupertinoColors.systemGrey6,
+              child: CupertinoScrollbar(
+                child: ListView(
+                  children: [
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
+                        _menuItem("プッシュ通知設定", CupertinoIcons.bell,
+                            _navigateToPushNotificationSettings),
+                      ],
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
+                        _menuItem(
+                            "レビューを送信", CupertinoIcons.star, _requestReview),
+                        _menuItem("アプリをシェア", CupertinoIcons.share, _shareApp),
+                      ],
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
+                        _menuItem("筆者について", CupertinoIcons.person, () {
+                          _navigateTo(context, const Profile());
+                        }),
+                        _menuItem("筆者のSNS", CupertinoIcons.globe, () {
+                          _navigateTo(context, const Sns());
+                        }),
+                      ],
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
+                        _menuItem("プライバシーポリシー", CupertinoIcons.lock, () {
+                          _navigateTo(context, const Privacy());
+                        }),
+                        _menuItem(
+                            "お問い合わせ", CupertinoIcons.mail, _launchMailApp),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -70,39 +85,12 @@ class _MenuState extends State<Menu> {
     );
   }
 
-  Widget _menuItem(String title, Icon icon, VoidCallback onTap) {
-    return InkWell(
+  CupertinoListTile _menuItem(String title, IconData icon, VoidCallback onTap) {
+    return CupertinoListTile(
+      title: Text(title),
+      leading: Icon(icon),
+      trailing: const CupertinoListTileChevron(),
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0),
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 4.0),
-        child: Row(
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(right: 10.0),
-              child: icon,
-            ),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(color: Colors.black, fontSize: 15.0),
-              ),
-            ),
-            const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _divider() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: const Divider(
-        color: Colors.grey,
-        height: 1,
-        thickness: 0.5,
-      ),
     );
   }
 
@@ -131,7 +119,7 @@ class _MenuState extends State<Menu> {
   void _navigateTo(BuildContext context, Widget page) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => page),
+      CupertinoPageRoute(builder: (context) => page),
     );
   }
 

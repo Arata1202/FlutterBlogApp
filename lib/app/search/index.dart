@@ -27,7 +27,7 @@ class _SearchState extends State<Search> {
   void _initializeWebViewController() {
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.transparent)
+      ..setBackgroundColor(CupertinoColors.systemBackground)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
@@ -36,7 +36,7 @@ class _SearchState extends State<Search> {
                     .contains('web-view-blog-app.vercel.app/search?q=')) {
               Navigator.push(
                 context,
-                MaterialPageRoute(
+                CupertinoPageRoute(
                   builder: (context) => SearchResultsPage(url: request.url),
                 ),
               );
@@ -69,17 +69,9 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: Column(
+    return CupertinoPageScaffold(
+      navigationBar: _buildNavigationBar(context),
+      child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -96,6 +88,33 @@ class _SearchState extends State<Search> {
             child: WebViewWidget(controller: _webViewController),
           ),
         ],
+      ),
+    );
+  }
+
+  CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
+    return CupertinoNavigationBar(
+      backgroundColor: CupertinoColors.white,
+      middle: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      leading: CupertinoButton(
+        padding: const EdgeInsets.all(0),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
+            SizedBox(width: 4),
+            Text(
+              '戻る',
+              style: TextStyle(color: CupertinoColors.activeBlue),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -99,23 +99,6 @@ class _SearchState extends State<Search> {
         'assets/title.webp',
         height: 28,
       ),
-      leading: CupertinoButton(
-        padding: const EdgeInsets.all(0),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
-            SizedBox(width: 4),
-            Text(
-              '戻る',
-              style: TextStyle(color: CupertinoColors.activeBlue),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

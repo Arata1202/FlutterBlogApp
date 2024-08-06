@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -20,28 +20,39 @@ class _SnsState extends State<Sns> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: Column(
+    return CupertinoPageScaffold(
+      navigationBar: _buildNavigationBar(),
+      child: Column(
         children: [
           BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SNS')),
           Expanded(
             child: Container(
-              color: Colors.white,
-              child: ListView(
-                children: [
-                  _menuItem("X", const FaIcon(FontAwesomeIcons.twitter), () {
-                    _launchURL('https://x.com/Aokumoblog');
-                  }),
-                  _divider(),
-                  _menuItem(
-                      "Instagram", const FaIcon(FontAwesomeIcons.instagram),
-                      () {
-                    _launchURL(
-                        'https://www.instagram.com/ao_realstudent/?hl=ja');
-                  }),
-                  _divider(),
-                ],
+              color: CupertinoColors.systemGrey6,
+              child: CupertinoScrollbar(
+                child: ListView(
+                  children: [
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
+                        _menuItem(
+                          "X",
+                          const FaIcon(FontAwesomeIcons.twitter),
+                          () {
+                            _launchURL('https://x.com/Aokumoblog');
+                          },
+                        ),
+                        _menuItem(
+                          "Instagram",
+                          const FaIcon(FontAwesomeIcons.instagram),
+                          () {
+                            _launchURL(
+                                'https://www.instagram.com/ao_realstudent/?hl=ja');
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -50,65 +61,23 @@ class _SnsState extends State<Sns> {
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: Image.asset(
+  CupertinoNavigationBar _buildNavigationBar() {
+    return CupertinoNavigationBar(
+      middle: Image.asset(
         'assets/title.webp',
         height: 28,
       ),
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.transparent,
-      elevation: 4,
-      // bottom: PreferredSize(
-      //   preferredSize: const Size.fromHeight(40.0),
-      //   child: Padding(
-      //     padding: const EdgeInsets.only(bottom: 8.0),
-      //     child: const Text(
-      //       '筆者のSNS',
-      //       style: TextStyle(
-      //         color: Colors.black,
-      //         fontSize: 15,
-      //         fontWeight: FontWeight.bold,
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      backgroundColor: CupertinoColors.white,
+      border: null,
     );
   }
 
-  Widget _menuItem(String title, Widget icon, VoidCallback onTap) {
-    return InkWell(
+  CupertinoListTile _menuItem(String title, Widget icon, VoidCallback onTap) {
+    return CupertinoListTile(
+      title: Text(title),
+      leading: icon,
+      trailing: const CupertinoListTileChevron(),
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0),
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 4.0),
-        child: Row(
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(right: 10.0),
-              child: icon,
-            ),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(color: Colors.black, fontSize: 15.0),
-              ),
-            ),
-            const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _divider() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: const Divider(
-        color: Colors.grey,
-        height: 1,
-        thickness: 0.5,
-      ),
     );
   }
 

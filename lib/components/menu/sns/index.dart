@@ -59,20 +59,20 @@ class _SnsState extends State<Sns> {
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
       elevation: 4,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(40.0),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: const Text(
-            '筆者のSNS',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      // bottom: PreferredSize(
+      //   preferredSize: const Size.fromHeight(40.0),
+      //   child: Padding(
+      //     padding: const EdgeInsets.only(bottom: 8.0),
+      //     child: const Text(
+      //       '筆者のSNS',
+      //       style: TextStyle(
+      //         color: Colors.black,
+      //         fontSize: 15,
+      //         fontWeight: FontWeight.bold,
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 

@@ -75,20 +75,20 @@ class _ProfileState extends State<Profile> {
         'assets/title.webp',
         height: 28,
       ),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(30.0),
-        child: Container(
-          alignment: Alignment.center,
-          child: const Text(
-            '筆者について',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      // bottom: PreferredSize(
+      //   preferredSize: const Size.fromHeight(30.0),
+      //   child: Container(
+      //     alignment: Alignment.center,
+      //     child: const Text(
+      //       '筆者について',
+      //       style: TextStyle(
+      //         color: Colors.black,
+      //         fontSize: 15,
+      //         fontWeight: FontWeight.bold,
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

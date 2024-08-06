@@ -27,20 +27,6 @@ class _MenuState extends State<Menu> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         elevation: 4,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(40.0),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: const Text(
-              'メニュー',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
       ),
       body: Column(
         children: [
@@ -65,6 +51,9 @@ class _MenuState extends State<Menu> {
                   }),
                   _divider(),
                   _menuItem("お問い合わせ", const Icon(Icons.email), _launchMailApp),
+                  _divider(),
+                  _menuItem("プッシュ通知設定", const Icon(Icons.notifications),
+                      _navigateToPushNotificationSettings),
                   _divider(),
                 ],
               ),
@@ -138,5 +127,14 @@ class _MenuState extends State<Menu> {
       context,
       MaterialPageRoute(builder: (context) => page),
     );
+  }
+
+  void _navigateToPushNotificationSettings() async {
+    const String url = 'app-settings:';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Could not launch $url');
+    }
   }
 }

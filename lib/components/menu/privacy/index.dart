@@ -77,19 +77,19 @@ class _PrivacyState extends State<Privacy> {
         'assets/title.webp',
         height: 28,
       ),
-      bottom: const PreferredSize(
-        preferredSize: Size.fromHeight(30.0),
-        child: Center(
-          child: Text(
-            'プライバシーポリシー',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      // bottom: const PreferredSize(
+      //   preferredSize: Size.fromHeight(30.0),
+      //   child: Center(
+      //     child: Text(
+      //       'プライバシーポリシー',
+      //       style: TextStyle(
+      //         color: Colors.black,
+      //         fontSize: 15,
+      //         fontWeight: FontWeight.bold,
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

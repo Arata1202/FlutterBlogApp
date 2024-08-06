@@ -143,14 +143,11 @@ class _SearchState extends State<Search> {
                 trailing: CupertinoButton(
                   padding: EdgeInsets.zero,
                   child: Icon(
-                    CupertinoIcons.clear_thick_circled,
+                    CupertinoIcons.ellipsis_vertical,
                     color: CupertinoColors.systemGrey,
                   ),
                   onPressed: () {
-                    setState(() {
-                      _searchHistory.remove(history);
-                      _saveSearchHistory();
-                    });
+                    _showActionSheet(context, history);
                   },
                 ),
                 onTap: () {
@@ -169,6 +166,34 @@ class _SearchState extends State<Search> {
                 ),
               ),
             ],
+    );
+  }
+
+  void _showActionSheet(BuildContext context, String history) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text(history),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              setState(() {
+                _searchHistory.remove(history);
+                _saveSearchHistory();
+              });
+              Navigator.pop(context);
+            },
+            child: Text('削除する'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('キャンセル'),
+        ),
+      ),
     );
   }
 

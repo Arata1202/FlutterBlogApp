@@ -22,14 +22,7 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
-        backgroundColor: CupertinoColors.white,
-        border: null,
-      ),
+      navigationBar: _buildNavigationBar(context),
       child: Column(
         children: [
           BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_MENU')),
@@ -81,6 +74,16 @@ class _MenuState extends State<Menu> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
+    return CupertinoNavigationBar(
+      backgroundColor: CupertinoColors.white,
+      middle: Image.asset(
+        'assets/title.webp',
+        height: 28,
       ),
     );
   }

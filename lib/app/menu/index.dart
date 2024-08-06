@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:in_app_review/in_app_review.dart';
 import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
 import '../../components/menu/sns/index.dart';
@@ -16,6 +17,8 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  final InAppReview _inAppReview = InAppReview.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +57,9 @@ class _MenuState extends State<Menu> {
                   _divider(),
                   _menuItem("プッシュ通知設定", const Icon(Icons.notifications),
                       _navigateToPushNotificationSettings),
+                  _divider(),
+                  _menuItem(
+                      "レビューを送信", const Icon(Icons.rate_review), _requestReview),
                   _divider(),
                 ],
               ),
@@ -135,6 +141,14 @@ class _MenuState extends State<Menu> {
       await launch(url);
     } else {
       print('Could not launch $url');
+    }
+  }
+
+  void _requestReview() async {
+    if (await _inAppReview.isAvailable()) {
+      _inAppReview.requestReview();
+    } else {
+      print('In-app review not available');
     }
   }
 }

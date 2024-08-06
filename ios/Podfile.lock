@@ -7,6 +7,8 @@ PODS:
     - Google-Mobile-Ads-SDK (~> 11.2.0)
     - webview_flutter_wkwebview
   - GoogleUserMessagingPlatform (2.5.0)
+  - in_app_review (0.2.0):
+    - Flutter
   - onesignal_flutter (5.2.2):
     - Flutter
     - OneSignalXCFramework (= 5.2.2)
@@ -74,6 +76,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
+  - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - OneSignalXCFramework (< 6.0, >= 5.0.0)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -94,6 +97,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
+  in_app_review:
+    :path: ".symlinks/plugins/in_app_review/ios"
   onesignal_flutter:
     :path: ".symlinks/plugins/onesignal_flutter/ios"
   path_provider_foundation:
@@ -114,6 +119,7 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 5a6d005a6cb5b5e8f4c7b69ca05cdea79c181139
   google_mobile_ads: 9379c80fdfa9988fb0e105a407890ff8deb3cf86
   GoogleUserMessagingPlatform: 6b4f48a370e77ce121d034c908cc6ee4fdafaf13
+  in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   onesignal_flutter: c64704854df3c77f5e8b464abc15b65c8c74001a
   OneSignalXCFramework: f06edd9b146c7ac5935136a117ce2a5fdd6420f6
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46

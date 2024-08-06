@@ -45,6 +45,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   google_mobile_ads: ^5.1.0
   onesignal_flutter: ^5.1.2
+  in_app_review: ^2.0.2
 
 dev_dependencies:
   flutter_test:

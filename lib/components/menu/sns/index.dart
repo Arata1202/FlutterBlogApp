@@ -21,7 +21,7 @@ class _SnsState extends State<Sns> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: _buildNavigationBar(),
+      navigationBar: _buildNavigationBar(context),
       child: Column(
         children: [
           BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SNS')),
@@ -61,14 +61,30 @@ class _SnsState extends State<Sns> {
     );
   }
 
-  CupertinoNavigationBar _buildNavigationBar() {
+  CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
     return CupertinoNavigationBar(
+      backgroundColor: CupertinoColors.white,
       middle: Image.asset(
         'assets/title.webp',
         height: 28,
       ),
-      backgroundColor: CupertinoColors.white,
-      border: null,
+      leading: CupertinoButton(
+        padding: const EdgeInsets.all(0),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
+            SizedBox(width: 4),
+            Text(
+              '戻る',
+              style: TextStyle(color: CupertinoColors.activeBlue),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

@@ -51,6 +51,18 @@ class _SnsState extends State<Sns> {
                         ),
                       ],
                     ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
+                        _menuItem(
+                          "Suzuri",
+                          const FaIcon(FontAwesomeIcons.shoppingBag),
+                          () {
+                            _launchURL('https://suzuri.jp/realunivlog');
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

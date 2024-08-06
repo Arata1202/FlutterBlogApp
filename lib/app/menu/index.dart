@@ -8,6 +8,7 @@ import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
 import '../../components/menu/sns/index.dart';
 import '../../common/admob/banner/index.dart';
+import 'package:package_info/package_info.dart';
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
@@ -18,6 +19,20 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   final InAppReview _inAppReview = InAppReview.instance;
+  String _appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initAppVersion();
+  }
+
+  void _initAppVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = 'v${packageInfo.version} (${packageInfo.buildNumber})';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +81,17 @@ class _MenuState extends State<Menu> {
                         }),
                         _menuItem(
                             "お問い合わせ", CupertinoIcons.mail, _launchMailApp),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _appVersion,
+                            style: TextStyle(
+                              color: CupertinoColors.systemGrey,
+                              fontSize: 12,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ],
                     ),
                   ],

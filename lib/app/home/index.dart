@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
       _showInterstitialAd().then((_) {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (context) => ArticlePage(url: _lastUrl!),
           ),
         ).then((_) => _clearLastUrl());
@@ -87,33 +88,41 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
+  CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
+    return CupertinoNavigationBar(
+      backgroundColor: CupertinoColors.white,
+      middle: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 0,
       length: 5,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.transparent,
-          toolbarHeight: 60,
-          elevation: 4,
-          title: Image.asset(
-            'assets/title.webp',
-            height: 28,
-          ),
-          bottom: TabBar(
-            indicatorColor: Colors.blue,
-            labelColor: Colors.blue,
-            isScrollable: true,
-            tabs: const <Widget>[
-              Tab(text: '最新記事'),
-              Tab(text: 'プログラミング'),
-              Tab(text: '大学生活'),
-              Tab(text: '旅行'),
-              Tab(text: 'ブログ'),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(100.0), // 高さを調整できます
+          child: Column(
+            children: [
+              _buildNavigationBar(context),
+              TabBar(
+                indicatorColor: CupertinoColors.activeBlue,
+                labelColor: CupertinoColors.activeBlue,
+                isScrollable: true,
+                tabs: const <Widget>[
+                  Tab(text: '最新記事'),
+                  Tab(text: 'プログラミング'),
+                  Tab(text: '大学生活'),
+                  Tab(text: '旅行'),
+                  Tab(text: 'ブログ'),
+                ],
+                onTap: _onTabTapped,
+              ),
             ],
-            onTap: _onTabTapped,
           ),
         ),
         body: Column(
@@ -214,7 +223,7 @@ class _WebViewTabState extends State<WebViewTab> {
   void _initializeWebViewController() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.transparent)
+      ..setBackgroundColor(CupertinoColors.systemBackground)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
@@ -223,7 +232,7 @@ class _WebViewTabState extends State<WebViewTab> {
               await _showInterstitialAd();
               Navigator.push(
                 context,
-                MaterialPageRoute(
+                CupertinoPageRoute(
                   builder: (context) => ArticlePage(url: request.url),
                 ),
               ).then((_) => _clearLastUrl());

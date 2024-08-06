@@ -99,19 +99,19 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           'assets/title.webp',
           height: 28,
         ),
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Center(
-            child: Text(
-              '検索結果',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+        // bottom: const PreferredSize(
+        //   preferredSize: Size.fromHeight(30.0),
+        //   child: Center(
+        //       child: Text(
+        //         '検索結果',
+        //         style: TextStyle(
+        //           color: Colors.black,
+        //           fontSize: 15,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //       ),
+        // ),
       ),
       backgroundColor: Colors.white,
       body: Column(

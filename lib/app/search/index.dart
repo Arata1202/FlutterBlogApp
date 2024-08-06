@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -15,6 +16,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   late WebViewController _webViewController;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -56,6 +58,15 @@ class _SearchState extends State<Search> {
       ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/keyword'));
   }
 
+  void _performSearch() {
+    final query = _searchController.text;
+    if (query.isNotEmpty) {
+      _searchController.clear();
+      final searchUrl = 'https://web-view-blog-app.vercel.app/search?q=$query';
+      _webViewController.loadRequest(Uri.parse(searchUrl));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,25 +77,21 @@ class _SearchState extends State<Search> {
           'assets/title.webp',
           height: 28,
         ),
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Center(
-            child: Text(
-              '検索',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
       ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CupertinoSearchTextField(
+              controller: _searchController,
+              placeholder: '検索',
+              onSubmitted: (value) => _performSearch(),
+            ),
+          ),
           BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH')),
+            adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH'),
+          ),
           Expanded(
             child: WebViewWidget(controller: _webViewController),
           ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -52,7 +53,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   void _initializeWebViewController() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.transparent)
+      ..setBackgroundColor(CupertinoColors.systemBackground)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
@@ -60,7 +61,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               _showInterstitialAd(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  CupertinoPageRoute(
                     builder: (context) => ArticlePage(url: request.url),
                   ),
                 );
@@ -91,30 +92,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        title: Image.asset(
-          'assets/title.webp',
-          height: 28,
-        ),
-        // bottom: const PreferredSize(
-        //   preferredSize: Size.fromHeight(30.0),
-        //   child: Center(
-        //       child: Text(
-        //         '検索結果',
-        //         style: TextStyle(
-        //           color: Colors.black,
-        //           fontSize: 15,
-        //           fontWeight: FontWeight.bold,
-        //         ),
-        //       ),
-        //       ),
-        // ),
-      ),
-      backgroundColor: Colors.white,
-      body: Column(
+    return CupertinoPageScaffold(
+      navigationBar: _buildNavigationBar(context),
+      child: Column(
         children: [
           BannerAdWidget(
               adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
@@ -122,6 +102,33 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             child: WebViewWidget(controller: _controller),
           ),
         ],
+      ),
+    );
+  }
+
+  CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
+    return CupertinoNavigationBar(
+      backgroundColor: CupertinoColors.white,
+      middle: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      leading: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
+            SizedBox(width: 4),
+            Text(
+              '戻る',
+              style: TextStyle(color: CupertinoColors.activeBlue),
+            ),
+          ],
+        ),
       ),
     );
   }

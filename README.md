@@ -3,6 +3,14 @@
 まずは.env.example を.env に変更し、適切に設定する。
 
 ```
+flutter pub get
+cd ios && pod install && cd ..
+flutter run
+```
+
+または
+
+```
 chmod +x pod.sh
 ./pod.sh
 ```

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../util/last_article/index.dart';
@@ -17,6 +18,27 @@ class ArticlePage extends StatefulWidget {
   _ArticlePageState createState() => _ArticlePageState();
 }
 
+class ArticleHistoryManager {
+  static const _historyKey = 'article_history';
+
+  static Future<void> addArticleToHistory(String url) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> history = prefs.getStringList(_historyKey) ?? [];
+    history.add(url);
+    await prefs.setStringList(_historyKey, history);
+  }
+
+  static Future<List<String>> getArticleHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(_historyKey) ?? [];
+  }
+
+  static Future<void> clearHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_historyKey);
+  }
+}
+
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
 
@@ -29,6 +51,8 @@ class _ArticlePageState extends State<ArticlePage> {
     super.initState();
     WakelockManager.enable();
     LastUrlManager.saveLastUrl(widget.url);
+
+    ArticleHistoryManager.addArticleToHistory(widget.url);
 
     // インタースティシャル
     _interstitialAdManager = InterstitialAdManager();

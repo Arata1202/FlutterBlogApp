@@ -78,8 +78,8 @@ class _SearchState extends State<Search> {
       setState(() {
         _searchHistory.remove(query);
         _searchHistory.insert(0, query);
-        if (_searchHistory.length > 30) {
-          _searchHistory = _searchHistory.sublist(0, 30);
+        if (_searchHistory.length > 5) {
+          _searchHistory = _searchHistory.take(5).toList();
         }
         _saveSearchHistory();
       });

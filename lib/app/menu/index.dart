@@ -67,7 +67,7 @@ class _MenuState extends State<Menu> {
                     CupertinoListSection.insetGrouped(
                       backgroundColor: CupertinoColors.systemGrey6,
                       children: [
-                        _menuItem("履歴", CupertinoIcons.person, () {
+                        _menuItem("閲覧履歴", CupertinoIcons.time, () {
                           _navigateTo(context, const History());
                         }),
                       ],

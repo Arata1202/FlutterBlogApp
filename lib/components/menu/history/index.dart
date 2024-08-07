@@ -49,17 +49,26 @@ class _HistoryState extends State<History> {
   void _loadHistory() async {
     _history = await ArticleHistoryManager.getArticleHistory();
     _removeDuplicates();
+    _history = _history.reversed.toList();
+    _trimHistoryToThree();
     setState(() {});
   }
 
   void _removeFromHistory(String url) async {
     _history.removeWhere((entry) => entry['url'] == url);
     _removeDuplicates();
+    _trimHistoryToThree();
     List<String> updatedHistory =
         _history.map((entry) => '${entry['title']}|${entry['url']}').toList();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('article_history', updatedHistory);
     setState(() {});
+  }
+
+  void _trimHistoryToThree() {
+    if (_history.length > 10) {
+      _history = _history.take(10).toList();
+    }
   }
 
   void _removeDuplicates() {
@@ -109,7 +118,7 @@ class _HistoryState extends State<History> {
         ),
       ),
       children: _history.isNotEmpty
-          ? _history.take(5).map((entry) {
+          ? _history.map((entry) {
               return CupertinoListTile(
                 title: Text(entry['title'] ?? 'Unknown'),
                 trailing: CupertinoButton(

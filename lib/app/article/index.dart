@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../util/last_article/index.dart';
@@ -17,12 +18,39 @@ class ArticlePage extends StatefulWidget {
   _ArticlePageState createState() => _ArticlePageState();
 }
 
+class ArticleHistoryManager {
+  static const _historyKey = 'article_history';
+
+  static Future<void> addArticleToHistory(String url, String title) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> history = prefs.getStringList(_historyKey) ?? [];
+    history.add('$title|$url');
+    await prefs.setStringList(_historyKey, history);
+  }
+
+  static Future<List<Map<String, String>>> getArticleHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> history = prefs.getStringList(_historyKey) ?? [];
+    return history.map((entry) {
+      var parts = entry.split('|');
+      return {
+        'title': parts[0],
+        'url': parts[1],
+      };
+    }).toList();
+  }
+
+  static Future<void> clearHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_historyKey);
+  }
+}
+
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
-
-  // インタースティシャル
-  late InterstitialAdManager _interstitialAdManager;
   bool _isInterstitialAdReady = false;
+  late InterstitialAdManager _interstitialAdManager;
+  String _pageTitle = '';
 
   @override
   void initState() {
@@ -46,6 +74,10 @@ class _ArticlePageState extends State<ArticlePage> {
       ..setBackgroundColor(CupertinoColors.systemBackground)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageFinished: (String url) async {
+            _pageTitle = await _controller.getTitle() ?? 'Unknown';
+            ArticleHistoryManager.addArticleToHistory(widget.url, _pageTitle);
+          },
           onNavigationRequest: (NavigationRequest request) async {
             return await NavigationHelper.handleNavigationRequest(
               request,

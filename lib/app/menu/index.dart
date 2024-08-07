@@ -7,6 +7,7 @@ import 'package:in_app_review/in_app_review.dart';
 import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
 import '../../components/menu/sns/index.dart';
+import '../../components/menu/history/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'package:package_info/package_info.dart';
 
@@ -61,6 +62,14 @@ class _MenuState extends State<Menu> {
                         _menuItem(
                             "レビューを送信", CupertinoIcons.star, _requestReview),
                         _menuItem("アプリをシェア", CupertinoIcons.share, _shareApp),
+                      ],
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
+                        _menuItem("閲覧履歴", CupertinoIcons.time, () {
+                          _navigateTo(context, const History());
+                        }),
                       ],
                     ),
                     CupertinoListSection.insetGrouped(

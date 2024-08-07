@@ -21,16 +21,23 @@ class ArticlePage extends StatefulWidget {
 class ArticleHistoryManager {
   static const _historyKey = 'article_history';
 
-  static Future<void> addArticleToHistory(String url) async {
+  static Future<void> addArticleToHistory(String url, String title) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> history = prefs.getStringList(_historyKey) ?? [];
-    history.add(url);
+    history.add('$title|$url');
     await prefs.setStringList(_historyKey, history);
   }
 
-  static Future<List<String>> getArticleHistory() async {
+  static Future<List<Map<String, String>>> getArticleHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(_historyKey) ?? [];
+    List<String> history = prefs.getStringList(_historyKey) ?? [];
+    return history.map((entry) {
+      var parts = entry.split('|');
+      return {
+        'title': parts[0],
+        'url': parts[1],
+      };
+    }).toList();
   }
 
   static Future<void> clearHistory() async {
@@ -41,18 +48,15 @@ class ArticleHistoryManager {
 
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
-
-  // インタースティシャル
-  late InterstitialAdManager _interstitialAdManager;
   bool _isInterstitialAdReady = false;
+  late InterstitialAdManager _interstitialAdManager;
+  String _pageTitle = '';
 
   @override
   void initState() {
     super.initState();
     WakelockManager.enable();
     LastUrlManager.saveLastUrl(widget.url);
-
-    ArticleHistoryManager.addArticleToHistory(widget.url);
 
     // インタースティシャル
     _interstitialAdManager = InterstitialAdManager();
@@ -70,6 +74,10 @@ class _ArticlePageState extends State<ArticlePage> {
       ..setBackgroundColor(CupertinoColors.systemBackground)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageFinished: (String url) async {
+            _pageTitle = await _controller.getTitle() ?? 'Unknown';
+            ArticleHistoryManager.addArticleToHistory(widget.url, _pageTitle);
+          },
           onNavigationRequest: (NavigationRequest request) async {
             return await NavigationHelper.handleNavigationRequest(
               request,

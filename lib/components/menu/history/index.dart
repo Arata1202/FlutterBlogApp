@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app/article/index.dart';
 import '../../../common/admob/banner/index.dart';
+import '../../../common/admob/interstitial/index.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class History extends StatefulWidget {
@@ -13,27 +13,63 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-  List<String> _history = [];
+  List<Map<String, String>> _history = [];
+  late InterstitialAdManager _interstitialAdManager;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
+    _interstitialAdManager = InterstitialAdManager();
+    _loadInterstitialAd();
     _loadHistory();
   }
 
+  void _loadInterstitialAd() {
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HISTORY'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed) {
+    if (_isInterstitialAdReady) {
+      _interstitialAdManager.showInterstitialAd().then((_) {
+        onAdClosed();
+      }).catchError((error) {
+        print('Failed to show interstitial ad: $error');
+        onAdClosed();
+      });
+    } else {
+      print('Interstitial ad is not ready yet');
+      onAdClosed();
+    }
+  }
+
   void _loadHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _history = prefs.getStringList('article_history') ?? [];
-    });
+    _history = await ArticleHistoryManager.getArticleHistory();
+    _removeDuplicates();
+    setState(() {});
   }
 
   void _removeFromHistory(String url) async {
+    _history.removeWhere((entry) => entry['url'] == url);
+    _removeDuplicates();
+    List<String> updatedHistory =
+        _history.map((entry) => '${entry['title']}|${entry['url']}').toList();
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _history.remove(url);
-      prefs.setStringList('article_history', _history);
-    });
+    await prefs.setStringList('article_history', updatedHistory);
+    setState(() {});
+  }
+
+  void _removeDuplicates() {
+    Map<String, Map<String, String>> uniqueHistory = {};
+    for (var entry in _history) {
+      if (!uniqueHistory.containsKey(entry['title'])) {
+        uniqueHistory[entry['title']!] = entry;
+      }
+    }
+    _history = uniqueHistory.values.toList();
   }
 
   @override
@@ -73,9 +109,9 @@ class _HistoryState extends State<History> {
         ),
       ),
       children: _history.isNotEmpty
-          ? _history.take(5).map((url) {
+          ? _history.take(5).map((entry) {
               return CupertinoListTile(
-                title: Text(url),
+                title: Text(entry['title'] ?? 'Unknown'),
                 trailing: CupertinoButton(
                   padding: EdgeInsets.zero,
                   child: Icon(
@@ -83,16 +119,19 @@ class _HistoryState extends State<History> {
                     color: CupertinoColors.systemGrey,
                   ),
                   onPressed: () {
-                    _showActionSheet(context, url);
+                    _showActionSheet(
+                        context, entry['url']!, entry['title'] ?? 'Unknown');
                   },
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => ArticlePage(url: url),
-                    ),
-                  );
+                  _showInterstitialAd(() {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => ArticlePage(url: entry['url']!),
+                      ),
+                    );
+                  });
                 },
               );
             }).toList()
@@ -113,11 +152,11 @@ class _HistoryState extends State<History> {
     );
   }
 
-  void _showActionSheet(BuildContext context, String url) {
+  void _showActionSheet(BuildContext context, String url, String title) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
-        title: Text(url),
+        title: Text('$title'),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             isDestructiveAction: true,
@@ -136,5 +175,11 @@ class _HistoryState extends State<History> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _interstitialAdManager.dispose();
+    super.dispose();
   }
 }

@@ -101,7 +101,7 @@ class _HistoryState extends State<History> {
   Widget _buildHistoryList() {
     return CupertinoListSection(
       header: Text(
-        '履歴',
+        '閲覧履歴',
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.bold,
@@ -140,7 +140,7 @@ class _HistoryState extends State<History> {
                 padding: const EdgeInsets.all(16.0),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '履歴はありません。',
+                  '閲覧履歴はありません。',
                   style: TextStyle(
                       color: CupertinoColors.systemGrey,
                       decoration: TextDecoration.none,

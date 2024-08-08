@@ -98,6 +98,7 @@ class _ArticlePageState extends State<ArticlePage> {
   late InterstitialAdManager _interstitialAdManager;
   String _pageTitle = '';
   bool _isFavorite = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -122,9 +123,17 @@ class _ArticlePageState extends State<ArticlePage> {
       ..setBackgroundColor(CupertinoColors.systemBackground)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
           onPageFinished: (String url) async {
             _pageTitle = await _controller.getTitle() ?? 'Unknown';
             ArticleHistoryManager.addArticleToHistory(widget.url, _pageTitle);
+            setState(() {
+              _isLoading = false;
+            });
           },
           onNavigationRequest: (NavigationRequest request) async {
             return await NavigationHelper.handleNavigationRequest(
@@ -252,14 +261,16 @@ class _ArticlePageState extends State<ArticlePage> {
           ],
         ),
       ),
-      trailing: CupertinoButton(
-        padding: EdgeInsets.zero,
-        onPressed: _toggleFavorite,
-        child: Icon(
-          _isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-          color: CupertinoColors.systemRed,
-        ),
-      ),
+      trailing: _isLoading
+          ? const SizedBox()
+          : CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: _toggleFavorite,
+              child: Icon(
+                _isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                color: CupertinoColors.systemRed,
+              ),
+            ),
     );
   }
 }

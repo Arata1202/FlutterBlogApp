@@ -182,7 +182,7 @@ class _ArticlePageState extends State<ArticlePage> {
       context: context,
       builder: (BuildContext context) {
         return CupertinoActionSheet(
-          title: const Text('お気に入り登録は15件までです'),
+          title: const Text('登録は15件までです。'),
           actions: <CupertinoActionSheetAction>[
             CupertinoActionSheetAction(
               onPressed: () {

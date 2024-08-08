@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../../app/article/index.dart';
 import '../../../common/admob/banner/index.dart';
 import '../../../common/admob/interstitial/index.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class History extends StatefulWidget {
-  const History({super.key});
+class Favorite extends StatefulWidget {
+  const Favorite({super.key});
 
   @override
-  _HistoryState createState() => _HistoryState();
+  _FavoriteState createState() => _FavoriteState();
 }
 
-class _HistoryState extends State<History> {
-  List<Map<String, String>> _history = [];
+class _FavoriteState extends State<Favorite> {
+  List<Map<String, String>> _favorites = [];
   late InterstitialAdManager _interstitialAdManager;
   bool _isInterstitialAdReady = false;
 
@@ -22,12 +22,12 @@ class _HistoryState extends State<History> {
     super.initState();
     _interstitialAdManager = InterstitialAdManager();
     _loadInterstitialAd();
-    _loadHistory();
+    _loadFavorites();
   }
 
   void _loadInterstitialAd() {
     _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HISTORY'),
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_FAVORITES'),
       () => setState(() => _isInterstitialAdReady = true),
     );
   }
@@ -46,39 +46,15 @@ class _HistoryState extends State<History> {
     }
   }
 
-  void _loadHistory() async {
-    _history = await ArticleHistoryManager.getArticleHistory();
-    _removeDuplicates();
-    _history = _history.reversed.toList();
-    _trimHistoryToThree();
+  void _loadFavorites() async {
+    _favorites = await FavoritesManager.getFavorites();
     setState(() {});
   }
 
-  void _removeFromHistory(String url) async {
-    _history.removeWhere((entry) => entry['url'] == url);
-    _removeDuplicates();
-    _trimHistoryToThree();
-    List<String> updatedHistory =
-        _history.map((entry) => '${entry['title']}|${entry['url']}').toList();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('article_history', updatedHistory);
+  void _removeFromFavorites(String url) async {
+    await FavoritesManager.removeFavorite(url);
+    _favorites.removeWhere((entry) => entry['url'] == url);
     setState(() {});
-  }
-
-  void _trimHistoryToThree() {
-    if (_history.length > 15) {
-      _history = _history.take(15).toList();
-    }
-  }
-
-  void _removeDuplicates() {
-    Map<String, Map<String, String>> uniqueHistory = {};
-    for (var entry in _history) {
-      if (!uniqueHistory.containsKey(entry['title'])) {
-        uniqueHistory[entry['title']!] = entry;
-      }
-    }
-    _history = uniqueHistory.values.toList();
   }
 
   @override
@@ -88,9 +64,9 @@ class _HistoryState extends State<History> {
       child: Column(
         children: [
           BannerAdWidget(
-            adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HISTORY'),
+            adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_FAVORITES'),
           ),
-          _buildHistoryList(),
+          _buildFavoritesList(),
           Expanded(child: Container(color: CupertinoColors.systemGrey6)),
         ],
       ),
@@ -124,18 +100,18 @@ class _HistoryState extends State<History> {
     );
   }
 
-  Widget _buildHistoryList() {
+  Widget _buildFavoritesList() {
     return CupertinoListSection(
       header: Text(
-        '閲覧履歴',
+        'お気に入り',
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.bold,
           color: CupertinoColors.black,
         ),
       ),
-      children: _history.isNotEmpty
-          ? _history.map((entry) {
+      children: _favorites.isNotEmpty
+          ? _favorites.map((entry) {
               return CupertinoListTile(
                 title: Text(entry['title'] ?? 'Unknown'),
                 trailing: CupertinoButton(
@@ -166,7 +142,7 @@ class _HistoryState extends State<History> {
                 padding: const EdgeInsets.all(16.0),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '閲覧履歴はありません。',
+                  'お気に入りはありません。',
                   style: TextStyle(
                       color: CupertinoColors.systemGrey,
                       decoration: TextDecoration.none,
@@ -187,7 +163,7 @@ class _HistoryState extends State<History> {
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () {
-              _removeFromHistory(url);
+              _removeFromFavorites(url);
               Navigator.pop(context);
             },
             child: Text('削除する'),

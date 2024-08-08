@@ -8,6 +8,7 @@ import '../../common/admob/interstitial/index.dart';
 import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
 import '../../util/wake_lock/index.dart';
+import '../../components/menu/favorite/index.dart';
 
 class ArticlePage extends StatefulWidget {
   final String url;
@@ -46,11 +47,57 @@ class ArticleHistoryManager {
   }
 }
 
+class FavoritesManager {
+  static const _favoritesKey = 'favorite_articles';
+
+  static Future<void> addFavorite(String url, String title) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
+    if (favorites.length >= 15) {
+      return;
+    }
+    favorites.insert(0, '$title|$url');
+    await prefs.setStringList(_favoritesKey, favorites);
+  }
+
+  static Future<void> removeFavorite(String url) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
+    favorites.removeWhere((entry) => entry.split('|')[1] == url);
+    await prefs.setStringList(_favoritesKey, favorites);
+  }
+
+  static Future<List<Map<String, String>>> getFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
+    return favorites.map((entry) {
+      var parts = entry.split('|');
+      return {
+        'title': parts[0],
+        'url': parts[1],
+      };
+    }).toList();
+  }
+
+  static Future<bool> isFavorite(String url) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
+    return favorites.any((entry) => entry.split('|')[1] == url);
+  }
+
+  static Future<int> getFavoriteCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
+    return favorites.length;
+  }
+}
+
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
   bool _isInterstitialAdReady = false;
   late InterstitialAdManager _interstitialAdManager;
   String _pageTitle = '';
+  bool _isFavorite = false;
 
   @override
   void initState() {
@@ -66,6 +113,7 @@ class _ArticlePageState extends State<ArticlePage> {
     );
 
     _initializeWebViewController();
+    _checkIfFavorite();
   }
 
   void _initializeWebViewController() {
@@ -96,6 +144,57 @@ class _ArticlePageState extends State<ArticlePage> {
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
+  }
+
+  void _checkIfFavorite() async {
+    _isFavorite = await FavoritesManager.isFavorite(widget.url);
+    setState(() {});
+  }
+
+  void _toggleFavorite() async {
+    int favoriteCount = await FavoritesManager.getFavoriteCount();
+    if (_isFavorite) {
+      await FavoritesManager.removeFavorite(widget.url);
+      setState(() {
+        _isFavorite = false;
+      });
+    } else if (favoriteCount >= 15) {
+      _showFavoriteLimitExceededSheet();
+    } else {
+      await FavoritesManager.addFavorite(widget.url, _pageTitle);
+      setState(() {
+        _isFavorite = true;
+      });
+    }
+  }
+
+  void _showFavoriteLimitExceededSheet() {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: const Text('お気に入り登録は15件までです'),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (context) => Favorite()),
+                );
+              },
+              child: const Text('お気に入りを編集'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('キャンセル'),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -151,6 +250,14 @@ class _ArticlePageState extends State<ArticlePage> {
               style: TextStyle(color: CupertinoColors.activeBlue),
             ),
           ],
+        ),
+      ),
+      trailing: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: _toggleFavorite,
+        child: Icon(
+          _isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+          color: CupertinoColors.systemRed,
         ),
       ),
     );

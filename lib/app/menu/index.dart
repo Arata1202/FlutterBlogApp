@@ -8,6 +8,7 @@ import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
 import '../../components/menu/sns/index.dart';
 import '../../components/menu/history/index.dart';
+import '../../components/menu/favorite/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'package:package_info/package_info.dart';
 
@@ -69,6 +70,9 @@ class _MenuState extends State<Menu> {
                       children: [
                         _menuItem("閲覧履歴", CupertinoIcons.time, () {
                           _navigateTo(context, const History());
+                        }),
+                        _menuItem("お気に入り", CupertinoIcons.heart, () {
+                          _navigateTo(context, const Favorite());
                         }),
                       ],
                     ),

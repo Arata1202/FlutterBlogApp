@@ -66,8 +66,8 @@ class _HistoryState extends State<History> {
   }
 
   void _trimHistoryToThree() {
-    if (_history.length > 10) {
-      _history = _history.take(10).toList();
+    if (_history.length > 15) {
+      _history = _history.take(15).toList();
     }
   }
 

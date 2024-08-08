@@ -8,6 +8,7 @@ import '../../common/admob/interstitial/index.dart';
 import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
 import '../../util/wake_lock/index.dart';
+import '../../components/menu/favorite/index.dart';
 
 class ArticlePage extends StatefulWidget {
   final String url;
@@ -52,6 +53,9 @@ class FavoritesManager {
   static Future<void> addFavorite(String url, String title) async {
     final prefs = await SharedPreferences.getInstance();
     List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
+    if (favorites.length >= 15) {
+      return;
+    }
     favorites.insert(0, '$title|$url');
     await prefs.setStringList(_favoritesKey, favorites);
   }
@@ -79,6 +83,12 @@ class FavoritesManager {
     final prefs = await SharedPreferences.getInstance();
     List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
     return favorites.any((entry) => entry.split('|')[1] == url);
+  }
+
+  static Future<int> getFavoriteCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favorites = prefs.getStringList(_favoritesKey) ?? [];
+    return favorites.length;
   }
 }
 
@@ -142,14 +152,49 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   void _toggleFavorite() async {
+    int favoriteCount = await FavoritesManager.getFavoriteCount();
     if (_isFavorite) {
       await FavoritesManager.removeFavorite(widget.url);
+      setState(() {
+        _isFavorite = false;
+      });
+    } else if (favoriteCount >= 15) {
+      _showFavoriteLimitExceededSheet();
     } else {
       await FavoritesManager.addFavorite(widget.url, _pageTitle);
+      setState(() {
+        _isFavorite = true;
+      });
     }
-    setState(() {
-      _isFavorite = !_isFavorite;
-    });
+  }
+
+  void _showFavoriteLimitExceededSheet() {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: const Text('お気に入り登録は15件までです'),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(builder: (context) => Favorite()),
+                );
+              },
+              child: const Text('お気に入りを編集'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('キャンセル'),
+          ),
+        );
+      },
+    );
   }
 
   @override

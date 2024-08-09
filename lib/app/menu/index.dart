@@ -6,6 +6,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
 import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
+import '../../components/menu/disclaimer/index.dart';
+import '../../components/menu/copyright/index.dart';
+import '../../components/menu/link/index.dart';
 import '../../components/menu/sns/index.dart';
 import '../../components/menu/history/index.dart';
 import '../../components/menu/favorite/index.dart';
@@ -93,6 +96,21 @@ class _MenuState extends State<Menu> {
                         _menuItem("プライバシーポリシー", CupertinoIcons.lock, () {
                           _navigateTo(context, const Privacy());
                         }),
+                        _menuItem("免責事項", CupertinoIcons.exclamationmark_circle,
+                            () {
+                          _navigateTo(context, const Disclaimer());
+                        }),
+                        _menuItem("著作権", CupertinoIcons.doc_text, () {
+                          _navigateTo(context, const Copyright());
+                        }),
+                        _menuItem("リンク", CupertinoIcons.link, () {
+                          _navigateTo(context, const Link());
+                        }),
+                      ],
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      backgroundColor: CupertinoColors.systemGrey6,
+                      children: [
                         _menuItem(
                             "お問い合わせ", CupertinoIcons.mail, _launchMailApp),
                         Padding(

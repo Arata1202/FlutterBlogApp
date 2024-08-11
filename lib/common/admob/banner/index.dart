@@ -18,8 +18,10 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _createBannerAd();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!await AdClickManager.shouldHideAd()) {
+        _createBannerAd();
+      }
     });
   }
 

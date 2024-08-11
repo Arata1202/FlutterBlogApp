@@ -5,23 +5,25 @@ class InterstitialAdManager {
   InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
 
-  void loadInterstitialAd(String adUnitId, Function onAdLoaded) {
-    InterstitialAd.load(
-      adUnitId: adUnitId,
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          _interstitialAd = ad;
-          _isInterstitialAdReady = true;
-          _interstitialAd?.setImmersiveMode(true);
-          onAdLoaded();
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('InterstitialAd failed to load: $error');
-          _isInterstitialAdReady = false;
-        },
-      ),
-    );
+  void loadInterstitialAd(String adUnitId, Function onAdLoaded) async {
+    if (!await AdClickManager.shouldHideAd()) {
+      InterstitialAd.load(
+        adUnitId: adUnitId,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            _interstitialAd = ad;
+            _isInterstitialAdReady = true;
+            _interstitialAd?.setImmersiveMode(true);
+            onAdLoaded();
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+            _isInterstitialAdReady = false;
+          },
+        ),
+      );
+    }
   }
 
   Future<void> showInterstitialAd() async {

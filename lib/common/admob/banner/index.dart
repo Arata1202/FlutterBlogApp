@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../util/invalid_admob/index.dart';
 
 class BannerAdWidget extends StatefulWidget {
   final String adUnitId;
@@ -43,6 +44,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       listener: BannerAdListener(
         onAdLoaded: (_) {
           setState(() {});
+        },
+        onAdClicked: (_) {
+          AdClickManager.incrementClickCount();
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();

@@ -1,4 +1,5 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../util/invalid_admob/index.dart';
 
 class InterstitialAdManager {
   InterstitialAd? _interstitialAd;
@@ -36,6 +37,9 @@ class InterstitialAdManager {
           ad.dispose();
           _interstitialAd = null;
           _isInterstitialAdReady = false;
+        },
+        onAdClicked: (InterstitialAd ad) {
+          AdClickManager.incrementClickCount();
         },
       );
       await _interstitialAd?.show();

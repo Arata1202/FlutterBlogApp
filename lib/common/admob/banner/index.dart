@@ -12,17 +12,33 @@ class BannerAdWidget extends StatefulWidget {
 
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
+  AdSize? _adSize;
 
   @override
   void initState() {
     super.initState();
-    _createBannerAd();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _createBannerAd();
+    });
   }
 
-  void _createBannerAd() {
+  void _createBannerAd() async {
+    final AnchoredAdaptiveBannerAdSize? adSize =
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            MediaQuery.of(context).size.width.toInt());
+
+    if (adSize == null) {
+      print('Failed to get adaptive banner size');
+      return;
+    }
+
+    setState(() {
+      _adSize = adSize;
+    });
+
     _bannerAd = BannerAd(
       adUnitId: widget.adUnitId,
-      size: AdSize.banner,
+      size: adSize,
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) {
@@ -47,16 +63,17 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _bannerAd != null
+    return _bannerAd != null && _adSize != null
         ? Container(
             color: Colors.white,
-            width: _bannerAd!.size.width.toDouble(),
-            height: _bannerAd!.size.height.toDouble(),
+            width: _adSize!.width.toDouble(),
+            height: _adSize!.height.toDouble(),
             child: AdWidget(ad: _bannerAd!),
           )
         : SizedBox(
-            width: AdSize.banner.width.toDouble(),
-            height: AdSize.banner.height.toDouble(),
+            width: _adSize?.width.toDouble() ?? AdSize.banner.width.toDouble(),
+            height:
+                _adSize?.height.toDouble() ?? AdSize.banner.height.toDouble(),
           );
   }
 }

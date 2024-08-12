@@ -44,3 +44,4 @@ app.*.map.json
 
 .env
 todo.txt
+GoogleService-Info.plist

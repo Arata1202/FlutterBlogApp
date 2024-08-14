@@ -9,12 +9,17 @@ import 'layout/footer/index.dart';
 import 'layout/splash/index.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(const MyApp());
   MobileAds.instance.initialize();
   await dotenv.load(fileName: '.env');
   //Remove this method to stop OneSignal Debugging
@@ -24,6 +29,82 @@ void main() async {
 
   // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.Notifications.requestPermission(true);
+
+  _checkVersionAndRunApp();
+}
+
+Future<void> _checkVersionAndRunApp() async {
+  final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
+
+  await remoteConfig.setConfigSettings(RemoteConfigSettings(
+    fetchTimeout: const Duration(seconds: 10),
+    minimumFetchInterval: Duration.zero,
+  ));
+
+  await remoteConfig.setDefaults(<String, dynamic>{
+    "current_version": "1.0.0",
+  });
+
+  await remoteConfig.fetchAndActivate();
+
+  var latestVersion = remoteConfig.getString("current_version");
+
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  String currentVersion = packageInfo.version;
+
+  if (_isUpdateRequired(currentVersion, latestVersion)) {
+    runApp(UpdateRequiredApp());
+  } else {
+    runApp(const MyApp());
+  }
+}
+
+bool _isUpdateRequired(String currentVersion, String latestVersion) {
+  return currentVersion.compareTo(latestVersion) < 0;
+}
+
+class UpdateRequiredApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: CupertinoAlertDialog(
+        title: Text('アップデートのお知らせ'),
+        content: Text('新しいバージョンのアプリが利用可能です。ストアからアップデートしてください。'),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text('アップデート'),
+            onPressed: () {
+              _launchAppStore();
+            },
+          ),
+        ],
+      ),
+      builder: (context, child) {
+        return Center(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: EdgeInsets.all(16),
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
+  void _launchAppStore() async {
+    const url =
+        'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {

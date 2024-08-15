@@ -43,20 +43,16 @@ Future<void> _checkVersionAndRunApp() async {
 
   await remoteConfig.setDefaults(<String, dynamic>{
     "current_version": "1.0.0",
-    "maintenance_mode": false,
   });
 
   await remoteConfig.fetchAndActivate();
 
   var latestVersion = remoteConfig.getString("current_version");
-  var maintenanceMode = remoteConfig.getBool("maintenance_mode");
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String currentVersion = packageInfo.version;
 
-  if (maintenanceMode) {
-    runApp(MaintenanceModeApp());
-  } else if (_isUpdateRequired(currentVersion, latestVersion)) {
+  if (_isUpdateRequired(currentVersion, latestVersion)) {
     runApp(UpdateRequiredApp());
   } else {
     runApp(const MyApp());
@@ -108,40 +104,6 @@ class UpdateRequiredApp extends StatelessWidget {
     } else {
       throw 'Could not launch $url';
     }
-  }
-}
-
-class MaintenanceModeApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CupertinoAlertDialog(
-        title: Text('メンテナンス中'),
-        content: Text('現在、アプリはメンテナンス中です。しばらくしてから再度お試しください。'),
-        actions: <Widget>[
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text('OK'),
-            onPressed: () {
-              SystemNavigator.pop();
-            },
-          ),
-        ],
-      ),
-      builder: (context, child) {
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            padding: EdgeInsets.all(16),
-            child: child,
-          ),
-        );
-      },
-    );
   }
 }
 

@@ -122,9 +122,18 @@ class MaintenanceModeApp extends StatelessWidget {
         actions: <Widget>[
           CupertinoDialogAction(
             isDefaultAction: true,
-            child: Text('OK'),
-            onPressed: () {
-              SystemNavigator.pop();
+            child: Text('WEB版を開く'),
+            onPressed: () async {
+              const url = 'https://realunivlog.com';
+              if (await canLaunch(url)) {
+                await launch(
+                  url,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                );
+              } else {
+                throw 'Could not launch $url';
+              }
             },
           ),
         ],

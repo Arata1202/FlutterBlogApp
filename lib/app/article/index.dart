@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,10 @@ import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
 import '../../util/wake_lock/index.dart';
 import '../../components/menu/favorite/index.dart';
+import 'dart:io' show Platform;
+
+bool isAndroid = Platform.isAndroid;
+bool isIOS = Platform.isIOS;
 
 class ArticlePage extends StatefulWidget {
   final String url;
@@ -120,7 +125,8 @@ class _ArticlePageState extends State<ArticlePage> {
   void _initializeWebViewController() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(CupertinoColors.systemBackground)
+      ..setBackgroundColor(
+          isIOS ? CupertinoColors.systemBackground : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
@@ -136,19 +142,35 @@ class _ArticlePageState extends State<ArticlePage> {
             });
           },
           onNavigationRequest: (NavigationRequest request) async {
-            return await NavigationHelper.handleNavigationRequest(
-              request,
-              widget.url,
-              () async {
-                await _interstitialAdManager.showInterstitialAd();
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => ArticlePage(url: request.url),
-                  ),
-                ).then((_) => LastUrlManager.clearLastUrl());
-              },
-            );
+            if (isIOS) {
+              return await NavigationHelper.handleNavigationRequest(
+                request,
+                widget.url,
+                () async {
+                  await _interstitialAdManager.showInterstitialAd();
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => ArticlePage(url: request.url),
+                    ),
+                  ).then((_) => LastUrlManager.clearLastUrl());
+                },
+              );
+            } else {
+              return await NavigationHelper.handleNavigationRequest(
+                request,
+                widget.url,
+                () async {
+                  await _interstitialAdManager.showInterstitialAd();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ArticlePage(url: request.url),
+                    ),
+                  ).then((_) => LastUrlManager.clearLastUrl());
+                },
+              );
+            }
           },
         ),
       )
@@ -178,32 +200,67 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   void _showFavoriteLimitExceededSheet() {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoActionSheet(
-          title: const Text('登録は15件までです。'),
-          actions: <CupertinoActionSheetAction>[
-            CupertinoActionSheetAction(
+    if (isIOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            title: const Text('登録は15件までです。'),
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(builder: (context) => Favorite()),
+                  );
+                },
+                child: const Text('お気に入りを編集'),
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(builder: (context) => Favorite()),
-                );
               },
-              child: const Text('お気に入りを編集'),
+              child: const Text('キャンセル'),
             ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('キャンセル'),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: const Text('登録は15件までです。', textAlign: TextAlign.center),
+              ),
+              ListTile(
+                title: const Text('お気に入りを編集'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Favorite()),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('キャンセル'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -220,21 +277,39 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: _buildNavigationBar(context),
-      child: Column(
-        children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 39.0),
-              child: WebViewWidget(controller: _controller),
+    if (isIOS) {
+      return CupertinoPageScaffold(
+        navigationBar: _buildNavigationBar(context),
+        child: Column(
+          children: [
+            BannerAdWidget(
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 39.0),
+                child: WebViewWidget(controller: _controller),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: _buildAppBar(context),
+        body: Column(
+          children: [
+            BannerAdWidget(
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 56.0),
+                child: WebViewWidget(controller: _controller),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
@@ -271,6 +346,38 @@ class _ArticlePageState extends State<ArticlePage> {
                 color: CupertinoColors.systemRed,
               ),
             ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(Icons.arrow_back, color: Colors.black),
+          ],
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      actions: [
+        if (!_isLoading)
+          IconButton(
+            icon: Icon(
+              _isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.red,
+            ),
+            onPressed: _toggleFavorite,
+          ),
+      ],
     );
   }
 }

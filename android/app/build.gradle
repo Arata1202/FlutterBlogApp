@@ -61,6 +61,7 @@ flutter {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:32.2.2')  // Firebase BoMの使用
-    implementation 'com.google.firebase:firebase-analytics'  // Firebase Analyticsの依存関係
+    implementation platform('com.google.firebase:firebase-bom:32.2.2')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.android.gms:play-services-ads:22.0.0'
 }

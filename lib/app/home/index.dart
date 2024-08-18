@@ -9,6 +9,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
 import '../../common/admob/banner/index.dart';
 import '../../common/admob/interstitial/index.dart';
+import 'dart:io' show Platform;
+
+bool isAndroid = Platform.isAndroid;
+bool isIOS = Platform.isIOS;
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -52,14 +56,23 @@ class _HomeState extends State<Home> {
       _lastUrl = prefs.getString('lastUrl');
     });
     if (_lastUrl != null) {
-      _showInterstitialAd().then((_) {
+      if (isIOS) {
+        _showInterstitialAd().then((_) {
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => ArticlePage(url: _lastUrl!),
+            ),
+          ).then((_) => _clearLastUrl());
+        });
+      } else {
         Navigator.push(
           context,
-          CupertinoPageRoute(
+          MaterialPageRoute(
             builder: (context) => ArticlePage(url: _lastUrl!),
           ),
         ).then((_) => _clearLastUrl());
-      });
+      }
     }
   }
 
@@ -98,47 +111,100 @@ class _HomeState extends State<Home> {
     );
   }
 
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      centerTitle: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      initialIndex: 0,
-      length: 5,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(100.0),
-          child: Column(
+    if (isIOS) {
+      return DefaultTabController(
+        initialIndex: 0,
+        length: 5,
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(100.0),
+            child: Column(
+              children: [
+                _buildNavigationBar(context),
+                TabBar(
+                  indicatorColor: CupertinoColors.activeBlue,
+                  labelColor: CupertinoColors.activeBlue,
+                  isScrollable: true,
+                  tabs: const <Widget>[
+                    Tab(text: '最新記事'),
+                    Tab(text: 'プログラミング'),
+                    Tab(text: '大学生活'),
+                    Tab(text: '旅行'),
+                    Tab(text: 'ブログ'),
+                  ],
+                  onTap: _onTabTapped,
+                ),
+              ],
+            ),
+          ),
+          body: Column(
             children: [
-              _buildNavigationBar(context),
-              TabBar(
-                indicatorColor: CupertinoColors.activeBlue,
-                labelColor: CupertinoColors.activeBlue,
-                isScrollable: true,
-                tabs: const <Widget>[
-                  Tab(text: '最新記事'),
-                  Tab(text: 'プログラミング'),
-                  Tab(text: '大学生活'),
-                  Tab(text: '旅行'),
-                  Tab(text: 'ブログ'),
-                ],
-                onTap: _onTabTapped,
+              BannerAdWidget(
+                  adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')),
+              Expanded(
+                child: IndexedStack(
+                  index: _currentIndex,
+                  children: _tabs,
+                ),
               ),
             ],
           ),
         ),
-        body: Column(
-          children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')),
-            Expanded(
-              child: IndexedStack(
-                index: _currentIndex,
-                children: _tabs,
-              ),
+      );
+    } else {
+      return DefaultTabController(
+        initialIndex: 0,
+        length: 5,
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(105.0),
+            child: Column(
+              children: [
+                _buildAppBar(context),
+                TabBar(
+                  indicatorColor: CupertinoColors.activeBlue,
+                  labelColor: CupertinoColors.activeBlue,
+                  isScrollable: true,
+                  tabs: const <Widget>[
+                    Tab(text: '最新記事'),
+                    Tab(text: 'プログラミング'),
+                    Tab(text: '大学生活'),
+                    Tab(text: '旅行'),
+                    Tab(text: 'ブログ'),
+                  ],
+                  onTap: _onTabTapped,
+                ),
+              ],
             ),
-          ],
+          ),
+          body: Column(
+            children: [
+              BannerAdWidget(
+                  adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')),
+              Expanded(
+                child: IndexedStack(
+                  index: _currentIndex,
+                  children: _tabs,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
 
@@ -223,19 +289,29 @@ class _WebViewTabState extends State<WebViewTab> {
   void _initializeWebViewController() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(CupertinoColors.systemBackground)
+      ..setBackgroundColor(
+          isIOS ? CupertinoColors.systemBackground : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) async {
             if (request.url.contains('web-view-blog-app.vercel.app/article') &&
                 request.url != widget.url) {
               await _showInterstitialAd();
-              Navigator.push(
-                context,
-                CupertinoPageRoute(
-                  builder: (context) => ArticlePage(url: request.url),
-                ),
-              ).then((_) => _clearLastUrl());
+              if (isIOS) {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => ArticlePage(url: request.url),
+                  ),
+                ).then((_) => _clearLastUrl());
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ArticlePage(url: request.url),
+                  ),
+                ).then((_) => _clearLastUrl());
+              }
               return NavigationDecision.prevent;
             }
             if (!request.url.contains('web-view-blog-app.vercel.app')) {

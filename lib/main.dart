@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -12,8 +13,11 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io' show Platform;
+
+bool isAndroid = Platform.isAndroid;
+bool isIOS = Platform.isIOS;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,34 +74,52 @@ bool _isUpdateRequired(String currentVersion, String latestVersion) {
 class UpdateRequiredApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CupertinoAlertDialog(
-        title: Text('アップデートのお知らせ'),
-        content: Text('新しいバージョンのアプリが利用可能です。ストアからアップデートしてください。'),
-        actions: <Widget>[
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text('アップデート'),
-            onPressed: () {
-              _launchAppStore();
-            },
-          ),
-        ],
-      ),
-      builder: (context, child) {
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
+    if (isIOS) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: CupertinoAlertDialog(
+          title: Text('アップデートのお知らせ'),
+          content: Text('新しいバージョンのアプリが利用可能です。ストアからアップデートしてください。'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text('アップデート'),
+              onPressed: () {
+                _launchAppStore();
+              },
             ),
-            padding: EdgeInsets.all(16),
-            child: child,
-          ),
-        );
-      },
-    );
+          ],
+        ),
+        builder: (context, child) {
+          return Center(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              padding: EdgeInsets.all(16),
+              child: child,
+            ),
+          );
+        },
+      );
+    } else {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: AlertDialog(
+          title: Text('アップデートのお知らせ'),
+          content: Text('新しいバージョンのアプリが利用可能です。ストアからアップデートしてください。'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('アップデート'),
+              onPressed: () {
+                _launchAppStore();
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _launchAppStore() async {
@@ -114,43 +136,70 @@ class UpdateRequiredApp extends StatelessWidget {
 class MaintenanceModeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CupertinoAlertDialog(
-        title: Text('メンテナンス中'),
-        content: Text('現在、アプリはメンテナンス中です。しばらくしてから再度お試しください。'),
-        actions: <Widget>[
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text('WEB版を開く'),
-            onPressed: () async {
-              const url = 'https://realunivlog.com';
-              if (await canLaunch(url)) {
-                await launch(
-                  url,
-                  forceSafariVC: false,
-                  forceWebView: false,
-                );
-              } else {
-                throw 'Could not launch $url';
-              }
-            },
-          ),
-        ],
-      ),
-      builder: (context, child) {
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
+    if (isIOS) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: CupertinoAlertDialog(
+          title: Text('メンテナンス中'),
+          content: Text('現在、アプリはメンテナンス中です。しばらくしてから再度お試しください。'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text('WEB版を開く'),
+              onPressed: () async {
+                const url = 'https://realunivlog.com';
+                if (await canLaunch(url)) {
+                  await launch(
+                    url,
+                    forceSafariVC: false,
+                    forceWebView: false,
+                  );
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
             ),
-            padding: EdgeInsets.all(16),
-            child: child,
-          ),
-        );
-      },
-    );
+          ],
+        ),
+        builder: (context, child) {
+          return Center(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              padding: EdgeInsets.all(16),
+              child: child,
+            ),
+          );
+        },
+      );
+    } else {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: AlertDialog(
+          title: Text('メンテナンス中'),
+          content: Text('現在、アプリはメンテナンス中です。しばらくしてから再度お試しください。'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('WEB版を開く'),
+              onPressed: () async {
+                const url = 'https://realunivlog.com';
+                if (await canLaunch(url)) {
+                  await launch(
+                    url,
+                    forceSafariVC: false,
+                    forceWebView: false,
+                  );
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 

@@ -5,6 +5,10 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../common/admob/banner/index.dart';
+import 'dart:io' show Platform;
+
+bool isAndroid = Platform.isAndroid;
+bool isIOS = Platform.isIOS;
 
 class Link extends StatefulWidget {
   const Link({super.key});
@@ -55,17 +59,33 @@ class _LinkState extends State<Link> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: _buildNavigationBar(context),
-      child: Column(
-        children: [
-          BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_LINK')),
-          Expanded(
-            child: WebViewWidget(controller: _controller),
-          ),
-        ],
-      ),
-    );
+    if (isIOS) {
+      return CupertinoPageScaffold(
+        navigationBar: _buildNavigationBar(context),
+        child: Column(
+          children: [
+            BannerAdWidget(
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_LINK')),
+            Expanded(
+              child: WebViewWidget(controller: _controller),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: _buildAppBar(context),
+        body: Column(
+          children: [
+            BannerAdWidget(
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_LINK')),
+            Expanded(
+              child: WebViewWidget(controller: _controller),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
@@ -91,6 +111,23 @@ class _LinkState extends State<Link> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

@@ -159,10 +159,10 @@ class _MenuState extends State<Menu> {
                         _menuItem("プッシュ通知設定", Icons.notifications,
                             _navigateToPushNotificationSettings),
                       ]),
-                      _buildListSection([
-                        _menuItem("レビューを送信", Icons.star, _requestReview),
-                        _menuItem("アプリをシェア", Icons.share, _shareApp),
-                      ]),
+                      // _buildListSection([
+                      //   _menuItem("レビューを送信", Icons.star, _requestReview),
+                      //   _menuItem("アプリをシェア", Icons.share, _shareApp),
+                      // ]),
                       _buildListSection([
                         _menuItem("閲覧履歴", Icons.history, () {
                           _navigateTo(context, const History());

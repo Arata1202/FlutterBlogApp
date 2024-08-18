@@ -6,6 +6,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
 import '../../common/admob/interstitial/index.dart';
 import '../../common/admob/banner/index.dart';
+import 'dart:io' show Platform;
+
+bool isAndroid = Platform.isAndroid;
+bool isIOS = Platform.isIOS;
 
 class SearchResultsPage extends StatefulWidget {
   final String url;
@@ -53,18 +57,28 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   void _initializeWebViewController() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(CupertinoColors.systemBackground)
+      ..setBackgroundColor(
+          isIOS ? CupertinoColors.systemBackground : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('web-view-blog-app.vercel.app/article')) {
               _showInterstitialAd(() {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => ArticlePage(url: request.url),
-                  ),
-                );
+                if (isIOS) {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => ArticlePage(url: request.url),
+                    ),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ArticlePage(url: request.url),
+                    ),
+                  );
+                }
               });
               return NavigationDecision.prevent;
             }
@@ -92,16 +106,55 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: _buildNavigationBar(context),
-      child: Column(
-        children: [
-          BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
-          Expanded(
-            child: WebViewWidget(controller: _controller),
-          ),
-        ],
+    if (isIOS) {
+      return CupertinoPageScaffold(
+        navigationBar: _buildNavigationBar(context),
+        child: Column(
+          children: [
+            BannerAdWidget(
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
+            Expanded(
+              child: WebViewWidget(controller: _controller),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: _buildAppBar(context),
+        body: Column(
+          children: [
+            BannerAdWidget(
+                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
+            Expanded(
+              child: WebViewWidget(controller: _controller),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      title: Image.asset(
+        'assets/title.webp',
+        height: 28,
+      ),
+      centerTitle: true,
+      // ヘッダーの変色対策
+      elevation: 0,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

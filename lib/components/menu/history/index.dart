@@ -272,12 +272,16 @@ class _HistoryState extends State<History> {
                   )
                 : Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      '閲覧履歴はありません。',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.normal,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '閲覧履歴はありません。',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),

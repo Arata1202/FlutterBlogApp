@@ -49,6 +49,7 @@ Future<void> _checkVersionAndRunApp() async {
     "current_version": "1.0.0",
     "android_current_version": "1.0.0",
     "maintenance_mode": false,
+    "android_maintenance_mode": false,
   });
 
   await remoteConfig.fetchAndActivate();
@@ -56,7 +57,9 @@ Future<void> _checkVersionAndRunApp() async {
   var latestVersion = isIOS
       ? remoteConfig.getString("current_version")
       : remoteConfig.getString("android_current_version");
-  var maintenanceMode = remoteConfig.getBool("maintenance_mode");
+  var maintenanceMode = isIOS
+      ? remoteConfig.getBool("maintenance_mode")
+      : remoteConfig.getBool("android_maintenance_mode");
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String currentVersion = packageInfo.version;

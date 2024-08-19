@@ -1,6 +1,4 @@
-![pic](https://github.com/user-attachments/assets/c97fc183-6c85-413e-b6fd-c4301712caf1)
-
-
+![pic](https://github.com/user-attachments/assets/b86aa4fb-a38e-44ff-a64f-f1661926bc3d)
 
 ## 開発方法
 

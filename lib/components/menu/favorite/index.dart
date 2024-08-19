@@ -248,12 +248,16 @@ class _FavoriteState extends State<Favorite> {
                   )
                 : Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'お気に入りはありません。',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.normal,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'お気に入りはありません。',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),

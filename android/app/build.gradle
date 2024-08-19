@@ -44,7 +44,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
-        versionName "1.4.6"
+        versionName "1.0.0"
     }
 
     buildTypes {

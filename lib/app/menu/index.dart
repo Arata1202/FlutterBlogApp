@@ -155,10 +155,10 @@ class _MenuState extends State<Menu> {
                 child: Scrollbar(
                   child: ListView(
                     children: [
-                      _buildListSection([
-                        _menuItem("プッシュ通知設定", Icons.notifications,
-                            _navigateToPushNotificationSettings),
-                      ]),
+                      // _buildListSection([
+                      //   _menuItem("プッシュ通知設定", Icons.notifications,
+                      //       _navigateToPushNotificationSettings),
+                      // ]),
                       // _buildListSection([
                       //   _menuItem("レビューを送信", Icons.star, _requestReview),
                       //   _menuItem("アプリをシェア", Icons.share, _shareApp),

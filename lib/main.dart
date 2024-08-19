@@ -47,13 +47,19 @@ Future<void> _checkVersionAndRunApp() async {
 
   await remoteConfig.setDefaults(<String, dynamic>{
     "current_version": "1.0.0",
+    "android_current_version": "1.0.0",
     "maintenance_mode": false,
+    "android_maintenance_mode": false,
   });
 
   await remoteConfig.fetchAndActivate();
 
-  var latestVersion = remoteConfig.getString("current_version");
-  var maintenanceMode = remoteConfig.getBool("maintenance_mode");
+  var latestVersion = isIOS
+      ? remoteConfig.getString("current_version")
+      : remoteConfig.getString("android_current_version");
+  var maintenanceMode = isIOS
+      ? remoteConfig.getBool("maintenance_mode")
+      : remoteConfig.getBool("android_maintenance_mode");
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String currentVersion = packageInfo.version;
@@ -109,14 +115,14 @@ class UpdateRequiredApp extends StatelessWidget {
         home: AlertDialog(
           title: Text('アップデートのお知らせ'),
           content: Text('新しいバージョンのアプリが利用可能です。ストアからアップデートしてください。'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('アップデート'),
-              onPressed: () {
-                _launchAppStore();
-              },
-            ),
-          ],
+          // actions: <Widget>[
+          //   TextButton(
+          //     child: Text('アップデート'),
+          //     onPressed: () {
+          //       _launchAppStore();
+          //     },
+          //   ),
+          // ],
         ),
       );
     }

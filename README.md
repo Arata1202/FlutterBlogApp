@@ -1,4 +1,4 @@
-![pic](https://github.com/user-attachments/assets/b86aa4fb-a38e-44ff-a64f-f1661926bc3d)
+![pic（大）](https://github.com/user-attachments/assets/3ab43f70-545b-4622-82f4-bf604c1a59ab)
 
 ## 開発方法
 
@@ -34,7 +34,7 @@ chmod +x pod.sh
     - メンテナンス機能
     - 強制アップデート
 
-##　技術構成
+## 技術構成
 
 - Flutter
 - Xcode

@@ -10,16 +10,16 @@ cd ios && pod install && cd ..
 flutter run
 ```
 
-または
+<!-- または
 
 ```
 chmod +x pod.sh
 ./pod.sh
-```
+``` -->
 
-## 機能
+## 実装機能
 
-### 実装機能（ネイティブ）
+### ネイティブ
 
 - GoogleAdMob
   - バナー広告
@@ -33,3 +33,22 @@ chmod +x pod.sh
   - RemoteConfig
     - メンテナンス機能
     - 強制アップデート
+
+##　技術構成
+
+- Flutter
+- Xcode
+- Next.js
+- TypeScript
+- TailwindCSS
+- AWS Lambda
+- MicroCMS
+- Vercel
+- Prettier
+- GitHub
+- Canva
+- Figma
+
+## 料金（年）
+
+- Apple Developer Program（約 12000 円）

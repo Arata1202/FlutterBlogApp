@@ -55,20 +55,27 @@ class _SnsState extends State<Sns> {
                                   'https://www.instagram.com/ao_realstudent/?hl=ja');
                             },
                           ),
-                        ],
-                      ),
-                      CupertinoListSection.insetGrouped(
-                        backgroundColor: CupertinoColors.systemGrey6,
-                        children: [
                           _menuItem(
-                            "Suzuri",
-                            const FaIcon(FontAwesomeIcons.shoppingBag),
+                            "GitHub",
+                            const FaIcon(FontAwesomeIcons.github),
                             () {
-                              _launchURL('https://suzuri.jp/realunivlog');
+                              _launchURL('https://github.com/Arata1202');
                             },
                           ),
                         ],
                       ),
+                      // CupertinoListSection.insetGrouped(
+                      //   backgroundColor: CupertinoColors.systemGrey6,
+                      //   children: [
+                      //     _menuItem(
+                      //       "Suzuri",
+                      //       const FaIcon(FontAwesomeIcons.shoppingBag),
+                      //       () {
+                      //         _launchURL('https://suzuri.jp/realunivlog');
+                      //       },
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
@@ -105,16 +112,23 @@ class _SnsState extends State<Sns> {
                                 'https://www.instagram.com/ao_realstudent/?hl=ja');
                           },
                         ),
-                      ]),
-                      _buildListSection([
                         _menuItem(
-                          "Suzuri",
-                          const FaIcon(FontAwesomeIcons.shoppingBag),
+                          "GitHub",
+                          const FaIcon(FontAwesomeIcons.github),
                           () {
-                            _launchURL('https://suzuri.jp/realunivlog');
+                            _launchURL('https://github.com/Arata1202');
                           },
                         ),
                       ]),
+                      // _buildListSection([
+                      //   _menuItem(
+                      //     "Suzuri",
+                      //     const FaIcon(FontAwesomeIcons.shoppingBag),
+                      //     () {
+                      //       _launchURL('https://suzuri.jp/realunivlog');
+                      //     },
+                      //   ),
+                      // ]),
                     ],
                   ),
                 ),

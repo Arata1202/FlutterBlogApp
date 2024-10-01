@@ -1,5 +1,9 @@
 ![pic（大）](https://github.com/user-attachments/assets/3ab43f70-545b-4622-82f4-bf604c1a59ab)
 
+## アーキテクチャ
+
+![fluttern](https://github.com/user-attachments/assets/2fe96c21-ea8a-4232-990d-71437f673135)
+
 ## 開発方法
 
 まずは.env.example を.env に変更し、適切に設定する。

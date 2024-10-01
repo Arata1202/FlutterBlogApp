@@ -42,17 +42,12 @@ chmod +x pod.sh
 
 - Flutter
 - Xcode
-- Next.js
-- TypeScript
-- TailwindCSS
-- AWS Lambda
-- MicroCMS
-- Vercel
-- Prettier
+- Android Studio
 - GitHub
 - Canva
 - Figma
 
-## 料金（年）
+## 料金
 
-- Apple Developer Program（約 12000 円）
+- Apple Developer Program（年間 約 12000 円）
+- Google Developers （買い切り 約 4000円）

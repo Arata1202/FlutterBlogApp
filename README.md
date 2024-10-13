@@ -1,8 +1,16 @@
-![pic（大）](https://github.com/user-attachments/assets/3ab43f70-545b-4622-82f4-bf604c1a59ab)
-
 ## アーキテクチャ
 
 ![fluttern](https://github.com/user-attachments/assets/2fe96c21-ea8a-4232-990d-71437f673135)
+
+## リンク集
+
+### AppStore
+
+- https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103
+
+### GooglePlay
+
+- https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp
 
 ## 開発方法
 

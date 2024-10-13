@@ -4,13 +4,16 @@
 
 ## リンク集
 
-### AppStore
+### App Store
 
 - https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103
 
-### GooglePlay
+### Google Play
 
 - https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp
+
+### Figma
+- https://www.figma.com/design/8abXv3H0UaRwCjkyy8lecU/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88?node-id=0-1&t=RxhblDmbNSeXsEgf-1
 
 ## 開発方法
 

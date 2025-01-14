@@ -145,7 +145,6 @@ class _SearchState extends State<Search> {
             BannerAdWidget(
               adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH'),
             ),
-            _buildSearchHistory(),
             keyword(),
             Expanded(
               child: WebViewWidget(controller: _webViewController),
@@ -162,9 +161,7 @@ class _SearchState extends State<Search> {
             BannerAdWidget(
               adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH'),
             ),
-            _buildSectionTitle('検索履歴'),
-            _buildSearchHistory(),
-            _buildSectionTitle('キーワードで探す'),
+            _buildSectionTitle('タグ'),
             Expanded(
               child: WebViewWidget(controller: _webViewController),
             ),
@@ -232,103 +229,6 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Widget _buildSearchHistory() {
-    if (isIOS) {
-      return CupertinoListSection(
-        header: Text(
-          '検索履歴',
-          style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            color: CupertinoColors.black,
-          ),
-        ),
-        children: _searchHistory.isNotEmpty
-            ? _searchHistory.take(5).map((history) {
-                return CupertinoListTile(
-                  title: Text(history),
-                  trailing: CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    child: Icon(
-                      CupertinoIcons.ellipsis_vertical,
-                      color: CupertinoColors.systemGrey,
-                    ),
-                    onPressed: () {
-                      _showActionSheet(context, history);
-                    },
-                  ),
-                  onTap: () {
-                    _webViewController.loadRequest(Uri.parse(
-                        'https://web-view-blog-app.vercel.app/search?q=$history'));
-                  },
-                );
-              }).toList()
-            : [
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '検索履歴はありません。',
-                    style: TextStyle(color: CupertinoColors.systemGrey),
-                  ),
-                ),
-              ],
-      );
-    } else {
-      return _searchHistory.isNotEmpty
-          ? ListView.builder(
-              shrinkWrap: true,
-              itemCount: _searchHistory.take(3).length,
-              itemBuilder: (context, index) {
-                final history = _searchHistory[index];
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                  child: ListTile(
-                    title: Text(history),
-                    trailing: PopupMenuButton<String>(
-                      onSelected: (String result) {
-                        if (result == '削除する') {
-                          setState(() {
-                            _searchHistory.remove(history);
-                            _saveSearchHistory();
-                          });
-                        }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: '削除する',
-                          child: Text('削除する'),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      final searchUrl =
-                          'https://web-view-blog-app.vercel.app/search?q=$history';
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              SearchResultsPage(url: searchUrl),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            )
-          : Container(
-              padding: const EdgeInsets.all(16.0),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '検索履歴はありません。',
-                style: TextStyle(color: Colors.grey),
-              ),
-            );
-    }
-  }
-
   void _showActionSheet(BuildContext context, String history) {
     showCupertinoModalPopup(
       context: context,
@@ -360,7 +260,7 @@ class _SearchState extends State<Search> {
   Widget keyword() {
     return CupertinoListSection(
       header: Text(
-        'キーワードで探す',
+        'タグ',
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.bold,

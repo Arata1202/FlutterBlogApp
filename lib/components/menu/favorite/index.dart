@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../../app/article/index.dart';
 import '../../../common/admob/banner/index.dart';
-import '../../../common/admob/interstitial/index.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
@@ -19,36 +18,11 @@ class Favorite extends StatefulWidget {
 
 class _FavoriteState extends State<Favorite> {
   List<Map<String, String>> _favorites = [];
-  late InterstitialAdManager _interstitialAdManager;
-  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
-    _interstitialAdManager = InterstitialAdManager();
-    _loadInterstitialAd();
     _loadFavorites();
-  }
-
-  void _loadInterstitialAd() {
-    _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_FAVORITES'),
-      () => setState(() => _isInterstitialAdReady = true),
-    );
-  }
-
-  void _showInterstitialAd(VoidCallback onAdClosed) {
-    if (_isInterstitialAdReady) {
-      _interstitialAdManager.showInterstitialAd().then((_) {
-        onAdClosed();
-      }).catchError((error) {
-        print('Failed to show interstitial ad: $error');
-        onAdClosed();
-      });
-    } else {
-      print('Interstitial ad is not ready yet');
-      onAdClosed();
-    }
   }
 
   void _loadFavorites() async {
@@ -170,14 +144,12 @@ class _FavoriteState extends State<Favorite> {
                     },
                   ),
                   onTap: () {
-                    _showInterstitialAd(() {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => ArticlePage(url: entry['url']!),
-                        ),
-                      );
-                    });
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => ArticlePage(url: entry['url']!),
+                      ),
+                    );
                   },
                 );
               }).toList()
@@ -231,15 +203,13 @@ class _FavoriteState extends State<Favorite> {
                               },
                             ),
                             onTap: () {
-                              _showInterstitialAd(() {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ArticlePage(url: entry['url']!),
-                                  ),
-                                );
-                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ArticlePage(url: entry['url']!),
+                                ),
+                              );
                             },
                           ),
                         );
@@ -320,7 +290,6 @@ class _FavoriteState extends State<Favorite> {
 
   @override
   void dispose() {
-    _interstitialAdManager.dispose();
     super.dispose();
   }
 }

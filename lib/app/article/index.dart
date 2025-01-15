@@ -334,16 +334,7 @@ class _ArticlePageState extends State<ArticlePage> {
           ],
         ),
       ),
-      trailing: _isLoading
-          ? const SizedBox()
-          : CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: _toggleFavorite,
-              child: Icon(
-                _isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-                color: CupertinoColors.systemRed,
-              ),
-            ),
+      // ここにシェアボタン
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app/article/index.dart';
 import '../../../common/admob/banner/index.dart';
+import '../../../common/admob/interstitial/index.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io' show Platform;
 
@@ -18,11 +19,36 @@ class History extends StatefulWidget {
 
 class _HistoryState extends State<History> {
   List<Map<String, String>> _history = [];
+  late InterstitialAdManager _interstitialAdManager;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
+    _interstitialAdManager = InterstitialAdManager();
+    _loadInterstitialAd();
     _loadHistory();
+  }
+
+  void _loadInterstitialAd() {
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HISTORY'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed) {
+    if (_isInterstitialAdReady) {
+      _interstitialAdManager.showInterstitialAd().then((_) {
+        onAdClosed();
+      }).catchError((error) {
+        print('Failed to show interstitial ad: $error');
+        onAdClosed();
+      });
+    } else {
+      print('Interstitial ad is not ready yet');
+      onAdClosed();
+    }
   }
 
   void _loadHistory() async {
@@ -168,12 +194,14 @@ class _HistoryState extends State<History> {
                     },
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => ArticlePage(url: entry['url']!),
-                      ),
-                    );
+                    _showInterstitialAd(() {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ArticlePage(url: entry['url']!),
+                        ),
+                      );
+                    });
                   },
                 );
               }).toList()
@@ -227,13 +255,15 @@ class _HistoryState extends State<History> {
                               },
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ArticlePage(url: entry['url']!),
-                                ),
-                              );
+                              _showInterstitialAd(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ArticlePage(url: entry['url']!),
+                                  ),
+                                );
+                              });
                             },
                           ),
                         );
@@ -314,6 +344,7 @@ class _HistoryState extends State<History> {
 
   @override
   void dispose() {
+    _interstitialAdManager.dispose();
     super.dispose();
   }
 }

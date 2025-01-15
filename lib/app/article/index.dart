@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../util/last_article/index.dart';
+import '../../common/admob/interstitial/index.dart';
 import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
 import '../../util/wake_lock/index.dart';
@@ -98,6 +99,8 @@ class FavoritesManager {
 
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
+  bool _isInterstitialAdReady = false;
+  late InterstitialAdManager _interstitialAdManager;
   String _pageTitle = '';
   bool _isFavorite = false;
   bool _isLoading = true;
@@ -107,6 +110,13 @@ class _ArticlePageState extends State<ArticlePage> {
     super.initState();
     WakelockManager.enable();
     LastUrlManager.saveLastUrl(widget.url);
+
+    // インタースティシャル
+    _interstitialAdManager = InterstitialAdManager();
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
 
     _initializeWebViewController();
     _checkIfFavorite();
@@ -137,6 +147,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 request,
                 widget.url,
                 () async {
+                  await _interstitialAdManager.showInterstitialAd();
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
@@ -150,6 +161,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 request,
                 widget.url,
                 () async {
+                  await _interstitialAdManager.showInterstitialAd();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -259,6 +271,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   void _cleanupResources() {
     WakelockManager.disable();
+    _interstitialAdManager.dispose();
     LastUrlManager.clearLastUrl();
   }
 

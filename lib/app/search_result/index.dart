@@ -4,6 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
+import '../../common/admob/interstitial/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
 
@@ -21,11 +22,36 @@ class SearchResultsPage extends StatefulWidget {
 
 class _SearchResultsPageState extends State<SearchResultsPage> {
   late WebViewController _controller;
+  late InterstitialAdManager _interstitialAdManager;
+  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
+    _interstitialAdManager = InterstitialAdManager();
+    _loadInterstitialAd();
     _initializeWebViewController();
+  }
+
+  void _loadInterstitialAd() {
+    _interstitialAdManager.loadInterstitialAd(
+      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_SEARCH'),
+      () => setState(() => _isInterstitialAdReady = true),
+    );
+  }
+
+  void _showInterstitialAd(VoidCallback onAdClosed) {
+    if (_isInterstitialAdReady) {
+      _interstitialAdManager.showInterstitialAd().then((_) {
+        onAdClosed();
+      }).catchError((error) {
+        print('Failed to show interstitial ad: $error');
+        onAdClosed();
+      });
+    } else {
+      print('Interstitial ad is not ready yet');
+      onAdClosed();
+    }
   }
 
   void _initializeWebViewController() {
@@ -37,21 +63,23 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('web-view-blog-app.vercel.app/article')) {
-              if (isIOS) {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => ArticlePage(url: request.url),
-                  ),
-                );
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ArticlePage(url: request.url),
-                  ),
-                );
-              }
+              _showInterstitialAd(() {
+                if (isIOS) {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => ArticlePage(url: request.url),
+                    ),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ArticlePage(url: request.url),
+                    ),
+                  );
+                }
+              });
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
@@ -72,6 +100,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   void dispose() {
+    _interstitialAdManager.dispose();
     super.dispose();
   }
 

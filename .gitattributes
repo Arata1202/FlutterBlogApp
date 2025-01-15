@@ -1,0 +1,14 @@
+*.cmake linguist-language=Dart
+CMakeLists.txt linguist-language=Dart
+
+*.cpp linguist-language=Dart
+*.h linguist-language=Dart
+*.hpp linguist-language=Dart
+*.c linguist-language=Dart
+
+*.swift linguist-language=Dart
+
+*.rb linguist-language=Dart
+
+*.m linguist-language=Dart
+*.mm linguist-language=Dart

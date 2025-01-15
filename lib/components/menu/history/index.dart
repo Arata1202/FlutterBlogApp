@@ -32,7 +32,7 @@ class _HistoryState extends State<History> {
 
   void _loadInterstitialAd() {
     _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HISTORY'),
+      dotenv.get('INTERSTITIAL_AD'),
       () => setState(() => _isInterstitialAdReady = true),
     );
   }
@@ -94,7 +94,7 @@ class _HistoryState extends State<History> {
         child: Column(
           children: [
             BannerAdWidget(
-              adUnitId: dotenv.get('IOS_BANNER_AD'),
+              adUnitId: dotenv.get('BANNER_AD'),
             ),
             _buildHistoryList(),
             Expanded(child: Container(color: CupertinoColors.systemGrey6)),
@@ -107,7 +107,7 @@ class _HistoryState extends State<History> {
         body: Column(
           children: [
             BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_FAVORITES'),
+              adUnitId: dotenv.get('BANNER_AD'),
             ),
             _buildHistoryList(),
           ],

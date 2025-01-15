@@ -35,7 +35,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   void _loadInterstitialAd() {
     _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_SEARCH'),
+      dotenv.get('INTERSTITIAL_AD'),
       () => setState(() => _isInterstitialAdReady = true),
     );
   }
@@ -111,7 +111,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
+            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),
@@ -123,8 +123,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         appBar: _buildAppBar(context),
         body: Column(
           children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
+            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),

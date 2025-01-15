@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
   void _initializeInterstitialAdManager() {
     _interstitialAdManager = InterstitialAdManager();
     _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      dotenv.get('INTERSTITIAL_AD'),
       () => setState(() => _isInterstitialAdReady = true),
     );
   }
@@ -152,7 +152,7 @@ class _HomeState extends State<Home> {
           ),
           body: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
+              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(
                 child: IndexedStack(
                   index: _currentIndex,
@@ -191,8 +191,7 @@ class _HomeState extends State<Home> {
           ),
           body: Column(
             children: [
-              BannerAdWidget(
-                  adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')),
+              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(
                 child: IndexedStack(
                   index: _currentIndex,
@@ -280,7 +279,7 @@ class _WebViewTabState extends State<WebViewTab> {
   void _initializeInterstitialAdManager() {
     _interstitialAdManager = InterstitialAdManager();
     _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      dotenv.get('INTERSTITIAL_AD'),
       () => setState(() => _isInterstitialAdReady = true),
     );
   }

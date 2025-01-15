@@ -65,7 +65,7 @@ class _CopyrightState extends State<Copyright> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
+            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),
@@ -77,8 +77,7 @@ class _CopyrightState extends State<Copyright> {
         appBar: _buildAppBar(context),
         body: Column(
           children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_COPYRIGHT')),
+            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),

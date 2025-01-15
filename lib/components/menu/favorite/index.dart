@@ -32,7 +32,7 @@ class _FavoriteState extends State<Favorite> {
 
   void _loadInterstitialAd() {
     _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_FAVORITES'),
+      dotenv.get('INTERSTITIAL_AD'),
       () => setState(() => _isInterstitialAdReady = true),
     );
   }
@@ -70,7 +70,7 @@ class _FavoriteState extends State<Favorite> {
         child: Column(
           children: [
             BannerAdWidget(
-              adUnitId: dotenv.get('IOS_BANNER_AD'),
+              adUnitId: dotenv.get('BANNER_AD'),
             ),
             _buildFavoritesList(),
             Expanded(child: Container(color: CupertinoColors.systemGrey6)),
@@ -83,7 +83,7 @@ class _FavoriteState extends State<Favorite> {
         body: Column(
           children: [
             BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_FAVORITES'),
+              adUnitId: dotenv.get('BANNER_AD'),
             ),
             _buildFavoritesList(),
           ],

@@ -114,7 +114,7 @@ class _ArticlePageState extends State<ArticlePage> {
     // インタースティシャル
     _interstitialAdManager = InterstitialAdManager();
     _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('PRODUCTION_INTERSTITIAL_AD_ID_HOME'),
+      dotenv.get('INTERSTITIAL_AD'),
       () => setState(() => _isInterstitialAdReady = true),
     );
 
@@ -282,7 +282,7 @@ class _ArticlePageState extends State<ArticlePage> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
+            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 39.0),
@@ -297,8 +297,7 @@ class _ArticlePageState extends State<ArticlePage> {
         appBar: _buildAppBar(context),
         body: Column(
           children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
+            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 0),

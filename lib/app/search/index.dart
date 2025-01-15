@@ -143,7 +143,7 @@ class _SearchState extends State<Search> {
               ),
             ),
             BannerAdWidget(
-              adUnitId: dotenv.get('IOS_BANNER_AD'),
+              adUnitId: dotenv.get('BANNER_AD'),
             ),
             keyword(),
             Expanded(
@@ -159,7 +159,7 @@ class _SearchState extends State<Search> {
           children: [
             _buildSearchFormCard(),
             BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH'),
+              adUnitId: dotenv.get('BANNER_AD'),
             ),
             _buildSectionTitle('タグ'),
             Expanded(

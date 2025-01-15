@@ -367,6 +367,8 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   void _shareArticle() {
-    Share.share('$_pageTitle\n${widget.url}');
+    final newUrl = widget.url.replaceFirst(
+        'https://web-view-blog-app.vercel.app/', 'https://realunivlog.com/');
+    Share.share('$_pageTitle\n$newUrl');
   }
 }

@@ -169,7 +169,7 @@ class _HomeState extends State<Home> {
         length: 5,
         child: Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(105.0),
+            preferredSize: Size.fromHeight(112.0),
             child: Column(
               children: [
                 _buildAppBar(context),

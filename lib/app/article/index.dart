@@ -362,16 +362,7 @@ class _ArticlePageState extends State<ArticlePage> {
           Navigator.pop(context);
         },
       ),
-      actions: [
-        if (!_isLoading)
-          IconButton(
-            icon: Icon(
-              _isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: Colors.red,
-            ),
-            onPressed: _toggleFavorite,
-          ),
-      ],
+      // ここにシェアボタン
     );
   }
 

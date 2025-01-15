@@ -10,6 +10,7 @@ import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
 import '../../util/wake_lock/index.dart';
 import '../../components/menu/favorite/index.dart';
+import 'package:share_plus/share_plus.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
@@ -334,7 +335,14 @@ class _ArticlePageState extends State<ArticlePage> {
           ],
         ),
       ),
-      // ここにシェアボタン
+      trailing: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: () {
+          _shareArticle();
+        },
+        child:
+            const Icon(CupertinoIcons.share, color: CupertinoColors.activeBlue),
+      ),
     );
   }
 
@@ -368,5 +376,9 @@ class _ArticlePageState extends State<ArticlePage> {
           ),
       ],
     );
+  }
+
+  void _shareArticle() {
+    Share.share('$_pageTitle\n${widget.url}');
   }
 }

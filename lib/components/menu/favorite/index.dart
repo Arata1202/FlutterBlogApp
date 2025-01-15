@@ -44,7 +44,7 @@ class _FavoriteState extends State<Favorite> {
         child: Column(
           children: [
             BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_FAVORITES'),
+              adUnitId: dotenv.get('IOS_BANNER_AD'),
             ),
             _buildFavoritesList(),
             Expanded(child: Container(color: CupertinoColors.systemGrey6)),

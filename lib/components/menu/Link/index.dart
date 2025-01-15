@@ -64,8 +64,7 @@ class _LinkState extends State<Link> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_LINK')),
+            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),

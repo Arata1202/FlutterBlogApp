@@ -82,8 +82,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH_RESULT')),
+            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),

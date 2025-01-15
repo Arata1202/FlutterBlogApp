@@ -143,7 +143,7 @@ class _SearchState extends State<Search> {
               ),
             ),
             BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SEARCH'),
+              adUnitId: dotenv.get('IOS_BANNER_AD'),
             ),
             keyword(),
             Expanded(

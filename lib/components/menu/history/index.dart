@@ -68,7 +68,7 @@ class _HistoryState extends State<History> {
         child: Column(
           children: [
             BannerAdWidget(
-              adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HISTORY'),
+              adUnitId: dotenv.get('IOS_BANNER_AD'),
             ),
             _buildHistoryList(),
             Expanded(child: Container(color: CupertinoColors.systemGrey6)),

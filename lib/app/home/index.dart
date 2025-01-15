@@ -129,8 +129,7 @@ class _HomeState extends State<Home> {
           ),
           body: Column(
             children: [
-              BannerAdWidget(
-                  adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_HOME')),
+              BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
               Expanded(
                 child: IndexedStack(
                   index: _currentIndex,

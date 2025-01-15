@@ -269,8 +269,7 @@ class _ArticlePageState extends State<ArticlePage> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_ARTICLE')),
+            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 39.0),

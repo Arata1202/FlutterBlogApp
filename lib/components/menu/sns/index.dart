@@ -30,7 +30,7 @@ class _SnsState extends State<Sns> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_SNS')),
+            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
             Expanded(
               child: Container(
                 color: CupertinoColors.systemGrey6,

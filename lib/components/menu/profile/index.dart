@@ -63,8 +63,7 @@ class _ProfileState extends State<Profile> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(
-                adUnitId: dotenv.get('PRODUCTION_BANNER_AD_ID_PROFILE')),
+            BannerAdWidget(adUnitId: dotenv.get('IOS_BANNER_AD')),
             Expanded(
               child: WebViewWidget(controller: _controller),
             ),

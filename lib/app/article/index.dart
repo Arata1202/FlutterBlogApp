@@ -285,10 +285,7 @@ class _ArticlePageState extends State<ArticlePage> {
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 39.0),
-                child: WebViewWidget(controller: _controller),
-              ),
+              child: WebViewWidget(controller: _controller),
             ),
           ],
         ),

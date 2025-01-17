@@ -8,7 +8,6 @@ import 'package:wakelock/wakelock.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
 import '../../common/admob/banner/index.dart';
-import '../../common/admob/interstitial/index.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
@@ -24,8 +23,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
   String? _lastUrl;
-  late InterstitialAdManager _interstitialAdManager;
-  bool _isInterstitialAdReady = false;
 
   final List<Widget> _tabs = [
     const NewPostTab(),
@@ -38,16 +35,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _initializeInterstitialAdManager();
     _loadLastUrl();
-  }
-
-  void _initializeInterstitialAdManager() {
-    _interstitialAdManager = InterstitialAdManager();
-    _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('INTERSTITIAL_AD'),
-      () => setState(() => _isInterstitialAdReady = true),
-    );
   }
 
   void _loadLastUrl() async {
@@ -57,14 +45,12 @@ class _HomeState extends State<Home> {
     });
     if (_lastUrl != null) {
       if (isIOS) {
-        _showInterstitialAd().then((_) {
-          Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => ArticlePage(url: _lastUrl!),
-            ),
-          ).then((_) => _clearLastUrl());
-        });
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => ArticlePage(url: _lastUrl!),
+          ),
+        ).then((_) => _clearLastUrl());
       } else {
         Navigator.push(
           context,
@@ -81,14 +67,6 @@ class _HomeState extends State<Home> {
     await prefs.remove('lastUrl');
   }
 
-  Future<void> _showInterstitialAd() async {
-    if (_isInterstitialAdReady) {
-      await _interstitialAdManager.showInterstitialAd();
-    } else {
-      print('Interstitial ad is not ready yet');
-    }
-  }
-
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -97,7 +75,6 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    _interstitialAdManager.dispose();
     super.dispose();
   }
 
@@ -266,22 +243,11 @@ class WebViewTab extends StatefulWidget {
 
 class _WebViewTabState extends State<WebViewTab> {
   late WebViewController _controller;
-  late InterstitialAdManager _interstitialAdManager;
-  bool _isInterstitialAdReady = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeInterstitialAdManager();
     _initializeWebViewController();
-  }
-
-  void _initializeInterstitialAdManager() {
-    _interstitialAdManager = InterstitialAdManager();
-    _interstitialAdManager.loadInterstitialAd(
-      dotenv.get('INTERSTITIAL_AD'),
-      () => setState(() => _isInterstitialAdReady = true),
-    );
   }
 
   void _initializeWebViewController() {
@@ -294,7 +260,6 @@ class _WebViewTabState extends State<WebViewTab> {
           onNavigationRequest: (NavigationRequest request) async {
             if (request.url.contains('web-view-blog-app.vercel.app/article') &&
                 request.url != widget.url) {
-              await _showInterstitialAd();
               if (isIOS) {
                 Navigator.push(
                   context,
@@ -325,14 +290,6 @@ class _WebViewTabState extends State<WebViewTab> {
       ..loadRequest(Uri.parse(widget.url));
   }
 
-  Future<void> _showInterstitialAd() async {
-    if (_isInterstitialAdReady) {
-      await _interstitialAdManager.showInterstitialAd();
-    } else {
-      print('Interstitial ad is not ready yet');
-    }
-  }
-
   void _clearLastUrl() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('lastUrl');
@@ -340,7 +297,6 @@ class _WebViewTabState extends State<WebViewTab> {
 
   @override
   void dispose() {
-    _interstitialAdManager.dispose();
     super.dispose();
   }
 

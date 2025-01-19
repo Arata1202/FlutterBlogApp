@@ -4,7 +4,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
-import '../../components/menu/favorite/index.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io' show Platform;
 

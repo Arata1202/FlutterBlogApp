@@ -21,7 +21,7 @@
 2. [環境](#2-環境)
 3. [ディレクトリ構成](#3-ディレクトリ構成)
 4. [開発環境構築](#4-開発環境構築)
-4. [プレフィックス](#5-プレフィックス)
+5. [プレフィックス](#5-プレフィックス)
 
 ## 1. プロジェクトについて
 
@@ -44,11 +44,11 @@
 <!-- 言語、フレームワーク、ミドルウェア、インフラの一覧とバージョンを記載 -->
 
 | 主要なパッケージ  | バージョン |
-| --------------------- | ---------- |
-| flutter               | 3.22.3     |
-| firebase_core               | 2.24.2     |
-| onesignal_flutter               | 5.1.2     |
-| google_mobile_ads               | 5.1.0     |
+| ----------------- | ---------- |
+| flutter           | 3.22.3     |
+| firebase_core     | 2.24.2     |
+| onesignal_flutter | 5.1.2      |
+| google_mobile_ads | 5.1.0      |
 
 その他のパッケージのバージョンは`pubspec.yaml`を参照
 
@@ -76,9 +76,7 @@ lib
 │   └── splash
 ├── main.dart
 └── util
-    ├── last_article
-    ├── navigate_out
-    └── wake_lock
+    └── navigate_out
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
@@ -126,36 +124,36 @@ Xcode または Android Studio で起動できるか確認
 
 ### 環境変数一覧
 
-| 変数名                 | 役割                                      |
-| ---------------------- | ----------------------------------------- |
-| ONESIGNAL_APP_ID | OneSignalのappId |
-| APP_PACKAGE_NAME | Androidのパッケージ名 |
-| PRODUCTION_BANNER_AD_ID_HOME | トップページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_ARTICLE | 記事ページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_SEARCH | 検索ページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_SEARCH_RESULT | 検索結果ページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_MENU | メニューページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_PROFILE | プロフィールページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_SNS | SNSページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_PRIVACY | プライバシーポリシーページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_HISTORY | 閲覧履歴ページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_FAVORITES | お気に入りページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_DISCLAIMER | 免責事項ページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_COPYRIGHT | 著作権ページのGoogle AdMobのバナー広告 |
-| PRODUCTION_BANNER_AD_ID_LINK | リンクページのGoogle AdMobのバナー広告 |
-| PRODUCTION_INTERSTITIAL_AD_ID_HOME | トップページのGoogle AdMobのインタースティシャル広告 |
-| PRODUCTION_INTERSTITIAL_AD_ID_SEARCH | 検索ページのGoogle AdMobのインタースティシャル広告 |
-| PRODUCTION_INTERSTITIAL_AD_ID_HISTORY | 履歴ページのGoogle AdMobのインタースティシャル広告 |
-| PRODUCTION_INTERSTITIAL_AD_ID_FAVORITES | お気に入りページのGoogle AdMobのインタースティシャル広告 |
+| 変数名                                  | 役割                                                       |
+| --------------------------------------- | ---------------------------------------------------------- |
+| ONESIGNAL_APP_ID                        | OneSignal の appId                                         |
+| APP_PACKAGE_NAME                        | Android のパッケージ名                                     |
+| PRODUCTION_BANNER_AD_ID_HOME            | トップページの Google AdMob のバナー広告                   |
+| PRODUCTION_BANNER_AD_ID_ARTICLE         | 記事ページの Google AdMob のバナー広告                     |
+| PRODUCTION_BANNER_AD_ID_SEARCH          | 検索ページの Google AdMob のバナー広告                     |
+| PRODUCTION_BANNER_AD_ID_SEARCH_RESULT   | 検索結果ページの Google AdMob のバナー広告                 |
+| PRODUCTION_BANNER_AD_ID_MENU            | メニューページの Google AdMob のバナー広告                 |
+| PRODUCTION_BANNER_AD_ID_PROFILE         | プロフィールページの Google AdMob のバナー広告             |
+| PRODUCTION_BANNER_AD_ID_SNS             | SNS ページの Google AdMob のバナー広告                     |
+| PRODUCTION_BANNER_AD_ID_PRIVACY         | プライバシーポリシーページの Google AdMob のバナー広告     |
+| PRODUCTION_BANNER_AD_ID_HISTORY         | 閲覧履歴ページの Google AdMob のバナー広告                 |
+| PRODUCTION_BANNER_AD_ID_FAVORITES       | お気に入りページの Google AdMob のバナー広告               |
+| PRODUCTION_BANNER_AD_ID_DISCLAIMER      | 免責事項ページの Google AdMob のバナー広告                 |
+| PRODUCTION_BANNER_AD_ID_COPYRIGHT       | 著作権ページの Google AdMob のバナー広告                   |
+| PRODUCTION_BANNER_AD_ID_LINK            | リンクページの Google AdMob のバナー広告                   |
+| PRODUCTION_INTERSTITIAL_AD_ID_HOME      | トップページの Google AdMob のインタースティシャル広告     |
+| PRODUCTION_INTERSTITIAL_AD_ID_SEARCH    | 検索ページの Google AdMob のインタースティシャル広告       |
+| PRODUCTION_INTERSTITIAL_AD_ID_HISTORY   | 履歴ページの Google AdMob のインタースティシャル広告       |
+| PRODUCTION_INTERSTITIAL_AD_ID_FAVORITES | お気に入りページの Google AdMob のインタースティシャル広告 |
 
 ### コマンド一覧
 
-| 主要なコマンド               | 実行する処理                                                            |
-| ------------------- | ----------------------------------------------------------------------- |
-| flutter pub get        | 依存関係のインストール |
-| pod install          | CocoaPodsの依存関係をインストール                                                     |
-| flutter run             | 開発環境の起動                                                          |
-| flutter clean             | キャッシュの削除                                                          |
+| 主要なコマンド  | 実行する処理                       |
+| --------------- | ---------------------------------- |
+| flutter pub get | 依存関係のインストール             |
+| pod install     | CocoaPods の依存関係をインストール |
+| flutter run     | 開発環境の起動                     |
+| flutter clean   | キャッシュの削除                   |
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
 

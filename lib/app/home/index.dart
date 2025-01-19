@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wakelock/wakelock.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
 import '../../common/admob/banner/index.dart';
@@ -22,7 +19,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
-  String? _lastUrl;
 
   final List<Widget> _tabs = [
     const NewPostTab(),
@@ -35,36 +31,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _loadLastUrl();
-  }
-
-  void _loadLastUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _lastUrl = prefs.getString('lastUrl');
-    });
-    if (_lastUrl != null) {
-      if (isIOS) {
-        Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => ArticlePage(url: _lastUrl!),
-          ),
-        ).then((_) => _clearLastUrl());
-      } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ArticlePage(url: _lastUrl!),
-          ),
-        ).then((_) => _clearLastUrl());
-      }
-    }
-  }
-
-  void _clearLastUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('lastUrl');
   }
 
   void _onTabTapped(int index) {
@@ -266,14 +232,14 @@ class _WebViewTabState extends State<WebViewTab> {
                   CupertinoPageRoute(
                     builder: (context) => ArticlePage(url: request.url),
                   ),
-                ).then((_) => _clearLastUrl());
+                );
               } else {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ArticlePage(url: request.url),
                   ),
-                ).then((_) => _clearLastUrl());
+                );
               }
               return NavigationDecision.prevent;
             }
@@ -288,11 +254,6 @@ class _WebViewTabState extends State<WebViewTab> {
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
-  }
-
-  void _clearLastUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('lastUrl');
   }
 
   @override

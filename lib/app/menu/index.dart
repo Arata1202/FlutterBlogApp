@@ -37,7 +37,6 @@ class _MenuState extends State<Menu> {
   void _initAppVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      // _appVersion = 'v${packageInfo.version} (${packageInfo.buildNumber})';
       _appVersion = 'v${packageInfo.version}';
     });
   }
@@ -284,7 +283,6 @@ class _MenuState extends State<Menu> {
         print('Could not launch $url');
       }
     } else {
-      final Uri uri = Uri.parse('package:${dotenv.env['APP_PACKAGE_NAME']}');
       if (await canLaunch('android.settings.APPLICATION_DETAILS_SETTINGS')) {
         await launch(
             'android.settings.APPLICATION_DETAILS_SETTINGS?package=${dotenv.env['APP_PACKAGE_NAME']}');

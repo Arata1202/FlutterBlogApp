@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../search_result/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
@@ -21,13 +19,11 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   late WebViewController _webViewController;
   final TextEditingController _searchController = TextEditingController();
-  List<String> _searchHistory = [];
 
   @override
   void initState() {
     super.initState();
     _initializeWebViewController();
-    _loadSearchHistory();
   }
 
   void _initializeWebViewController() {
@@ -75,30 +71,10 @@ class _SearchState extends State<Search> {
       ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/keyword'));
   }
 
-  void _loadSearchHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _searchHistory = prefs.getStringList('search_history') ?? [];
-    });
-  }
-
-  void _saveSearchHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('search_history', _searchHistory);
-  }
-
   void _performSearch() {
     if (isIOS) {
       final query = _searchController.text;
       if (query.isNotEmpty) {
-        setState(() {
-          _searchHistory.remove(query);
-          _searchHistory.insert(0, query);
-          if (_searchHistory.length > 5) {
-            _searchHistory = _searchHistory.take(5).toList();
-          }
-          _saveSearchHistory();
-        });
         _searchController.clear();
         final searchUrl =
             'https://web-view-blog-app.vercel.app/search?q=$query';
@@ -107,14 +83,6 @@ class _SearchState extends State<Search> {
     } else {
       final query = _searchController.text;
       if (query.isNotEmpty) {
-        setState(() {
-          _searchHistory.remove(query);
-          _searchHistory.insert(0, query);
-          if (_searchHistory.length > 5) {
-            _searchHistory = _searchHistory.take(5).toList();
-          }
-          _saveSearchHistory();
-        });
         _searchController.clear();
         final searchUrl =
             'https://web-view-blog-app.vercel.app/search?q=$query';
@@ -225,34 +193,6 @@ class _SearchState extends State<Search> {
             ),
           ),
           onSubmitted: (value) => _performSearch(),
-        ),
-      ),
-    );
-  }
-
-  void _showActionSheet(BuildContext context, String history) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) => CupertinoActionSheet(
-        title: Text(history),
-        actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            isDestructiveAction: true,
-            onPressed: () {
-              setState(() {
-                _searchHistory.remove(history);
-                _saveSearchHistory();
-              });
-              Navigator.pop(context);
-            },
-            child: Text('削除する'),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('キャンセル'),
         ),
       ),
     );

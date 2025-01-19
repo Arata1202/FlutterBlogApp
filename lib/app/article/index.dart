@@ -7,7 +7,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../util/last_article/index.dart';
 import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
-import '../../util/wake_lock/index.dart';
 import '../../components/menu/favorite/index.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io' show Platform;
@@ -106,7 +105,6 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   void initState() {
     super.initState();
-    WakelockManager.enable();
     LastUrlManager.saveLastUrl(widget.url);
 
     _initializeWebViewController();
@@ -259,7 +257,6 @@ class _ArticlePageState extends State<ArticlePage> {
   }
 
   void _cleanupResources() {
-    WakelockManager.disable();
     LastUrlManager.clearLastUrl();
   }
 

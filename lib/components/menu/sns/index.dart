@@ -41,7 +41,7 @@ class _SnsState extends State<Sns> {
                         children: [
                           _menuItem(
                             "X（旧Twitter）",
-                            const FaIcon(FontAwesomeIcons.twitter),
+                            const FaIcon(FontAwesomeIcons.xTwitter),
                             () {
                               _launchURL('https://x.com/Aokumoblog');
                             },
@@ -139,7 +139,7 @@ class _SnsState extends State<Sns> {
                       _buildListSection([
                         _menuItem(
                           "X（旧Twitter）",
-                          const FaIcon(FontAwesomeIcons.twitter),
+                          const FaIcon(FontAwesomeIcons.xTwitter),
                           () {
                             _launchURL('https://x.com/Aokumoblog');
                           },

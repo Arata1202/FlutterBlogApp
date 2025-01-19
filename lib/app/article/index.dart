@@ -4,7 +4,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../util/last_article/index.dart';
 import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
 import '../../components/menu/favorite/index.dart';
@@ -105,7 +104,6 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   void initState() {
     super.initState();
-    LastUrlManager.saveLastUrl(widget.url);
 
     _initializeWebViewController();
     _checkIfFavorite();
@@ -141,7 +139,7 @@ class _ArticlePageState extends State<ArticlePage> {
                     CupertinoPageRoute(
                       builder: (context) => ArticlePage(url: request.url),
                     ),
-                  ).then((_) => LastUrlManager.clearLastUrl());
+                  );
                 },
               );
             } else {
@@ -154,7 +152,7 @@ class _ArticlePageState extends State<ArticlePage> {
                     MaterialPageRoute(
                       builder: (context) => ArticlePage(url: request.url),
                     ),
-                  ).then((_) => LastUrlManager.clearLastUrl());
+                  );
                 },
               );
             }
@@ -252,12 +250,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   void dispose() {
-    _cleanupResources();
     super.dispose();
-  }
-
-  void _cleanupResources() {
-    LastUrlManager.clearLastUrl();
   }
 
   @override

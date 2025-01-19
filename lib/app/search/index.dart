@@ -40,7 +40,8 @@ class _SearchState extends State<Search> {
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('web-view-blog-app.vercel.app/tag/') ||
                 request.url
-                    .contains('web-view-blog-app.vercel.app/search?q=')) {
+                    .contains('web-view-blog-app.vercel.app/search?q=') ||
+                request.url.contains('web-view-blog-app.vercel.app/archive')) {
               if (isIOS) {
                 Navigator.push(
                   context,
@@ -260,7 +261,7 @@ class _SearchState extends State<Search> {
   Widget keyword() {
     return CupertinoListSection(
       header: Text(
-        'タグ',
+        'アーカイブ・タグ',
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.bold,

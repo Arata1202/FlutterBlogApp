@@ -77,10 +77,10 @@ class _MenuState extends State<Menu> {
                       CupertinoListSection.insetGrouped(
                         backgroundColor: CupertinoColors.systemGrey6,
                         children: [
-                          _menuItem("リアル大学生について", CupertinoIcons.person, () {
+                          _menuItem("プロフィール", CupertinoIcons.person, () {
                             _navigateTo(context, const Profile());
                           }),
-                          _menuItem("リアル大学生のSNS", CupertinoIcons.globe, () {
+                          _menuItem("SNS", CupertinoIcons.globe, () {
                             _navigateTo(context, const Sns());
                           }),
                         ],
@@ -143,10 +143,10 @@ class _MenuState extends State<Menu> {
                   child: ListView(
                     children: [
                       _buildListSection([
-                        _menuItem("リアル大学生について", Icons.person, () {
+                        _menuItem("プロフィール", Icons.person, () {
                           _navigateTo(context, const Profile());
                         }),
-                        _menuItem("リアル大学生のSNS", Icons.public, () {
+                        _menuItem("SNS", Icons.public, () {
                           _navigateTo(context, const Sns());
                         }),
                       ]),
@@ -247,7 +247,6 @@ class _MenuState extends State<Menu> {
     final Uri params = Uri(
       scheme: 'mailto',
       path: 'realunivlog@gmail.com',
-      query: 'subject=お問い合わせ&body=▼お問い合わせ内容を記入してください。',
     );
 
     var url = params.toString();
@@ -260,7 +259,7 @@ class _MenuState extends State<Menu> {
 
   void _shareApp() {
     Share.share(
-      'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103',
+      'リアル大学生：モバイル\nhttps://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103',
       subject: 'リアル大学生',
     );
   }

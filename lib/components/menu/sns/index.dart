@@ -41,7 +41,7 @@ class _SnsState extends State<Sns> {
                         backgroundColor: CupertinoColors.systemGrey6,
                         children: [
                           _menuItem(
-                            "X",
+                            "X（旧Twitter）",
                             const FaIcon(FontAwesomeIcons.twitter),
                             () {
                               _launchURL('https://x.com/Aokumoblog');
@@ -60,6 +60,47 @@ class _SnsState extends State<Sns> {
                             const FaIcon(FontAwesomeIcons.github),
                             () {
                               _launchURL('https://github.com/Arata1202');
+                            },
+                          ),
+                        ],
+                      ),
+                      CupertinoListSection.insetGrouped(
+                        backgroundColor: CupertinoColors.systemGrey6,
+                        children: [
+                          _menuItem(
+                            "Buy Me a Coffee",
+                            const FaIcon(FontAwesomeIcons.mugHot),
+                            () {
+                              _launchURL(
+                                  'https://buymeacoffee.com/realunivlog');
+                            },
+                          ),
+                        ],
+                      ),
+                      CupertinoListSection.insetGrouped(
+                        backgroundColor: CupertinoColors.systemGrey6,
+                        children: [
+                          _menuItem(
+                            "にほんブログ村",
+                            const FaIcon(FontAwesomeIcons.crown),
+                            () {
+                              _launchURL(
+                                  'https://blogmura.com/profiles/11190305/?p_cid=11190305&reader=11190305');
+                            },
+                          ),
+                          _menuItem(
+                            "人気ブログランキング",
+                            const FaIcon(FontAwesomeIcons.crown),
+                            () {
+                              _launchURL('https://blog.with2.net/ranking/9011');
+                            },
+                          ),
+                          _menuItem(
+                            "FC2ブログランキング",
+                            const FaIcon(FontAwesomeIcons.crown),
+                            () {
+                              _launchURL(
+                                  'https://blogranking.fc2.com/in.php?id=1067087');
                             },
                           ),
                         ],
@@ -98,7 +139,7 @@ class _SnsState extends State<Sns> {
                     children: [
                       _buildListSection([
                         _menuItem(
-                          "X",
+                          "X（旧Twitter）",
                           const FaIcon(FontAwesomeIcons.twitter),
                           () {
                             _launchURL('https://x.com/Aokumoblog');

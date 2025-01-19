@@ -22,6 +22,7 @@ class ArticlePage extends StatefulWidget {
 class _ArticlePageState extends State<ArticlePage> {
   late WebViewController _controller;
   String _pageTitle = '';
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -39,6 +40,9 @@ class _ArticlePageState extends State<ArticlePage> {
         NavigationDelegate(
           onPageFinished: (String url) async {
             _pageTitle = await _controller.getTitle() ?? 'Unknown';
+            setState(() {
+              _isLoading = true;
+            });
           },
           onNavigationRequest: (NavigationRequest request) async {
             if (isIOS) {
@@ -135,14 +139,16 @@ class _ArticlePageState extends State<ArticlePage> {
           ],
         ),
       ),
-      trailing: CupertinoButton(
-        padding: EdgeInsets.zero,
-        onPressed: () {
-          _shareArticle();
-        },
-        child:
-            const Icon(CupertinoIcons.share, color: CupertinoColors.activeBlue),
-      ),
+      trailing: _isLoading
+          ? CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                _shareArticle();
+              },
+              child: const Icon(CupertinoIcons.share,
+                  color: CupertinoColors.activeBlue),
+            )
+          : null,
     );
   }
 

@@ -1,64 +1,111 @@
-<div id="top"><h1>リアル大学生：モバイル</h1></div>
+<div id="top"></div>
+
+<div align="right">
+  
+![GitHub License](https://img.shields.io/github/license/Arata1202/FlutterBlogApp)
+
+</div>
+
+![title](https://github.com/user-attachments/assets/e3ba2618-58c2-4c67-ac0a-1d5cab1400f3)
+
+## 目次
+- [リアル大学生：モバイル](#top)
+  - [目次](#目次)
+  - [リンク一覧](#リンク一覧)
+  - [主な機能一覧](#主な機能一覧)
+  - [使用技術](#使用技術)
+  - [環境構築](#環境構築)
+    - [リポジトリのクローン](#リポジトリのクローン)
+    - [Flutterプロジェクトの起動](#Flutterプロジェクトの起動)
+  - [ディレクトリ構成](#ディレクトリ構成)
+  - [Gitの運用](#Gitの運用)
+    - [ブランチ](#ブランチ)
+    - [コミットメッセージの記法](#コミットメッセージの記法)
+
+## リンク一覧
+<ul><li><a href="https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103">App Store</a></li></ul>
+<ul><li><a href="https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp">Google Play</a></li></ul>
+<ul><li><a href="https://www.figma.com/design/8abXv3H0UaRwCjkyy8lecU/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88?node-id=0-1&t=RxhblDmbNSeXsEgf-1">Figma</a></li></ul>
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
+
+## 主な機能一覧
+
+※製品版ではGoogle AdMobによる広告が表示されます。
+
+| 記事一覧ページ |　検索ページ |
+| ---- | ---- |
+| ![1](https://github.com/user-attachments/assets/2805fb78-5f88-45f2-9e41-813fa743d1d8) | ![2](https://github.com/user-attachments/assets/fe12b36d-1e56-4e1b-b48f-d52f3473c25c) |
+| 最新記事やカテゴリーごとの記事を一覧表示するページです。 | キーワードやタグ、アーカイブから検索をすることができます。 |
+
+| 記事ページ |　メニューページ	 |
+| ---- | ---- |
+| ![3](https://github.com/user-attachments/assets/3299e7ef-80f3-47f0-969b-19eb3bf41302) | ![4](https://github.com/user-attachments/assets/eb4cc96f-c971-4cfc-9b84-98913d06bfad) |
+| 記事を閲覧するためのページです。ネイティブなシェアボタンから記事をシェアできます。 | 設定項目や固定ページ（プロフィールや免責事項など）へのリンクなどを記載しています。 |
+
+| 強制アップデート |　プッシュ通知 |
+| ---- | ---- |
+| ![5](https://github.com/user-attachments/assets/b714d555-4541-4328-aa43-0d66ae8fadd1) | ![6](https://github.com/user-attachments/assets/e2f48213-95c8-4705-b387-5eefc3e0cd92) |
+| FirebaseのRemote Configを利用して、指定のバージョンより古い場合にダイアログを表示させることができます。 | OneSignalとPipedream（Web Hook）を利用して、初回の記事公開時にプッシュ通知を送信することができます。 |
+
+| iOS UI |　Android UI |
+| ---- | ---- |
+| ![4](https://github.com/user-attachments/assets/eb4cc96f-c971-4cfc-9b84-98913d06bfad) | ![7](https://github.com/user-attachments/assets/a5a515bb-e45b-4aa1-9bb2-2aefc445de26) |
+| Cupertino UIを使用して、ネイティブに寄せたデザインを再現しています。 | Material UIを使用して、ネイティブに寄せたデザインを再現しています。 |
+
+<p align="right">(<a href="#top">トップへ</a>)</p>
 
 ## 使用技術
 
-<!-- シールド一覧 -->
-<p style="display: inline">
-  <img src="https://img.shields.io/badge/-Flutter-000000.svg?logo=flutter&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-Firebase-000000.svg?logo=firebase&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-Onesignal-000000.svg?logo=onesignal&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-Canva-000000.svg?logo=canva&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-Figma-000000.svg?logo=figma&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-Google AdMob-000000.svg?logo=googleadmob&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-Google Analytics-000000.svg?logo=googleanalytics&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-XCode-000000.svg?logo=xcode&style=for-the-badge">
-  <img src="https://img.shields.io/badge/-Android Studio-000000.svg?logo=androidstudio&style=for-the-badge">
-</p>
-
-## 目次
-
-1. [プロジェクトについて](#1-プロジェクトについて)
-2. [環境](#2-環境)
-3. [ディレクトリ構成](#3-ディレクトリ構成)
-4. [開発環境構築](#4-開発環境構築)
-5. [プレフィックス](#5-プレフィックス)
-
-## 1. プロジェクトについて
-
-大学生活やプログラミングに関する記事を公開している個人ブログ「リアル大学生」のモバイル版
-
-  <p align="left">
-    <br />
-    <a href="https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103"><strong>App Store »</strong></a>
-    <br />
-    <a href="https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp"><strong>Google Play »</strong></a>
-    <br />
-    <a href="https://www.figma.com/design/8abXv3H0UaRwCjkyy8lecU/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88?node-id=0-1&t=RxhblDmbNSeXsEgf-1"><strong>Figma »</strong></a>
-    <br />
-    <br />
+| Category          | Technology Stack                              |
+| ----------------- | --------------------------------------------- |
+| Frontend          | Flutter                                       |
+| Backend           | Firebase                                      |
+| Design            | Figma, Canva                                  |
+| Google            | AdMob, Analytics                              |
+| etc.              | OneSignal, Pipedream, XCode, Android Studio                         |
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
 
-## 2. 環境
+## 環境構築
 
-<!-- 言語、フレームワーク、ミドルウェア、インフラの一覧とバージョンを記載 -->
+### リポジトリのクローン
 
-| 主要なパッケージ  | バージョン |
-| ----------------- | ---------- |
-| flutter           | 3.22.3     |
-| firebase_core     | 2.24.2     |
-| onesignal_flutter | 5.1.2      |
-| google_mobile_ads | 5.1.0      |
+```
+# リポジトリのクローン
+git clone git@github.com:Arata1202/FlutterBlogApp.git
+cd FlutterBlogApp
 
-その他のパッケージのバージョンは`pubspec.yaml`を参照
+# .env.exampleから.envを作成
+mv .env.example .env
+
+# .envの編集
+vi .env
+
+# Firebaseから必要なファイルを入手
+cp GoogleService-Info.plist /ios/Runner
+cp google-services.json /android/app
+```
+
+### Flutterプロジェクトの起動
+
+```
+# 依存関係のインストール
+flutter pub get
+
+# CocoaPodsのインストール
+cd ios && pod install && cd ..
+
+# Flutterプロジェクトの起動
+flutter run
+```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
 
-## 3. ディレクトリ構成
+## ディレクトリ構成
 
 ```
 ❯ tree -a -I "node_modules|.next|.git|.pytest_cache|static" -L 2 lib
-
 lib
 ├── app
 │   ├── article
@@ -81,83 +128,19 @@ lib
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
 
-## 4. 開発環境構築
+## Gitの運用
 
-### 開発環境の構築と起動
+### ブランチ
 
-.env ファイルを[環境変数一覧](#環境変数一覧)を元に作成
+GitHub Flowを使用する。
+masterとfeatureブランチで運用する。
 
-```
-ONESIGNAL_APP_ID=
-APP_PACKAGE_NAME=
-PRODUCTION_BANNER_AD_ID_HOME=
-PRODUCTION_BANNER_AD_ID_ARTICLE=
-PRODUCTION_BANNER_AD_ID_SEARCH=
-PRODUCTION_BANNER_AD_ID_SEARCH_RESULT=
-PRODUCTION_BANNER_AD_ID_MENU=
-PRODUCTION_BANNER_AD_ID_PROFILE=
-PRODUCTION_BANNER_AD_ID_SNS=
-PRODUCTION_BANNER_AD_ID_PRIVACY=
-PRODUCTION_BANNER_AD_ID_HISTORY=
-PRODUCTION_BANNER_AD_ID_FAVORITES=
-PRODUCTION_BANNER_AD_ID_DISCLAIMER=
-PRODUCTION_BANNER_AD_ID_COPYRIGHT=
-PRODUCTION_BANNER_AD_ID_LINK=
-PRODUCTION_INTERSTITIAL_AD_ID_HOME=
-PRODUCTION_INTERSTITIAL_AD_ID_SEARCH=
-PRODUCTION_INTERSTITIAL_AD_ID_HISTORY=
-PRODUCTION_INTERSTITIAL_AD_ID_FAVORITES=
-```
+| ブランチ名 |   役割   | 派生元 | マージ先 |
+| :--------: | :------: | :----: | :------: |
+|    master    | 本番環境 |   -    |    -     |
+| feature/\* | 機能開発 |  master  |   master   |
 
-.env ファイルを作成後、以下のコマンドで開発環境を起動
-
-```
-flutter pub get
-cd ios && pod install && cd ..
-flutter run
-```
-
-### 動作確認
-
-Xcode または Android Studio で起動できるか確認
-起動できたら成功
-
-### 環境変数一覧
-
-| 変数名                                  | 役割                                                       |
-| --------------------------------------- | ---------------------------------------------------------- |
-| ONESIGNAL_APP_ID                        | OneSignal の appId                                         |
-| APP_PACKAGE_NAME                        | Android のパッケージ名                                     |
-| PRODUCTION_BANNER_AD_ID_HOME            | トップページの Google AdMob のバナー広告                   |
-| PRODUCTION_BANNER_AD_ID_ARTICLE         | 記事ページの Google AdMob のバナー広告                     |
-| PRODUCTION_BANNER_AD_ID_SEARCH          | 検索ページの Google AdMob のバナー広告                     |
-| PRODUCTION_BANNER_AD_ID_SEARCH_RESULT   | 検索結果ページの Google AdMob のバナー広告                 |
-| PRODUCTION_BANNER_AD_ID_MENU            | メニューページの Google AdMob のバナー広告                 |
-| PRODUCTION_BANNER_AD_ID_PROFILE         | プロフィールページの Google AdMob のバナー広告             |
-| PRODUCTION_BANNER_AD_ID_SNS             | SNS ページの Google AdMob のバナー広告                     |
-| PRODUCTION_BANNER_AD_ID_PRIVACY         | プライバシーポリシーページの Google AdMob のバナー広告     |
-| PRODUCTION_BANNER_AD_ID_HISTORY         | 閲覧履歴ページの Google AdMob のバナー広告                 |
-| PRODUCTION_BANNER_AD_ID_FAVORITES       | お気に入りページの Google AdMob のバナー広告               |
-| PRODUCTION_BANNER_AD_ID_DISCLAIMER      | 免責事項ページの Google AdMob のバナー広告                 |
-| PRODUCTION_BANNER_AD_ID_COPYRIGHT       | 著作権ページの Google AdMob のバナー広告                   |
-| PRODUCTION_BANNER_AD_ID_LINK            | リンクページの Google AdMob のバナー広告                   |
-| PRODUCTION_INTERSTITIAL_AD_ID_HOME      | トップページの Google AdMob のインタースティシャル広告     |
-| PRODUCTION_INTERSTITIAL_AD_ID_SEARCH    | 検索ページの Google AdMob のインタースティシャル広告       |
-| PRODUCTION_INTERSTITIAL_AD_ID_HISTORY   | 履歴ページの Google AdMob のインタースティシャル広告       |
-| PRODUCTION_INTERSTITIAL_AD_ID_FAVORITES | お気に入りページの Google AdMob のインタースティシャル広告 |
-
-### コマンド一覧
-
-| 主要なコマンド  | 実行する処理                       |
-| --------------- | ---------------------------------- |
-| flutter pub get | 依存関係のインストール             |
-| pod install     | CocoaPods の依存関係をインストール |
-| flutter run     | 開発環境の起動                     |
-| flutter clean   | キャッシュの削除                   |
-
-<p align="right">(<a href="#top">トップへ</a>)</p>
-
-## 5. プレフィックス
+### コミットメッセージの記法
 
 ```
 fix: バグ修正

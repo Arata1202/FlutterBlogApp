@@ -10,6 +10,7 @@ import '../../components/menu/disclaimer/index.dart';
 import '../../components/menu/copyright/index.dart';
 import '../../components/menu/link/index.dart';
 import '../../components/menu/sns/index.dart';
+import '../../components/menu/contact/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'package:package_info/package_info.dart';
 import 'dart:io' show Platform;
@@ -103,8 +104,9 @@ class _MenuState extends State<Menu> {
                       CupertinoListSection.insetGrouped(
                         backgroundColor: CupertinoColors.systemGrey6,
                         children: [
-                          _menuItem(
-                              "お問い合わせ", CupertinoIcons.mail, _launchMailApp),
+                          _menuItem("お問い合わせ", CupertinoIcons.mail, () {
+                            _navigateTo(context, const Contact());
+                          }),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
@@ -161,7 +163,9 @@ class _MenuState extends State<Menu> {
                         }),
                       ]),
                       _buildListSection([
-                        _menuItem("お問い合わせ", Icons.mail, _launchMailApp),
+                        _menuItem("お問い合わせ", Icons.mail, () {
+                          _navigateTo(context, const Contact());
+                        }),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -237,20 +241,6 @@ class _MenuState extends State<Menu> {
         children: children,
       ),
     );
-  }
-
-  void _launchMailApp() async {
-    final Uri params = Uri(
-      scheme: 'mailto',
-      path: 'realunivlog@gmail.com',
-    );
-
-    var url = params.toString();
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      print('Could not launch $url');
-    }
   }
 
   void _shareApp() {

@@ -130,7 +130,7 @@ class _SearchState extends State<Search> {
             BannerAdWidget(
               adUnitId: dotenv.get('BANNER_AD'),
             ),
-            _buildSectionTitle('タグ'),
+            _buildSectionTitle('アーカイブ・タグ'),
             Expanded(
               child: WebViewWidget(controller: _webViewController),
             ),

@@ -69,7 +69,20 @@ Future<void> _checkVersionAndRunApp() async {
 }
 
 bool _isUpdateRequired(String currentVersion, String latestVersion) {
-  return currentVersion.compareTo(latestVersion) < 0;
+  List<String> currentParts = currentVersion.split('.');
+  List<String> latestParts = latestVersion.split('.');
+
+  for (int i = 0; i < currentParts.length; i++) {
+    int currentPart = int.parse(currentParts[i]);
+    int latestPart = int.parse(latestParts[i]);
+
+    if (currentPart < latestPart) {
+      return true;
+    } else if (currentPart > latestPart) {
+      return false;
+    }
+  }
+  return false;
 }
 
 class UpdateRequiredApp extends StatelessWidget {

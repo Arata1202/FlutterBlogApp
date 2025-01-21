@@ -73,7 +73,7 @@ class _MenuState extends State<Menu> {
                       CupertinoListSection.insetGrouped(
                         backgroundColor: CupertinoColors.systemGrey6,
                         children: [
-                          _menuItem("プロフィール", CupertinoIcons.person, () {
+                          _menuItem("プロフィール", CupertinoIcons.person_circle, () {
                             _navigateTo(context, const Profile());
                           }),
                           _menuItem("SNS", CupertinoIcons.globe, () {
@@ -139,10 +139,10 @@ class _MenuState extends State<Menu> {
                   child: ListView(
                     children: [
                       _buildListSection([
-                        _menuItem("プロフィール", Icons.person, () {
+                        _menuItem("プロフィール", Icons.account_circle, () {
                           _navigateTo(context, const Profile());
                         }),
-                        _menuItem("SNS", Icons.public, () {
+                        _menuItem("SNS", Icons.language, () {
                           _navigateTo(context, const Sns());
                         }),
                       ]),
@@ -150,7 +150,7 @@ class _MenuState extends State<Menu> {
                         _menuItem("プライバシーポリシー", Icons.lock, () {
                           _navigateTo(context, const Privacy());
                         }),
-                        _menuItem("免責事項", Icons.warning, () {
+                        _menuItem("免責事項", Icons.error, () {
                           _navigateTo(context, const Disclaimer());
                         }),
                         _menuItem("著作権", Icons.description, () {

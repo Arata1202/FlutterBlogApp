@@ -171,7 +171,15 @@ class _ArticlePageState extends State<ArticlePage> {
           Navigator.pop(context);
         },
       ),
-      // ここにシェアボタン
+      actions: [
+        if (_isLoading)
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.black),
+            onPressed: () {
+              _shareArticle();
+            },
+          ),
+      ],
     );
   }
 

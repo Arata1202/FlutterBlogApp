@@ -14,6 +14,7 @@ import '../../components/menu/contact/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'package:package_info/package_info.dart';
 import 'dart:io' show Platform;
+import 'package:app_settings/app_settings.dart';
 
 bool isAndroid = Platform.isAndroid;
 bool isIOS = Platform.isIOS;
@@ -140,6 +141,11 @@ class _MenuState extends State<Menu> {
                 child: Scrollbar(
                   child: ListView(
                     children: [
+                      _buildListSection([
+                        _menuItem("プッシュ通知設定", Icons.notifications, () {
+                          _navigateToPushNotificationSettings();
+                        }),
+                      ]),
                       _buildListSection([
                         _menuItem("レビューを送信", Icons.star, () {
                           _requestReview();
@@ -275,22 +281,8 @@ class _MenuState extends State<Menu> {
     }
   }
 
-  void _navigateToPushNotificationSettings() async {
-    if (isIOS) {
-      const String url = 'app-settings:';
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        print('Could not launch $url');
-      }
-    } else {
-      if (await canLaunch('android.settings.APPLICATION_DETAILS_SETTINGS')) {
-        await launch(
-            'android.settings.APPLICATION_DETAILS_SETTINGS?package=${dotenv.env['APP_PACKAGE_NAME']}');
-      } else {
-        print('Could not launch settings');
-      }
-    }
+  void _navigateToPushNotificationSettings() {
+    AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 
   void _requestReview() async {

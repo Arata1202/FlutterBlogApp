@@ -141,6 +141,14 @@ class _MenuState extends State<Menu> {
                   child: ListView(
                     children: [
                       _buildListSection([
+                        _menuItem("レビューを送信", Icons.star, () {
+                          _requestReview();
+                        }),
+                        _menuItem("アプリをシェア", Icons.share, () {
+                          _shareApp();
+                        }),
+                      ]),
+                      _buildListSection([
                         _menuItem("プロフィール", Icons.account_circle, () {
                           _navigateTo(context, const Profile());
                         }),
@@ -244,8 +252,11 @@ class _MenuState extends State<Menu> {
   }
 
   void _shareApp() {
+    final String appUrl = isIOS
+        ? 'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103'
+        : 'https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp';
     Share.share(
-      'リアル大学生：モバイル\nhttps://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103',
+      'リアル大学生：モバイル\n$appUrl',
       subject: 'リアル大学生',
     );
   }

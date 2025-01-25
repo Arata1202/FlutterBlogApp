@@ -113,6 +113,7 @@ lib
 │   ├── article
 │   ├── home
 │   ├── menu
+│   ├── pagination
 │   ├── search
 │   └── search_result
 ├── common

@@ -19,6 +19,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   late WebViewController _webViewController;
   final TextEditingController _searchController = TextEditingController();
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -33,6 +34,16 @@ class _SearchState extends State<Search> {
           isIOS ? CupertinoColors.systemBackground : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains('web-view-blog-app.vercel.app/tag/') ||
                 request.url
@@ -56,12 +67,6 @@ class _SearchState extends State<Search> {
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;
-          },
-          onPageStarted: (String url) {
-            print('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            print('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
             print('Error occurred: $error');
@@ -98,6 +103,16 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    Widget webView = Stack(
+      children: [
+        WebViewWidget(controller: _webViewController),
+        if (_isLoading)
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
+    );
+
     if (isIOS) {
       return CupertinoPageScaffold(
         navigationBar: _buildNavigationBar(context),
@@ -115,9 +130,7 @@ class _SearchState extends State<Search> {
               adUnitId: dotenv.get('BANNER_AD'),
             ),
             keyword(),
-            Expanded(
-              child: WebViewWidget(controller: _webViewController),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );
@@ -131,9 +144,7 @@ class _SearchState extends State<Search> {
               adUnitId: dotenv.get('BANNER_AD'),
             ),
             _buildSectionTitle('アーカイブ・タグ'),
-            Expanded(
-              child: WebViewWidget(controller: _webViewController),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );

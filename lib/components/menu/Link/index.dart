@@ -18,6 +18,7 @@ class Link extends StatefulWidget {
 
 class _LinkState extends State<Link> {
   late WebViewController _controller;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -31,6 +32,16 @@ class _LinkState extends State<Link> {
       ..setBackgroundColor(Colors.transparent)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
           onNavigationRequest: (NavigationRequest request) async {
             if (!request.url.contains('web-view-blog-app.vercel.app')) {
               if (await _handleExternalUrl(request.url)) {
@@ -58,15 +69,23 @@ class _LinkState extends State<Link> {
 
   @override
   Widget build(BuildContext context) {
+    Widget webView = Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading)
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
+    );
+
     if (isIOS) {
       return CupertinoPageScaffold(
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );
@@ -76,9 +95,7 @@ class _LinkState extends State<Link> {
         body: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );

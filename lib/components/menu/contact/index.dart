@@ -17,6 +17,7 @@ class Contact extends StatefulWidget {
 
 class _ContactState extends State<Contact> {
   late WebViewController _controller;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -29,20 +30,42 @@ class _ContactState extends State<Contact> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(
           isIOS ? CupertinoColors.systemBackground : Colors.white)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+        ),
+      )
       ..loadRequest(Uri.parse('https://web-view-blog-app.vercel.app/contact'));
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget webView = Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading)
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
+    );
+
     if (isIOS) {
       return CupertinoPageScaffold(
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );
@@ -52,9 +75,7 @@ class _ContactState extends State<Contact> {
         body: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );

@@ -20,6 +20,7 @@ class SearchResultsPage extends StatefulWidget {
 
 class _SearchResultsPageState extends State<SearchResultsPage> {
   late WebViewController _controller;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -56,9 +57,15 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             return NavigationDecision.navigate;
           },
           onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
             print('Page started loading: $url');
           },
           onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
             print('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
@@ -76,15 +83,23 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget webView = Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading)
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
+    );
+
     if (isIOS) {
       return CupertinoPageScaffold(
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );
@@ -94,9 +109,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         body: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );

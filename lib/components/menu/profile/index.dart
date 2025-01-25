@@ -18,6 +18,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late WebViewController _controller;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -32,6 +33,16 @@ class _ProfileState extends State<Profile> {
           isIOS ? CupertinoColors.systemBackground : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
           onNavigationRequest: (NavigationRequest request) async {
             return await _handleNavigationRequest(request);
           },
@@ -57,15 +68,23 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    Widget webView = Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading)
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
+    );
+
     if (isIOS) {
       return CupertinoPageScaffold(
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );
@@ -75,9 +94,7 @@ class _ProfileState extends State<Profile> {
         body: Column(
           children: [
             BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: WebViewWidget(controller: _controller),
-            ),
+            Expanded(child: webView),
           ],
         ),
       );

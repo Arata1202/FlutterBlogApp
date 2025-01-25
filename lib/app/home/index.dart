@@ -4,6 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
+import '../pagination/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
 
@@ -249,6 +250,24 @@ class _WebViewTabState extends State<WebViewTab> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ArticlePage(url: request.url),
+                  ),
+                );
+              }
+              return NavigationDecision.prevent;
+            }
+            if (request.url.contains('/p/') && request.url != widget.url) {
+              if (isIOS) {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => PaginationPage(url: request.url),
+                  ),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaginationPage(url: request.url),
                   ),
                 );
               }

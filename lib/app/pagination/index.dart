@@ -3,23 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
-import '../pagination/index.dart';
 import '../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
 bool isIOS = Platform.isIOS;
 
-class SearchResultsPage extends StatefulWidget {
+class PaginationPage extends StatefulWidget {
   final String url;
 
-  const SearchResultsPage({super.key, required this.url});
+  const PaginationPage({super.key, required this.url});
 
   @override
-  _SearchResultsPageState createState() => _SearchResultsPageState();
+  _PaginationPageState createState() => _PaginationPageState();
 }
 
-class _SearchResultsPageState extends State<SearchResultsPage> {
+class _PaginationPageState extends State<PaginationPage> {
   late WebViewController _controller;
   bool _isLoading = true;
 

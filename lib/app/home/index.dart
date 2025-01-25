@@ -209,6 +209,7 @@ class WebViewTab extends StatefulWidget {
 
 class _WebViewTabState extends State<WebViewTab> {
   late WebViewController _controller;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -223,6 +224,16 @@ class _WebViewTabState extends State<WebViewTab> {
           isIOS ? CupertinoColors.systemBackground : Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              _isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
           onNavigationRequest: (NavigationRequest request) async {
             if (request.url.contains('web-view-blog-app.vercel.app/article') &&
                 request.url != widget.url) {
@@ -263,9 +274,19 @@ class _WebViewTabState extends State<WebViewTab> {
 
   @override
   Widget build(BuildContext context) {
+    Widget webView = Stack(
+      children: [
+        WebViewWidget(controller: _controller),
+        if (_isLoading)
+          Center(
+            child: CircularProgressIndicator(),
+          ),
+      ],
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: WebViewWidget(controller: _controller),
+      body: webView,
     );
   }
 }

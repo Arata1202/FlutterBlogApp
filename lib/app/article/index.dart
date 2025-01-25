@@ -185,7 +185,7 @@ class _ArticlePageState extends State<ArticlePage> {
         },
       ),
       actions: [
-        if (_isLoading)
+        if (!_isLoading)
           IconButton(
             icon: const Icon(Icons.share, color: Colors.black),
             onPressed: () {

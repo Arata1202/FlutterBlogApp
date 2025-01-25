@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -263,7 +262,7 @@ class _MenuState extends State<Menu> {
         : 'https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp';
     Share.share(
       'リアル大学生：モバイル\n$appUrl',
-      subject: 'リアル大学生',
+      subject: 'リアル大学生：モバイル',
     );
   }
 

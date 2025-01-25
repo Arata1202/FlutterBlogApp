@@ -152,7 +152,7 @@ class _ArticlePageState extends State<ArticlePage> {
           ],
         ),
       ),
-      trailing: _isLoading
+      trailing: !_isLoading
           ? CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () {

@@ -113,23 +113,29 @@ class _PaginationPageState extends State<PaginationPage> {
     );
 
     if (isIOS) {
-      return CupertinoPageScaffold(
-        navigationBar: _buildNavigationBar(context),
-        child: Column(
-          children: [
-            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(child: webView),
-          ],
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: CupertinoPageScaffold(
+          navigationBar: _buildNavigationBar(context),
+          child: Column(
+            children: [
+              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
+              Expanded(child: webView),
+            ],
+          ),
         ),
       );
     } else {
-      return Scaffold(
-        appBar: _buildAppBar(context),
-        body: Column(
-          children: [
-            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(child: webView),
-          ],
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: _buildAppBar(context),
+          body: Column(
+            children: [
+              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
+              Expanded(child: webView),
+            ],
+          ),
         ),
       );
     }

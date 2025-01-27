@@ -25,171 +25,179 @@ class _SnsState extends State<Sns> {
   @override
   Widget build(BuildContext context) {
     if (isIOS) {
-      return CupertinoPageScaffold(
-        navigationBar: _buildNavigationBar(context),
-        child: Column(
-          children: [
-            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: Container(
-                color: CupertinoColors.systemGrey6,
-                child: CupertinoScrollbar(
-                  child: ListView(
-                    children: [
-                      CupertinoListSection.insetGrouped(
-                        backgroundColor: CupertinoColors.systemGrey6,
-                        children: [
-                          _menuItem(
-                            "X（旧Twitter）",
-                            const FaIcon(FontAwesomeIcons.xTwitter),
-                            () {
-                              _launchURL('https://x.com/Aokumoblog');
-                            },
-                          ),
-                          _menuItem(
-                            "Instagram",
-                            const FaIcon(FontAwesomeIcons.instagram),
-                            () {
-                              _launchURL(
-                                  'https://www.instagram.com/ao_realstudent/?hl=ja');
-                            },
-                          ),
-                          _menuItem(
-                            "GitHub",
-                            const FaIcon(FontAwesomeIcons.github),
-                            () {
-                              _launchURL('https://github.com/Arata1202');
-                            },
-                          ),
-                        ],
-                      ),
-                      CupertinoListSection.insetGrouped(
-                        backgroundColor: CupertinoColors.systemGrey6,
-                        children: [
-                          _menuItem(
-                            "Buy Me a Coffee",
-                            const FaIcon(FontAwesomeIcons.mugHot),
-                            () {
-                              _launchURL(
-                                  'https://buymeacoffee.com/realunivlog');
-                            },
-                          ),
-                        ],
-                      ),
-                      CupertinoListSection.insetGrouped(
-                        backgroundColor: CupertinoColors.systemGrey6,
-                        children: [
-                          _menuItem(
-                            "にほんブログ村",
-                            const FaIcon(FontAwesomeIcons.crown),
-                            () {
-                              _launchURL(
-                                  'https://blogmura.com/profiles/11190305/?p_cid=11190305&reader=11190305');
-                            },
-                          ),
-                          _menuItem(
-                            "人気ブログランキング",
-                            const FaIcon(FontAwesomeIcons.crown),
-                            () {
-                              _launchURL('https://blog.with2.net/ranking/9011');
-                            },
-                          ),
-                          _menuItem(
-                            "FC2ブログランキング",
-                            const FaIcon(FontAwesomeIcons.crown),
-                            () {
-                              _launchURL(
-                                  'https://blogranking.fc2.com/in.php?id=1067087');
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: CupertinoPageScaffold(
+          navigationBar: _buildNavigationBar(context),
+          child: Column(
+            children: [
+              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
+              Expanded(
+                child: Container(
+                  color: CupertinoColors.systemGrey6,
+                  child: CupertinoScrollbar(
+                    child: ListView(
+                      children: [
+                        CupertinoListSection.insetGrouped(
+                          backgroundColor: CupertinoColors.systemGrey6,
+                          children: [
+                            _menuItem(
+                              "X（旧Twitter）",
+                              const FaIcon(FontAwesomeIcons.xTwitter),
+                              () {
+                                _launchURL('https://x.com/Aokumoblog');
+                              },
+                            ),
+                            _menuItem(
+                              "Instagram",
+                              const FaIcon(FontAwesomeIcons.instagram),
+                              () {
+                                _launchURL(
+                                    'https://www.instagram.com/ao_realstudent/?hl=ja');
+                              },
+                            ),
+                            _menuItem(
+                              "GitHub",
+                              const FaIcon(FontAwesomeIcons.github),
+                              () {
+                                _launchURL('https://github.com/Arata1202');
+                              },
+                            ),
+                          ],
+                        ),
+                        CupertinoListSection.insetGrouped(
+                          backgroundColor: CupertinoColors.systemGrey6,
+                          children: [
+                            _menuItem(
+                              "Buy Me a Coffee",
+                              const FaIcon(FontAwesomeIcons.mugHot),
+                              () {
+                                _launchURL(
+                                    'https://buymeacoffee.com/realunivlog');
+                              },
+                            ),
+                          ],
+                        ),
+                        CupertinoListSection.insetGrouped(
+                          backgroundColor: CupertinoColors.systemGrey6,
+                          children: [
+                            _menuItem(
+                              "にほんブログ村",
+                              const FaIcon(FontAwesomeIcons.crown),
+                              () {
+                                _launchURL(
+                                    'https://blogmura.com/profiles/11190305/?p_cid=11190305&reader=11190305');
+                              },
+                            ),
+                            _menuItem(
+                              "人気ブログランキング",
+                              const FaIcon(FontAwesomeIcons.crown),
+                              () {
+                                _launchURL(
+                                    'https://blog.with2.net/ranking/9011');
+                              },
+                            ),
+                            _menuItem(
+                              "FC2ブログランキング",
+                              const FaIcon(FontAwesomeIcons.crown),
+                              () {
+                                _launchURL(
+                                    'https://blogranking.fc2.com/in.php?id=1067087');
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     } else {
-      return Scaffold(
-        appBar: _buildAppBar(context),
-        body: Column(
-          children: [
-            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
-            Expanded(
-              child: Container(
-                color: Colors.grey[200],
-                child: Scrollbar(
-                  child: ListView(
-                    children: [
-                      _buildListSection([
-                        _menuItem(
-                          "X（旧Twitter）",
-                          const FaIcon(FontAwesomeIcons.xTwitter),
-                          () {
-                            _launchURL('https://x.com/Aokumoblog');
-                          },
-                        ),
-                        _menuItem(
-                          "Instagram",
-                          const FaIcon(FontAwesomeIcons.instagram),
-                          () {
-                            _launchURL(
-                                'https://www.instagram.com/ao_realstudent/?hl=ja');
-                          },
-                        ),
-                        _menuItem(
-                          "GitHub",
-                          const FaIcon(FontAwesomeIcons.github),
-                          () {
-                            _launchURL('https://github.com/Arata1202');
-                          },
-                        ),
-                      ]),
-                      _buildListSection([
-                        _menuItem(
-                          "Buy Me a Coffee",
-                          const FaIcon(FontAwesomeIcons.mugHot),
-                          () {
-                            _launchURL('https://buymeacoffee.com/realunivlog');
-                          },
-                        ),
-                      ]),
-                      _buildListSection([
-                        _menuItem(
-                          "にほんブログ村",
-                          const FaIcon(FontAwesomeIcons.crown),
-                          () {
-                            _launchURL(
-                                'https://blogmura.com/profiles/11190305/?p_cid=11190305&reader=11190305');
-                          },
-                        ),
-                        _menuItem(
-                          "人気ブログランキング",
-                          const FaIcon(FontAwesomeIcons.crown),
-                          () {
-                            _launchURL('https://blog.with2.net/ranking/9011');
-                          },
-                        ),
-                        _menuItem(
-                          "FC2ブログランキング",
-                          const FaIcon(FontAwesomeIcons.crown),
-                          () {
-                            _launchURL(
-                                'https://blogranking.fc2.com/in.php?id=1067087');
-                          },
-                        ),
-                      ]),
-                    ],
+      return WillPopScope(
+          onWillPop: () async => false,
+          child: Scaffold(
+            appBar: _buildAppBar(context),
+            body: Column(
+              children: [
+                BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
+                Expanded(
+                  child: Container(
+                    color: Colors.grey[200],
+                    child: Scrollbar(
+                      child: ListView(
+                        children: [
+                          _buildListSection([
+                            _menuItem(
+                              "X（旧Twitter）",
+                              const FaIcon(FontAwesomeIcons.xTwitter),
+                              () {
+                                _launchURL('https://x.com/Aokumoblog');
+                              },
+                            ),
+                            _menuItem(
+                              "Instagram",
+                              const FaIcon(FontAwesomeIcons.instagram),
+                              () {
+                                _launchURL(
+                                    'https://www.instagram.com/ao_realstudent/?hl=ja');
+                              },
+                            ),
+                            _menuItem(
+                              "GitHub",
+                              const FaIcon(FontAwesomeIcons.github),
+                              () {
+                                _launchURL('https://github.com/Arata1202');
+                              },
+                            ),
+                          ]),
+                          _buildListSection([
+                            _menuItem(
+                              "Buy Me a Coffee",
+                              const FaIcon(FontAwesomeIcons.mugHot),
+                              () {
+                                _launchURL(
+                                    'https://buymeacoffee.com/realunivlog');
+                              },
+                            ),
+                          ]),
+                          _buildListSection([
+                            _menuItem(
+                              "にほんブログ村",
+                              const FaIcon(FontAwesomeIcons.crown),
+                              () {
+                                _launchURL(
+                                    'https://blogmura.com/profiles/11190305/?p_cid=11190305&reader=11190305');
+                              },
+                            ),
+                            _menuItem(
+                              "人気ブログランキング",
+                              const FaIcon(FontAwesomeIcons.crown),
+                              () {
+                                _launchURL(
+                                    'https://blog.with2.net/ranking/9011');
+                              },
+                            ),
+                            _menuItem(
+                              "FC2ブログランキング",
+                              const FaIcon(FontAwesomeIcons.crown),
+                              () {
+                                _launchURL(
+                                    'https://blogranking.fc2.com/in.php?id=1067087');
+                              },
+                            ),
+                          ]),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      );
+          ));
     }
   }
 

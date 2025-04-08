@@ -85,8 +85,8 @@ mv .env.example .env
 vi .env
 
 # Firebaseから必要なファイルを入手
-cp GoogleService-Info.plist /ios/Runner
-cp google-services.json /android/app
+mv GoogleService-Info.plist /ios/Runner
+mv google-services.json /android/app
 ```
 
 ### Flutter プロジェクトの起動

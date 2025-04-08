@@ -43,6 +43,5 @@ app.*.map.json
 /android/app/release
 
 .env
-todo.txt
 GoogleService-Info.plist
 google-services.json

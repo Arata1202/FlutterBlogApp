@@ -5,6 +5,7 @@ import '../../common/page_scaffold/index.dart';
 import '../../common/web_view/index.dart';
 import '../../config/app_urls.dart';
 import '../../util/navigation/index.dart';
+import '../../util/web_view_navigation/index.dart';
 import '../article/index.dart';
 
 class PaginationPage extends StatelessWidget {
@@ -18,10 +19,8 @@ class PaginationPage extends StatelessWidget {
       showBackButton: true,
       child: AppWebView(
         initialUrl: Uri.parse(url),
-        onNavigationRequest: (request) => _handleNavigationRequest(
-          context,
-          request,
-        ),
+        onNavigationRequest:
+            (request) => _handleNavigationRequest(context, request),
       ),
     );
   }
@@ -40,6 +39,10 @@ class PaginationPage extends StatelessWidget {
     if (AppUrls.isPaginationUrl(requestedUrl) && requestedUrl != url) {
       await pushAppPage(context, PaginationPage(url: requestedUrl));
       return NavigationDecision.prevent;
+    }
+
+    if (!AppUrls.isAppUrl(requestedUrl)) {
+      return preventAndLaunchExternalUrl(requestedUrl);
     }
 
     return NavigationDecision.navigate;

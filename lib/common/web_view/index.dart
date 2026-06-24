@@ -4,9 +4,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../util/platform/index.dart';
 
-typedef AppNavigationHandler = Future<NavigationDecision> Function(
-  NavigationRequest request,
-);
+typedef AppNavigationHandler =
+    Future<NavigationDecision> Function(NavigationRequest request);
 
 class AppWebView extends StatefulWidget {
   final Uri initialUrl;
@@ -35,31 +34,46 @@ class _AppWebViewState extends State<AppWebView> {
   @override
   void initState() {
     super.initState();
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(
-        widget.backgroundColor ??
-            (AppPlatform.isIOS
-                ? CupertinoColors.systemBackground
-                : Colors.white),
-      )
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (_) => _setLoading(true),
-          onPageFinished: (_) async {
-            final title = await _controller.getTitle();
-            if (title != null) {
-              widget.onTitleChanged?.call(title);
-            }
-            _setLoading(false);
-          },
-          onNavigationRequest: (request) {
-            return widget.onNavigationRequest?.call(request) ??
-                Future.value(NavigationDecision.navigate);
-          },
-        ),
-      )
-      ..loadRequest(widget.initialUrl);
+    _controller =
+        WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setBackgroundColor(
+            widget.backgroundColor ??
+                (AppPlatform.isIOS
+                    ? CupertinoColors.systemBackground
+                    : Colors.white),
+          )
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onPageStarted: (_) => _setLoading(true),
+              onPageFinished: (_) async {
+                final title = await _controller.getTitle();
+                if (title != null) {
+                  widget.onTitleChanged?.call(title);
+                }
+                _setLoading(false);
+              },
+              onWebResourceError: (error) {
+                _setLoading(false);
+                FlutterError.reportError(
+                  FlutterErrorDetails(
+                    exception: StateError(
+                      'WebView failed to load ${error.url}: ${error.description}',
+                    ),
+                    library: 'FlutterBlogApp',
+                    context: ErrorDescription(
+                      'WebView resource loading failed',
+                    ),
+                  ),
+                );
+              },
+              onNavigationRequest: (request) {
+                return widget.onNavigationRequest?.call(request) ??
+                    Future.value(NavigationDecision.navigate);
+              },
+            ),
+          )
+          ..loadRequest(widget.initialUrl);
   }
 
   void _setLoading(bool value) {

@@ -4,9 +4,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../common/web_view/index.dart';
 import '../../config/app_urls.dart';
-import '../../util/launch_url/index.dart';
 import '../../util/navigation/index.dart';
 import '../../util/platform/index.dart';
+import '../../util/web_view_navigation/index.dart';
 import '../article/index.dart';
 import '../pagination/index.dart';
 
@@ -51,9 +51,7 @@ class _HomeState extends State<Home> {
                 indicatorColor: CupertinoColors.activeBlue,
                 labelColor: CupertinoColors.activeBlue,
                 isScrollable: true,
-                tabs: [
-                  for (final tab in _tabs) Tab(text: tab.label),
-                ],
+                tabs: [for (final tab in _tabs) Tab(text: tab.label)],
                 onTap: _onTabTapped,
               ),
             ],
@@ -92,10 +90,7 @@ class _HomeTab {
   final String label;
   final Uri url;
 
-  const _HomeTab({
-    required this.label,
-    required this.url,
-  });
+  const _HomeTab({required this.label, required this.url});
 }
 
 class _HomeWebView extends StatelessWidget {
@@ -107,10 +102,8 @@ class _HomeWebView extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppWebView(
       initialUrl: initialUrl,
-      onNavigationRequest: (request) => _handleNavigationRequest(
-        context,
-        request,
-      ),
+      onNavigationRequest:
+          (request) => _handleNavigationRequest(context, request),
     );
   }
 
@@ -132,8 +125,7 @@ class _HomeWebView extends StatelessWidget {
     }
 
     if (!AppUrls.isAppUrl(url)) {
-      await launchExternalUrl(url);
-      return NavigationDecision.prevent;
+      return preventAndLaunchExternalUrl(url);
     }
 
     return NavigationDecision.navigate;

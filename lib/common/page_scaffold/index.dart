@@ -37,12 +37,13 @@ class AppPageScaffold extends StatelessWidget {
         elevation: 0,
         title: Image.asset('assets/title.webp', height: 28),
         centerTitle: true,
-        leading: showBackButton
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            : null,
+        leading:
+            showBackButton
+                ? IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+                : null,
         actions: materialActions,
       ),
       body: child,
@@ -63,10 +64,7 @@ class _CupertinoBackButton extends StatelessWidget {
         children: [
           Icon(CupertinoIcons.back, color: CupertinoColors.activeBlue),
           SizedBox(width: 4),
-          Text(
-            '戻る',
-            style: TextStyle(color: CupertinoColors.activeBlue),
-          ),
+          Text('戻る', style: TextStyle(color: CupertinoColors.activeBlue)),
         ],
       ),
     );

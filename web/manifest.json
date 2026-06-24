@@ -1,11 +1,11 @@
 {
-    "name": "flutterblogapp",
-    "short_name": "flutterblogapp",
+    "name": "Real Univlog Mobile",
+    "short_name": "Real Univlog",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Mobile app for the Real University Student blog.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

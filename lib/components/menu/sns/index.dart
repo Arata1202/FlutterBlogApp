@@ -16,9 +16,7 @@ class Sns extends StatelessWidget {
         child: Container(
           color: CupertinoColors.systemGrey6,
           child: CupertinoScrollbar(
-            child: ListView(
-              children: _buildCupertinoSections(),
-            ),
+            child: ListView(children: _buildCupertinoSections()),
           ),
         ),
       );
@@ -27,11 +25,7 @@ class Sns extends StatelessWidget {
         showBackButton: true,
         child: Container(
           color: Colors.grey[200],
-          child: Scrollbar(
-            child: ListView(
-              children: _buildMaterialSections(),
-            ),
-          ),
+          child: Scrollbar(child: ListView(children: _buildMaterialSections())),
         ),
       );
     }
@@ -132,9 +126,7 @@ class Sns extends StatelessWidget {
     } else {
       return Card(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Column(
-          children: children,
-        ),
+        child: Column(children: children),
       );
     }
   }

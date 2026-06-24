@@ -35,10 +35,27 @@ void main() {
         isTrue,
       );
       expect(
+        AppUrls.isPaginationUrl('https://web-view-blog-app.vercel.app/p/2/'),
+        isTrue,
+      );
+      expect(
         AppUrls.isSearchDestinationUrl(
           'https://web-view-blog-app.vercel.app/tag/flutter',
         ),
         isTrue,
+      );
+    });
+
+    test('does not detect unrelated paths as pagination', () {
+      expect(
+        AppUrls.isPaginationUrl('https://web-view-blog-app.vercel.app/help/p'),
+        isFalse,
+      );
+      expect(
+        AppUrls.isPaginationUrl(
+          'https://web-view-blog-app.vercel.app/article/p/sample',
+        ),
+        isFalse,
       );
     });
 

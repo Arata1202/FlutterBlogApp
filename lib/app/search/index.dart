@@ -7,6 +7,7 @@ import '../../common/web_view/index.dart';
 import '../../config/app_urls.dart';
 import '../../util/navigation/index.dart';
 import '../../util/platform/index.dart';
+import '../../util/web_view_navigation/index.dart';
 import '../search_result/index.dart';
 
 class Search extends StatefulWidget {
@@ -98,16 +99,19 @@ class _SearchState extends State<Search> {
   }
 
   Widget _buildCupertinoSectionTitle() {
-    return CupertinoListSection(
-      header: const Text(
-        'アーカイブ・タグ',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: CupertinoColors.black,
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'アーカイブ・タグ',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: CupertinoColors.secondaryLabel,
+          ),
         ),
       ),
-      children: const [],
     );
   }
 
@@ -134,6 +138,10 @@ class _SearchState extends State<Search> {
     if (AppUrls.isSearchDestinationUrl(request.url)) {
       await pushAppPage(context, SearchResultsPage(url: request.url));
       return NavigationDecision.prevent;
+    }
+
+    if (!AppUrls.isAppUrl(request.url)) {
+      return preventAndLaunchExternalUrl(request.url);
     }
 
     return NavigationDecision.navigate;

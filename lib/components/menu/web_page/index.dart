@@ -4,15 +4,12 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../../common/page_scaffold/index.dart';
 import '../../../common/web_view/index.dart';
 import '../../../config/app_urls.dart';
-import '../../../util/launch_url/index.dart';
+import '../../../util/web_view_navigation/index.dart';
 
 class MenuWebPage extends StatelessWidget {
   final Uri initialUrl;
 
-  const MenuWebPage({
-    super.key,
-    required this.initialUrl,
-  });
+  const MenuWebPage({super.key, required this.initialUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +26,7 @@ class MenuWebPage extends StatelessWidget {
     NavigationRequest request,
   ) async {
     if (!AppUrls.isAppUrl(request.url)) {
-      await launchExternalUrl(request.url);
-      return NavigationDecision.prevent;
+      return preventAndLaunchExternalUrl(request.url);
     }
 
     return NavigationDecision.navigate;

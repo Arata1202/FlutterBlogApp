@@ -6,8 +6,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../../common/page_scaffold/index.dart';
 import '../../common/web_view/index.dart';
 import '../../config/app_urls.dart';
-import '../../util/launch_url/index.dart';
 import '../../util/navigation/index.dart';
+import '../../util/web_view_navigation/index.dart';
 
 class ArticlePage extends StatefulWidget {
   final String url;
@@ -26,16 +26,17 @@ class _ArticlePageState extends State<ArticlePage> {
   Widget build(BuildContext context) {
     return AppPageScaffold(
       showBackButton: true,
-      cupertinoTrailing: _isLoading
-          ? null
-          : CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: _shareArticle,
-              child: const Icon(
-                CupertinoIcons.share,
-                color: CupertinoColors.activeBlue,
+      cupertinoTrailing:
+          _isLoading
+              ? null
+              : CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: _shareArticle,
+                child: const Icon(
+                  CupertinoIcons.share,
+                  color: CupertinoColors.activeBlue,
+                ),
               ),
-            ),
       materialActions: [
         if (!_isLoading)
           IconButton(
@@ -65,8 +66,7 @@ class _ArticlePageState extends State<ArticlePage> {
     final url = request.url;
 
     if (!AppUrls.isAppUrl(url)) {
-      await launchExternalUrl(url);
-      return NavigationDecision.prevent;
+      return preventAndLaunchExternalUrl(url);
     }
 
     if (AppUrls.isArticleUrl(url) && url != widget.url) {

@@ -45,11 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
             selectedIndex = index;
           });
         },
-        children: const <Widget>[
-          Home(),
-          Search(),
-          Menu(),
-        ],
+        children: const <Widget>[Home(), Search(), Menu()],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: selectedIndex,

@@ -34,9 +34,13 @@ class AppUrls {
 
   static bool isPaginationUrl(String url) {
     final uri = Uri.tryParse(url);
-    return uri != null &&
-        uri.host == home.host &&
-        uri.pathSegments.contains('p');
+    if (uri == null || uri.host != home.host) {
+      return false;
+    }
+
+    final pathSegments =
+        uri.pathSegments.where((segment) => segment.isNotEmpty).toList();
+    return pathSegments.length == 2 && pathSegments.first == 'p';
   }
 
   static bool isSearchDestinationUrl(String url) {

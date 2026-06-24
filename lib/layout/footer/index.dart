@@ -19,11 +19,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
       return CupertinoTabBar(
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.compass), label: 'ホーム'),
+            icon: Icon(CupertinoIcons.compass),
+            label: 'ホーム',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.search), label: '検索'),
+            icon: Icon(CupertinoIcons.search),
+            label: '検索',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.square_grid_2x2), label: 'メニュー'),
+            icon: Icon(CupertinoIcons.square_grid_2x2),
+            label: 'メニュー',
+          ),
         ],
         currentIndex: currentIndex,
         backgroundColor: CupertinoColors.white,
@@ -34,18 +40,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
     } else {
       return BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'ホーム',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: '検索',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view),
-            label: 'メニュー',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'ホーム'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: '検索'),
+          BottomNavigationBarItem(icon: Icon(Icons.grid_view), label: 'メニュー'),
         ],
         currentIndex: currentIndex,
         backgroundColor: Colors.white,

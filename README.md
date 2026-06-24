@@ -33,8 +33,6 @@
 
 ## 主な機能一覧
 
-※製品版では Google AdMob による広告が表示されます。
-
 | 記事一覧ページ                                           | 　検索ページ                                               |
 | -------------------------------------------------------- | ---------------------------------------------------------- |
 | ![1](/.docs/readme/images/1.png)                         | ![2](/.docs/readme/images/2.png)                           |
@@ -64,7 +62,7 @@
 | Frontend | Flutter                                     |
 | Backend  | Firebase                                    |
 | Design   | Figma, Canva                                |
-| Google   | AdMob, Analytics                            |
+| Google   | Analytics                                   |
 | etc.     | OneSignal, Pipedream, XCode, Android Studio |
 
 <p align="right">(<a href="#top">トップへ</a>)</p>

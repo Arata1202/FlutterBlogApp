@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:in_app_review/in_app_review.dart';
 import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
@@ -10,7 +9,6 @@ import '../../components/menu/copyright/index.dart';
 import '../../components/menu/link/index.dart';
 import '../../components/menu/sns/index.dart';
 import '../../components/menu/contact/index.dart';
-import '../../common/admob/banner/index.dart';
 import 'package:package_info/package_info.dart';
 import 'dart:io' show Platform;
 import 'package:app_settings/app_settings.dart';
@@ -49,7 +47,6 @@ class _MenuState extends State<Menu> {
         navigationBar: _buildNavigationBar(context),
         child: Column(
           children: [
-            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: Container(
                 color: CupertinoColors.systemGrey6,
@@ -133,7 +130,6 @@ class _MenuState extends State<Menu> {
         appBar: _buildAppBar(context),
         body: Column(
           children: [
-            BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
             Expanded(
               child: Container(
                 color: Colors.grey[200],

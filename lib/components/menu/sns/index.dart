@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
@@ -31,7 +29,6 @@ class _SnsState extends State<Sns> {
           navigationBar: _buildNavigationBar(context),
           child: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(
                 child: Container(
                   color: CupertinoColors.systemGrey6,
@@ -123,7 +120,6 @@ class _SnsState extends State<Sns> {
             appBar: _buildAppBar(context),
             body: Column(
               children: [
-                BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
                 Expanded(
                   child: Container(
                     color: Colors.grey[200],

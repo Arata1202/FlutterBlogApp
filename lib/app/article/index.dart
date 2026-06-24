@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../common/admob/banner/index.dart';
 import '../../util/navigate_out/index.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:io' show Platform;
@@ -107,7 +105,6 @@ class _ArticlePageState extends State<ArticlePage> {
           navigationBar: _buildNavigationBar(context),
           child: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(child: webView),
             ],
           ),
@@ -120,7 +117,6 @@ class _ArticlePageState extends State<ArticlePage> {
           appBar: _buildAppBar(context),
           body: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 0),

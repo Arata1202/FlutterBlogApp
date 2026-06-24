@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../article/index.dart';
 import '../pagination/index.dart';
-import '../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
@@ -96,7 +94,6 @@ class _HomeState extends State<Home> {
           ),
           body: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(
                 child: IndexedStack(
                   index: _currentIndex,
@@ -135,7 +132,6 @@ class _HomeState extends State<Home> {
           ),
           body: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(
                 child: IndexedStack(
                   index: _currentIndex,

@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
@@ -86,7 +84,6 @@ class _PrivacyState extends State<Privacy> {
           navigationBar: _buildNavigationBar(context),
           child: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(child: webView),
             ],
           ),
@@ -99,7 +96,6 @@ class _PrivacyState extends State<Privacy> {
           appBar: _buildAppBar(context),
           body: Column(
             children: [
-              BannerAdWidget(adUnitId: dotenv.get('BANNER_AD')),
               Expanded(child: webView),
             ],
           ),

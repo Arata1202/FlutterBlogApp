@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../search_result/index.dart';
-import '../../common/admob/banner/index.dart';
 import 'dart:io' show Platform;
 
 bool isAndroid = Platform.isAndroid;
@@ -126,9 +124,6 @@ class _SearchState extends State<Search> {
                 onSubmitted: (value) => _performSearch(),
               ),
             ),
-            BannerAdWidget(
-              adUnitId: dotenv.get('BANNER_AD'),
-            ),
             keyword(),
             Expanded(child: webView),
           ],
@@ -140,9 +135,6 @@ class _SearchState extends State<Search> {
         body: Column(
           children: [
             _buildSearchFormCard(),
-            BannerAdWidget(
-              adUnitId: dotenv.get('BANNER_AD'),
-            ),
             _buildSectionTitle('アーカイブ・タグ'),
             Expanded(child: webView),
           ],

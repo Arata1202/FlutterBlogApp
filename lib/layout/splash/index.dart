@@ -7,7 +7,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.splashDuration});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -20,11 +20,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _startFadeOut() async {
-    await Future.delayed(widget.splashDuration - Duration(milliseconds: 300));
+    await Future.delayed(
+        widget.splashDuration - const Duration(milliseconds: 300));
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _opacity = 0.0;
     });
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) {
+      return;
+    }
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => const MyHomePage()),
     );
@@ -36,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: AnimatedOpacity(
         opacity: _opacity,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         child: Center(
           child: Image.asset(
             'assets/icon-512x512.png',

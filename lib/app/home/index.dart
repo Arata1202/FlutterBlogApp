@@ -1,307 +1,141 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../common/web_view/index.dart';
+import '../../config/app_urls.dart';
+import '../../util/launch_url/index.dart';
+import '../../util/navigation/index.dart';
+import '../../util/platform/index.dart';
 import '../article/index.dart';
 import '../pagination/index.dart';
-import 'dart:io' show Platform;
-
-bool isAndroid = Platform.isAndroid;
-bool isIOS = Platform.isIOS;
 
 class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  int _currentIndex = 0;
-
-  final List<Widget> _tabs = [
-    const NewPostTab(),
-    const ProgrammingPostTab(),
-    const UniversityPostTab(),
-    const TravelPostTab(),
-    const BlogPostTab(),
+  static final _tabs = [
+    _HomeTab(label: '最新記事', url: AppUrls.home),
+    _HomeTab(label: 'プログラミング', url: AppUrls.programming),
+    _HomeTab(label: '大学生活', url: AppUrls.university),
+    _HomeTab(label: '旅行', url: AppUrls.travel),
+    _HomeTab(label: 'ブログ', url: AppUrls.blog),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  int _currentIndex = 0;
+  final Set<int> _loadedIndexes = {0};
 
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+      _loadedIndexes.add(index);
     });
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      backgroundColor: CupertinoColors.white,
-      middle: Image.asset(
-        'assets/title.webp',
-        height: 28,
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      initialIndex: 0,
+      length: _tabs.length,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(AppPlatform.isIOS ? 100 : 112),
+          child: Column(
+            children: [
+              AppPlatform.isIOS ? _buildNavigationBar() : _buildAppBar(),
+              TabBar(
+                indicatorColor: CupertinoColors.activeBlue,
+                labelColor: CupertinoColors.activeBlue,
+                isScrollable: true,
+                tabs: [
+                  for (final tab in _tabs) Tab(text: tab.label),
+                ],
+                onTap: _onTabTapped,
+              ),
+            ],
+          ),
+        ),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: [
+            for (var index = 0; index < _tabs.length; index++)
+              _loadedIndexes.contains(index)
+                  ? _HomeWebView(initialUrl: _tabs[index].url)
+                  : const SizedBox.shrink(),
+          ],
+        ),
       ),
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  CupertinoNavigationBar _buildNavigationBar() {
+    return CupertinoNavigationBar(
+      backgroundColor: CupertinoColors.white,
+      middle: Image.asset('assets/title.webp', height: 28),
+    );
+  }
+
+  AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      title: Image.asset(
-        'assets/title.webp',
-        height: 28,
-      ),
+      title: Image.asset('assets/title.webp', height: 28),
       centerTitle: true,
     );
   }
+}
+
+class _HomeTab {
+  final String label;
+  final Uri url;
+
+  const _HomeTab({
+    required this.label,
+    required this.url,
+  });
+}
+
+class _HomeWebView extends StatelessWidget {
+  final Uri initialUrl;
+
+  const _HomeWebView({required this.initialUrl});
 
   @override
   Widget build(BuildContext context) {
-    if (isIOS) {
-      return DefaultTabController(
-        initialIndex: 0,
-        length: 5,
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(100.0),
-            child: Column(
-              children: [
-                _buildNavigationBar(context),
-                TabBar(
-                  indicatorColor: CupertinoColors.activeBlue,
-                  labelColor: CupertinoColors.activeBlue,
-                  isScrollable: true,
-                  tabs: const <Widget>[
-                    Tab(text: '最新記事'),
-                    Tab(text: 'プログラミング'),
-                    Tab(text: '大学生活'),
-                    Tab(text: '旅行'),
-                    Tab(text: 'ブログ'),
-                  ],
-                  onTap: _onTabTapped,
-                ),
-              ],
-            ),
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: IndexedStack(
-                  index: _currentIndex,
-                  children: _tabs,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return DefaultTabController(
-        initialIndex: 0,
-        length: 5,
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(112.0),
-            child: Column(
-              children: [
-                _buildAppBar(context),
-                TabBar(
-                  indicatorColor: CupertinoColors.activeBlue,
-                  labelColor: CupertinoColors.activeBlue,
-                  isScrollable: true,
-                  tabs: const <Widget>[
-                    Tab(text: '最新記事'),
-                    Tab(text: 'プログラミング'),
-                    Tab(text: '大学生活'),
-                    Tab(text: '旅行'),
-                    Tab(text: 'ブログ'),
-                  ],
-                  onTap: _onTabTapped,
-                ),
-              ],
-            ),
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: IndexedStack(
-                  index: _currentIndex,
-                  children: _tabs,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+    return AppWebView(
+      initialUrl: initialUrl,
+      onNavigationRequest: (request) => _handleNavigationRequest(
+        context,
+        request,
+      ),
+    );
+  }
+
+  Future<NavigationDecision> _handleNavigationRequest(
+    BuildContext context,
+    NavigationRequest request,
+  ) async {
+    final url = request.url;
+    final currentUrl = initialUrl.toString();
+
+    if (AppUrls.isArticleUrl(url) && url != currentUrl) {
+      await pushAppPage(context, ArticlePage(url: url));
+      return NavigationDecision.prevent;
     }
-  }
-}
 
-class NewPostTab extends StatelessWidget {
-  const NewPostTab({super.key});
+    if (AppUrls.isPaginationUrl(url) && url != currentUrl) {
+      await pushAppPage(context, PaginationPage(url: url));
+      return NavigationDecision.prevent;
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return const WebViewTab(url: 'https://web-view-blog-app.vercel.app');
-  }
-}
+    if (!AppUrls.isAppUrl(url)) {
+      await launchExternalUrl(url);
+      return NavigationDecision.prevent;
+    }
 
-class ProgrammingPostTab extends StatelessWidget {
-  const ProgrammingPostTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/programming');
-  }
-}
-
-class UniversityPostTab extends StatelessWidget {
-  const UniversityPostTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/university');
-  }
-}
-
-class TravelPostTab extends StatelessWidget {
-  const TravelPostTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/travel');
-  }
-}
-
-class BlogPostTab extends StatelessWidget {
-  const BlogPostTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const WebViewTab(
-        url: 'https://web-view-blog-app.vercel.app/category/blog');
-  }
-}
-
-class WebViewTab extends StatefulWidget {
-  final String url;
-
-  const WebViewTab({super.key, required this.url});
-
-  @override
-  _WebViewTabState createState() => _WebViewTabState();
-}
-
-class _WebViewTabState extends State<WebViewTab> {
-  late WebViewController _controller;
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeWebViewController();
-  }
-
-  void _initializeWebViewController() {
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(
-          isIOS ? CupertinoColors.systemBackground : Colors.white)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {
-            setState(() {
-              _isLoading = true;
-            });
-          },
-          onPageFinished: (String url) {
-            setState(() {
-              _isLoading = false;
-            });
-          },
-          onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.contains('web-view-blog-app.vercel.app/article') &&
-                request.url != widget.url) {
-              if (isIOS) {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => ArticlePage(url: request.url),
-                  ),
-                );
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ArticlePage(url: request.url),
-                  ),
-                );
-              }
-              return NavigationDecision.prevent;
-            }
-            if (request.url.contains('/p/') && request.url != widget.url) {
-              if (isIOS) {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => PaginationPage(url: request.url),
-                  ),
-                );
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PaginationPage(url: request.url),
-                  ),
-                );
-              }
-              return NavigationDecision.prevent;
-            }
-            if (!request.url.contains('web-view-blog-app.vercel.app')) {
-              if (await canLaunch(request.url)) {
-                await launch(request.url, forceSafariVC: false);
-                return NavigationDecision.prevent;
-              }
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(widget.url));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget webView = Stack(
-      children: [
-        WebViewWidget(controller: _controller),
-        if (_isLoading)
-          Center(
-            child: CircularProgressIndicator(),
-          ),
-      ],
-    );
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: webView,
-    );
+    return NavigationDecision.navigate;
   }
 }

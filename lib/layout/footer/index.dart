@@ -1,23 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:io' show Platform;
 
-bool isAndroid = Platform.isAndroid;
-bool isIOS = Platform.isIOS;
+import '../../util/platform/index.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
   const CustomBottomNavigationBar({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (isIOS) {
+    if (AppPlatform.isIOS) {
       return CupertinoTabBar(
         items: const [
           BottomNavigationBarItem(

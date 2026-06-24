@@ -30,6 +30,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/build/
 
 # Symbolication related
 app.*.symbols
@@ -42,6 +43,26 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Local configuration / secrets
 .env
+.env.*
+!.env.example
+!.env.*.example
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
+
+# Firebase / signing files for local builds only
 GoogleService-Info.plist
 google-services.json
+firebase_app_id_file.json
+lib/firebase_options.dart
+key.properties
+*.jks
+*.keystore
+*.p8
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+*.xcuserstate

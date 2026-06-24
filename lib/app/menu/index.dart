@@ -2,25 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
 import '../../components/menu/disclaimer/index.dart';
-import '../../components/menu/copyright/index.dart';
-import '../../components/menu/link/index.dart';
+import '../../components/menu/Copyright/index.dart';
+import '../../components/menu/Link/index.dart';
 import '../../components/menu/sns/index.dart';
 import '../../components/menu/contact/index.dart';
-import 'package:package_info/package_info.dart';
-import 'dart:io' show Platform;
+import '../../common/page_scaffold/index.dart';
+import '../../util/navigation/index.dart';
+import '../../util/platform/index.dart';
 import 'package:app_settings/app_settings.dart';
-
-bool isAndroid = Platform.isAndroid;
-bool isIOS = Platform.isIOS;
 
 class Menu extends StatefulWidget {
   const Menu({super.key});
 
   @override
-  _MenuState createState() => _MenuState();
+  State<Menu> createState() => _MenuState();
 }
 
 class _MenuState extends State<Menu> {
@@ -35,6 +34,9 @@ class _MenuState extends State<Menu> {
 
   void _initAppVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _appVersion = 'v${packageInfo.version}';
     });
@@ -42,9 +44,8 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    if (isIOS) {
-      return CupertinoPageScaffold(
-        navigationBar: _buildNavigationBar(context),
+    if (AppPlatform.isIOS) {
+      return AppPageScaffold(
         child: Column(
           children: [
             Expanded(
@@ -108,7 +109,7 @@ class _MenuState extends State<Menu> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               _appVersion,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: CupertinoColors.systemGrey,
                                 fontSize: 12,
                               ),
@@ -126,9 +127,8 @@ class _MenuState extends State<Menu> {
         ),
       );
     } else {
-      return Scaffold(
-        appBar: _buildAppBar(context),
-        body: Column(
+      return AppPageScaffold(
+        child: Column(
           children: [
             Expanded(
               child: Container(
@@ -198,18 +198,8 @@ class _MenuState extends State<Menu> {
     }
   }
 
-  CupertinoNavigationBar _buildNavigationBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      backgroundColor: CupertinoColors.white,
-      middle: Image.asset(
-        'assets/title.webp',
-        height: 28,
-      ),
-    );
-  }
-
   Widget _menuItem(String title, IconData icon, VoidCallback onTap) {
-    if (isIOS) {
+    if (AppPlatform.isIOS) {
       return CupertinoListTile(
         title: Text(title),
         leading: Icon(icon),
@@ -226,23 +216,6 @@ class _MenuState extends State<Menu> {
     }
   }
 
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-      ),
-      title: Image.asset(
-        'assets/title.webp',
-        height: 28,
-      ),
-      centerTitle: true,
-    );
-  }
-
   Widget _buildListSection(List<Widget> children) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -253,7 +226,7 @@ class _MenuState extends State<Menu> {
   }
 
   void _shareApp() {
-    final String appUrl = isIOS
+    final String appUrl = AppPlatform.isIOS
         ? 'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103'
         : 'https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp';
     Share.share(
@@ -263,17 +236,7 @@ class _MenuState extends State<Menu> {
   }
 
   void _navigateTo(BuildContext context, Widget page) {
-    if (isIOS) {
-      Navigator.push(
-        context,
-        CupertinoPageRoute(builder: (context) => page),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page),
-      );
-    }
+    pushAppPage(context, page);
   }
 
   void _navigateToPushNotificationSettings() {
@@ -283,8 +246,6 @@ class _MenuState extends State<Menu> {
   void _requestReview() async {
     if (await _inAppReview.isAvailable()) {
       _inAppReview.requestReview();
-    } else {
-      print('In-app review not available');
     }
   }
 }

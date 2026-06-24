@@ -77,8 +77,8 @@ git clone git@github.com:Arata1202/FlutterBlogApp.git
 cd FlutterBlogApp
 
 # Firebaseから必要なファイルを入手
-mv GoogleService-Info.plist /ios/Runner
-mv google-services.json /android/app
+cp GoogleService-Info.plist ios/Runner/
+cp google-services.json android/app/
 ```
 
 ### Flutter プロジェクトの起動
@@ -90,8 +90,11 @@ flutter pub get
 # CocoaPodsのインストール
 cd ios && pod install && cd ..
 
-# Flutterプロジェクトの起動
+# OneSignal App IDはソースに書かず、ローカルIDE設定またはCIの環境変数から渡す
 flutter run --dart-define=ONESIGNAL_APP_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+# Xcodeから起動する場合は、Runner.xcodeprojではなくworkspaceを開く
+open ios/Runner.xcworkspace
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>
@@ -109,16 +112,20 @@ lib
 │   ├── search
 │   └── search_result
 ├── common
-│   └── admob
+│   ├── page_scaffold
+│   └── web_view
 ├── components
 │   └── menu
+├── config
 ├── layout
 │   ├── footer
 │   ├── main
 │   └── splash
 ├── main.dart
 └── util
-    └── navigate_out
+    ├── launch_url
+    ├── navigation
+    └── platform
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>

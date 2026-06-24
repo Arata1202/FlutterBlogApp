@@ -76,12 +76,6 @@
 git clone git@github.com:Arata1202/FlutterBlogApp.git
 cd FlutterBlogApp
 
-# .env.exampleから.envを作成
-mv .env.example .env
-
-# .envの編集
-vi .env
-
 # Firebaseから必要なファイルを入手
 mv GoogleService-Info.plist /ios/Runner
 mv google-services.json /android/app
@@ -97,7 +91,7 @@ flutter pub get
 cd ios && pod install && cd ..
 
 # Flutterプロジェクトの起動
-flutter run
+flutter run --dart-define=ONESIGNAL_APP_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
 <p align="right">(<a href="#top">トップへ</a>)</p>

@@ -42,7 +42,6 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   wakelock: ^0.6.0
   shared_preferences: ^2.0.6
-  flutter_dotenv: ^5.1.0
   onesignal_flutter: ^5.1.2
   in_app_review: ^2.0.2
   package_info: ^2.0.2
@@ -70,7 +69,6 @@ flutter:
   assets:
     - assets/title.webp
     - assets/icon-512x512.png
-    - .env
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

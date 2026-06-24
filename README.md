@@ -84,6 +84,8 @@ cp google-services.json android/app/
 ### Flutter プロジェクトの起動
 
 ```
+# iOSは15.0以上を対象にしています
+
 # 依存関係のインストール
 flutter pub get
 

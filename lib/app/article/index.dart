@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
@@ -79,6 +81,10 @@ class _ArticlePageState extends State<ArticlePage> {
 
   void _shareArticle() {
     final title = _pageTitle.isEmpty ? 'リアル大学生' : _pageTitle;
-    Share.share('$title\n${AppUrls.toPublicUrl(widget.url)}');
+    unawaited(
+      SharePlus.instance.share(
+        ShareParams(text: '$title\n${AppUrls.toPublicUrl(widget.url)}'),
+      ),
+    );
   }
 }

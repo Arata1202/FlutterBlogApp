@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 import '../../components/menu/profile/index.dart';
 import '../../components/menu/privacy/index.dart';
 import '../../components/menu/disclaimer/index.dart';
@@ -238,7 +241,11 @@ class _MenuState extends State<Menu> {
         AppPlatform.isIOS
             ? 'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103'
             : 'https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp';
-    Share.share('リアル大学生：モバイル\n$appUrl', subject: 'リアル大学生：モバイル');
+    unawaited(
+      SharePlus.instance.share(
+        ShareParams(text: 'リアル大学生：モバイル\n$appUrl', subject: 'リアル大学生：モバイル'),
+      ),
+    );
   }
 
   void _navigateTo(BuildContext context, Widget page) {

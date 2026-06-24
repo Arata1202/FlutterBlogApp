@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -11,6 +12,7 @@ import '../../components/menu/Link/index.dart';
 import '../../components/menu/sns/index.dart';
 import '../../components/menu/contact/index.dart';
 import '../../common/page_scaffold/index.dart';
+import '../../config/app_config.dart';
 import '../../util/navigation/index.dart';
 import '../../util/platform/index.dart';
 import 'package:app_settings/app_settings.dart';
@@ -57,15 +59,21 @@ class _MenuState extends State<Menu> {
                       CupertinoListSection.insetGrouped(
                         backgroundColor: CupertinoColors.systemGrey6,
                         children: [
-                          _menuItem("プッシュ通知設定", CupertinoIcons.bell,
-                              _navigateToPushNotificationSettings),
+                          _menuItem(
+                            "プッシュ通知設定",
+                            CupertinoIcons.bell,
+                            _navigateToPushNotificationSettings,
+                          ),
                         ],
                       ),
                       CupertinoListSection.insetGrouped(
                         backgroundColor: CupertinoColors.systemGrey6,
                         children: [
                           _menuItem(
-                              "レビューを送信", CupertinoIcons.star, _requestReview),
+                            "レビューを送信",
+                            CupertinoIcons.star,
+                            _requestReview,
+                          ),
                           _menuItem("アプリをシェア", CupertinoIcons.share, _shareApp),
                         ],
                       ),
@@ -87,10 +95,12 @@ class _MenuState extends State<Menu> {
                             _navigateTo(context, const Privacy());
                           }),
                           _menuItem(
-                              "免責事項", CupertinoIcons.exclamationmark_circle,
-                              () {
-                            _navigateTo(context, const Disclaimer());
-                          }),
+                            "免責事項",
+                            CupertinoIcons.exclamationmark_circle,
+                            () {
+                              _navigateTo(context, const Disclaimer());
+                            },
+                          ),
                           _menuItem("著作権", CupertinoIcons.doc_text, () {
                             _navigateTo(context, const Copyright());
                           }),
@@ -219,27 +229,30 @@ class _MenuState extends State<Menu> {
   Widget _buildListSection(List<Widget> children) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Column(
-        children: children,
-      ),
+      child: Column(children: children),
     );
   }
 
   void _shareApp() {
-    final String appUrl = AppPlatform.isIOS
-        ? 'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103'
-        : 'https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp';
-    Share.share(
-      'リアル大学生：モバイル\n$appUrl',
-      subject: 'リアル大学生：モバイル',
-    );
+    final String appUrl =
+        AppPlatform.isIOS
+            ? 'https://apps.apple.com/jp/app/%E3%83%AA%E3%82%A2%E3%83%AB%E5%A4%A7%E5%AD%A6%E7%94%9F-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB/id6590619103'
+            : 'https://play.google.com/store/apps/details?id=com.realunivlog.flutterblogapp';
+    Share.share('リアル大学生：モバイル\n$appUrl', subject: 'リアル大学生：モバイル');
   }
 
   void _navigateTo(BuildContext context, Widget page) {
     pushAppPage(context, page);
   }
 
-  void _navigateToPushNotificationSettings() {
+  Future<void> _navigateToPushNotificationSettings() async {
+    if (AppPlatform.isIOS &&
+        AppConfig.oneSignalAppId.isNotEmpty &&
+        await OneSignal.Notifications.canRequest()) {
+      await OneSignal.Notifications.requestPermission(true);
+      return;
+    }
+
     AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 

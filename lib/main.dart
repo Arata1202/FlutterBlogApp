@@ -16,8 +16,10 @@ bool get isIOS => AppPlatform.isIOS;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   if (AppConfig.oneSignalAppId.isNotEmpty) {
     if (kDebugMode) {
@@ -25,9 +27,9 @@ void main() async {
     }
 
     OneSignal.initialize(AppConfig.oneSignalAppId);
-
-    // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.Notifications.requestPermission(true);
+    if (!AppPlatform.isIOS) {
+      OneSignal.Notifications.requestPermission(true);
+    }
   }
 
   _checkVersionAndRunApp();
@@ -36,10 +38,12 @@ void main() async {
 Future<void> _checkVersionAndRunApp() async {
   final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
 
-  await remoteConfig.setConfigSettings(RemoteConfigSettings(
-    fetchTimeout: const Duration(seconds: 10),
-    minimumFetchInterval: Duration.zero,
-  ));
+  await remoteConfig.setConfigSettings(
+    RemoteConfigSettings(
+      fetchTimeout: const Duration(seconds: 10),
+      minimumFetchInterval: Duration.zero,
+    ),
+  );
 
   await remoteConfig.setDefaults(<String, dynamic>{
     "current_version": "1.0.0",
@@ -50,12 +54,14 @@ Future<void> _checkVersionAndRunApp() async {
 
   await remoteConfig.fetchAndActivate();
 
-  var latestVersion = isIOS
-      ? remoteConfig.getString("current_version")
-      : remoteConfig.getString("android_current_version");
-  var maintenanceMode = isIOS
-      ? remoteConfig.getBool("maintenance_mode")
-      : remoteConfig.getBool("android_maintenance_mode");
+  var latestVersion =
+      isIOS
+          ? remoteConfig.getString("current_version")
+          : remoteConfig.getString("android_current_version");
+  var maintenanceMode =
+      isIOS
+          ? remoteConfig.getBool("maintenance_mode")
+          : remoteConfig.getBool("android_maintenance_mode");
 
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String currentVersion = packageInfo.version;

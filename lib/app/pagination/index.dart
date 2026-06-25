@@ -29,7 +29,7 @@ class PaginationPage extends StatelessWidget {
     BuildContext context,
     NavigationRequest request,
   ) async {
-    final requestedUrl = request.url;
+    final requestedUrl = AppUrls.toAppUrlString(request.url);
 
     if (AppUrls.isArticleUrl(requestedUrl) && requestedUrl != url) {
       await pushAppPage(context, ArticlePage(url: requestedUrl));
@@ -42,7 +42,7 @@ class PaginationPage extends StatelessWidget {
     }
 
     if (!AppUrls.isAppUrl(requestedUrl)) {
-      return preventAndLaunchExternalUrl(requestedUrl);
+      return preventAndLaunchExternalUrl(request.url);
     }
 
     return NavigationDecision.navigate;

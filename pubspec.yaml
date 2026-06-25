@@ -4,7 +4,7 @@ publish_to: "none"
 version: 1.4.11+2
 
 environment:
-  sdk: ">=3.7.0 <4.0.0"
+  sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -14,7 +14,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_core: ^4.11.0
   firebase_remote_config: ^6.5.3
-  font_awesome_flutter: ^10.9.1
+  font_awesome_flutter: ^11.0.0
   in_app_review: ^2.0.12
   onesignal_flutter: ^5.6.3
   package_info_plus: ^9.0.1

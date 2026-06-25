@@ -65,10 +65,10 @@ class _ArticlePageState extends State<ArticlePage> {
   Future<NavigationDecision> _handleNavigationRequest(
     NavigationRequest request,
   ) async {
-    final url = request.url;
+    final url = AppUrls.toAppUrlString(request.url);
 
     if (!AppUrls.isAppUrl(url)) {
-      return preventAndLaunchExternalUrl(url);
+      return preventAndLaunchExternalUrl(request.url);
     }
 
     if (AppUrls.isArticleUrl(url) && url != widget.url) {

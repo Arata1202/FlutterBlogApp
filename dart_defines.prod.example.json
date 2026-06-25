@@ -1,5 +1,6 @@
 {
   "ADMOB_ENABLED": "true",
+  "WEB_BASE_URL": "https://realunivlog.com",
   "ADMOB_IOS_APP_ID": "ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx",
   "ADMOB_IOS_BANNER_AD_UNIT_ID": "ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx",
   "ONESIGNAL_APP_ID": ""

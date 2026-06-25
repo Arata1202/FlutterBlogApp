@@ -19,7 +19,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final TextEditingController _searchController = TextEditingController();
-  Uri _webViewUrl = AppUrls.keyword;
+  Uri _webViewUrl = AppUrls.searchTop;
 
   @override
   void dispose() {
@@ -52,9 +52,6 @@ class _SearchState extends State<Search> {
       child: Column(
         children: [
           AppPlatform.isIOS ? _buildCupertinoSearchField() : _buildSearchCard(),
-          AppPlatform.isIOS
-              ? _buildCupertinoSectionTitle()
-              : _buildMaterialSectionTitle('アーカイブ・タグ'),
           Expanded(
             child: AppWebView(
               key: ValueKey(_webViewUrl.toString()),
@@ -98,49 +95,18 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Widget _buildCupertinoSectionTitle() {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          'アーカイブ・タグ',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: CupertinoColors.secondaryLabel,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMaterialSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-      ),
-    );
-  }
-
   Future<NavigationDecision> _handleNavigationRequest(
     NavigationRequest request,
   ) async {
-    if (AppUrls.isSearchDestinationUrl(request.url)) {
-      await pushAppPage(context, SearchResultsPage(url: request.url));
+    final url = AppUrls.toAppUrlString(request.url);
+    final currentUrl = _webViewUrl.toString();
+
+    if (AppUrls.isSearchDestinationUrl(url) && url != currentUrl) {
+      await pushAppPage(context, SearchResultsPage(url: url));
       return NavigationDecision.prevent;
     }
 
-    if (!AppUrls.isAppUrl(request.url)) {
+    if (!AppUrls.isAppUrl(url)) {
       return preventAndLaunchExternalUrl(request.url);
     }
 

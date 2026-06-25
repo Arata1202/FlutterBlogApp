@@ -25,7 +25,9 @@ class MenuWebPage extends StatelessWidget {
   Future<NavigationDecision> _handleNavigationRequest(
     NavigationRequest request,
   ) async {
-    if (!AppUrls.isAppUrl(request.url)) {
+    final url = AppUrls.toAppUrlString(request.url);
+
+    if (!AppUrls.isAppUrl(url)) {
       return preventAndLaunchExternalUrl(request.url);
     }
 

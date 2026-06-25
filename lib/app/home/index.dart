@@ -20,9 +20,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   static final _tabs = [
     _HomeTab(label: '最新記事', url: AppUrls.home),
-    _HomeTab(label: 'プログラミング', url: AppUrls.programming),
     _HomeTab(label: '大学生活', url: AppUrls.university),
+    _HomeTab(label: '社会人生活', url: AppUrls.work),
+    _HomeTab(label: 'レジャー', url: AppUrls.leisure),
     _HomeTab(label: '旅行', url: AppUrls.travel),
+    _HomeTab(label: 'プログラミング', url: AppUrls.programming),
     _HomeTab(label: 'ブログ', url: AppUrls.blog),
   ];
 
@@ -41,47 +43,65 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
       initialIndex: 0,
       length: _tabs.length,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(AppPlatform.isIOS ? 100 : 112),
-          child: Column(
-            children: [
-              AppPlatform.isIOS ? _buildNavigationBar() : _buildAppBar(),
-              TabBar(
-                indicatorColor: CupertinoColors.activeBlue,
-                labelColor: CupertinoColors.activeBlue,
-                isScrollable: true,
-                tabs: [for (final tab in _tabs) Tab(text: tab.label)],
-                onTap: _onTabTapped,
-              ),
-            ],
+      child: Column(
+        children: [
+          AppPlatform.isIOS
+              ? _buildNavigationHeader(context)
+              : _buildMaterialHeader(context),
+          Material(
+            color: Colors.white,
+            child: TabBar(
+              indicatorColor: CupertinoColors.activeBlue,
+              labelColor: CupertinoColors.activeBlue,
+              isScrollable: true,
+              tabs: [for (final tab in _tabs) Tab(text: tab.label)],
+              onTap: _onTabTapped,
+            ),
           ),
+          Expanded(
+            child: IndexedStack(
+              index: _currentIndex,
+              children: [
+                for (var index = 0; index < _tabs.length; index++)
+                  _loadedIndexes.contains(index)
+                      ? _HomeWebView(initialUrl: _tabs[index].url)
+                      : const SizedBox.shrink(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavigationHeader(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: CupertinoColors.white,
+        border: Border(
+          bottom: BorderSide(color: CupertinoColors.separator, width: 0),
         ),
-        body: IndexedStack(
-          index: _currentIndex,
-          children: [
-            for (var index = 0; index < _tabs.length; index++)
-              _loadedIndexes.contains(index)
-                  ? _HomeWebView(initialUrl: _tabs[index].url)
-                  : const SizedBox.shrink(),
-          ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+        child: SizedBox(
+          height: 52,
+          child: Center(child: Image.asset('assets/title.webp', height: 28)),
         ),
       ),
     );
   }
 
-  CupertinoNavigationBar _buildNavigationBar() {
-    return CupertinoNavigationBar(
-      backgroundColor: CupertinoColors.white,
-      middle: Image.asset('assets/title.webp', height: 28),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: Image.asset('assets/title.webp', height: 28),
-      centerTitle: true,
+  Widget _buildMaterialHeader(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+        child: SizedBox(
+          height: kToolbarHeight,
+          child: Center(child: Image.asset('assets/title.webp', height: 28)),
+        ),
+      ),
     );
   }
 }
@@ -111,7 +131,7 @@ class _HomeWebView extends StatelessWidget {
     BuildContext context,
     NavigationRequest request,
   ) async {
-    final url = request.url;
+    final url = AppUrls.toAppUrlString(request.url);
     final currentUrl = initialUrl.toString();
 
     if (AppUrls.isArticleUrl(url) && url != currentUrl) {
@@ -125,7 +145,7 @@ class _HomeWebView extends StatelessWidget {
     }
 
     if (!AppUrls.isAppUrl(url)) {
-      return preventAndLaunchExternalUrl(url);
+      return preventAndLaunchExternalUrl(request.url);
     }
 
     return NavigationDecision.navigate;

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
+import '../../config/app_urls.dart';
 import '../../util/platform/index.dart';
 
 typedef AppNavigationHandler =
@@ -35,7 +37,9 @@ class _AppWebViewState extends State<AppWebView> {
   void initState() {
     super.initState();
     _controller =
-        WebViewController()
+        WebViewController.fromPlatformCreationParams(
+            _controllerCreationParams(),
+          )
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..setBackgroundColor(
             widget.backgroundColor ??
@@ -68,12 +72,26 @@ class _AppWebViewState extends State<AppWebView> {
                 );
               },
               onNavigationRequest: (request) {
+                if (!request.isMainFrame) {
+                  return NavigationDecision.navigate;
+                }
+
                 return widget.onNavigationRequest?.call(request) ??
                     Future.value(NavigationDecision.navigate);
               },
             ),
           )
-          ..loadRequest(widget.initialUrl);
+          ..loadRequest(AppUrls.withAppMode(widget.initialUrl));
+  }
+
+  PlatformWebViewControllerCreationParams _controllerCreationParams() {
+    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
+      return WebKitWebViewControllerCreationParams(
+        allowsInlineMediaPlayback: true,
+      );
+    }
+
+    return const PlatformWebViewControllerCreationParams();
   }
 
   void _setLoading(bool value) {
@@ -92,7 +110,12 @@ class _AppWebViewState extends State<AppWebView> {
     return Stack(
       children: [
         WebViewWidget(controller: _controller),
-        if (_isLoading) const Center(child: CircularProgressIndicator()),
+        if (_isLoading)
+          Center(
+            child: AppPlatform.isIOS
+                ? const CupertinoActivityIndicator()
+                : const CircularProgressIndicator(),
+          ),
       ],
     );
   }

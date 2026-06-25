@@ -7,7 +7,6 @@ import '../../config/app_urls.dart';
 import '../../util/navigation/index.dart';
 import '../../util/web_view_navigation/index.dart';
 import '../article/index.dart';
-import '../pagination/index.dart';
 
 class SearchResultsPage extends StatelessWidget {
   final String url;
@@ -20,8 +19,8 @@ class SearchResultsPage extends StatelessWidget {
       showBackButton: true,
       child: AppWebView(
         initialUrl: Uri.parse(url),
-        onNavigationRequest:
-            (request) => _handleNavigationRequest(context, request),
+        onNavigationRequest: (request) =>
+            _handleNavigationRequest(context, request),
       ),
     );
   }
@@ -34,11 +33,6 @@ class SearchResultsPage extends StatelessWidget {
 
     if (AppUrls.isArticleUrl(requestedUrl) && requestedUrl != url) {
       await pushAppPage(context, ArticlePage(url: requestedUrl));
-      return NavigationDecision.prevent;
-    }
-
-    if (AppUrls.isPaginationUrl(requestedUrl) && requestedUrl != url) {
-      await pushAppPage(context, PaginationPage(url: requestedUrl));
       return NavigationDecision.prevent;
     }
 

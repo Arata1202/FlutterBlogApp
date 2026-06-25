@@ -8,6 +8,7 @@ import '../../config/app_urls.dart';
 import '../../util/navigation/index.dart';
 import '../../util/platform/index.dart';
 import '../../util/web_view_navigation/index.dart';
+import '../article/index.dart';
 import '../search_result/index.dart';
 
 class Search extends StatefulWidget {
@@ -19,7 +20,6 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final TextEditingController _searchController = TextEditingController();
-  Uri _webViewUrl = AppUrls.searchTop;
 
   @override
   void dispose() {
@@ -36,13 +36,6 @@ class _SearchState extends State<Search> {
     _searchController.clear();
     final searchUrl = AppUrls.search(query);
 
-    if (AppPlatform.isIOS) {
-      setState(() {
-        _webViewUrl = searchUrl;
-      });
-      return;
-    }
-
     pushAppPage(context, SearchResultsPage(url: searchUrl.toString()));
   }
 
@@ -54,8 +47,7 @@ class _SearchState extends State<Search> {
           AppPlatform.isIOS ? _buildCupertinoSearchField() : _buildSearchCard(),
           Expanded(
             child: AppWebView(
-              key: ValueKey(_webViewUrl.toString()),
-              initialUrl: _webViewUrl,
+              initialUrl: AppUrls.searchTop,
               onNavigationRequest: _handleNavigationRequest,
             ),
           ),
@@ -99,10 +91,18 @@ class _SearchState extends State<Search> {
     NavigationRequest request,
   ) async {
     final url = AppUrls.toAppUrlString(request.url);
-    final currentUrl = _webViewUrl.toString();
 
-    if (AppUrls.isSearchDestinationUrl(url) && url != currentUrl) {
+    if (AppUrls.isSearchTopUrl(url)) {
+      return NavigationDecision.navigate;
+    }
+
+    if (AppUrls.isSearchDestinationUrl(url)) {
       await pushAppPage(context, SearchResultsPage(url: url));
+      return NavigationDecision.prevent;
+    }
+
+    if (AppUrls.isArticleUrl(url)) {
+      await pushAppPage(context, ArticlePage(url: url));
       return NavigationDecision.prevent;
     }
 

@@ -8,7 +8,6 @@ import '../../util/navigation/index.dart';
 import '../../util/platform/index.dart';
 import '../../util/web_view_navigation/index.dart';
 import '../article/index.dart';
-import '../pagination/index.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -122,8 +121,8 @@ class _HomeWebView extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppWebView(
       initialUrl: initialUrl,
-      onNavigationRequest:
-          (request) => _handleNavigationRequest(context, request),
+      onNavigationRequest: (request) =>
+          _handleNavigationRequest(context, request),
     );
   }
 
@@ -136,11 +135,6 @@ class _HomeWebView extends StatelessWidget {
 
     if (AppUrls.isArticleUrl(url) && url != currentUrl) {
       await pushAppPage(context, ArticlePage(url: url));
-      return NavigationDecision.prevent;
-    }
-
-    if (AppUrls.isPaginationUrl(url) && url != currentUrl) {
-      await pushAppPage(context, PaginationPage(url: url));
       return NavigationDecision.prevent;
     }
 

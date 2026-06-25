@@ -34,14 +34,14 @@ class Sns extends StatelessWidget {
   List<Widget> _buildCupertinoSections() {
     return [
       _buildListSection([
-        _menuItem("X（旧Twitter）", const FaIcon(FontAwesomeIcons.xTwitter), () {
-          _launchURL('https://x.com/Aokumoblog');
-        }),
-        _menuItem("Instagram", const FaIcon(FontAwesomeIcons.instagram), () {
-          _launchURL('https://www.instagram.com/ao_realstudent/?hl=ja');
+        _menuItem("X", const FaIcon(FontAwesomeIcons.xTwitter), () {
+          _launchURL('https://x.com/realunivlog');
         }),
         _menuItem("GitHub", const FaIcon(FontAwesomeIcons.github), () {
           _launchURL('https://github.com/Arata1202');
+        }),
+        _menuItem("Zenn", const _ZennIcon(), () {
+          _launchURL('https://zenn.dev/realunivlog');
         }),
       ]),
       _buildListSection([
@@ -68,14 +68,14 @@ class Sns extends StatelessWidget {
   List<Widget> _buildMaterialSections() {
     return [
       _buildListSection([
-        _menuItem("X（旧Twitter）", const FaIcon(FontAwesomeIcons.xTwitter), () {
-          _launchURL('https://x.com/Aokumoblog');
-        }),
-        _menuItem("Instagram", const FaIcon(FontAwesomeIcons.instagram), () {
-          _launchURL('https://www.instagram.com/ao_realstudent/?hl=ja');
+        _menuItem("X", const FaIcon(FontAwesomeIcons.xTwitter), () {
+          _launchURL('https://x.com/realunivlog');
         }),
         _menuItem("GitHub", const FaIcon(FontAwesomeIcons.github), () {
           _launchURL('https://github.com/Arata1202');
+        }),
+        _menuItem("Zenn", const _ZennIcon(), () {
+          _launchURL('https://zenn.dev/realunivlog');
         }),
       ]),
       _buildListSection([
@@ -134,4 +134,71 @@ class Sns extends StatelessWidget {
   Future<void> _launchURL(String webUrl) async {
     await launchExternalUrl(webUrl);
   }
+}
+
+class _ZennIcon extends StatelessWidget {
+  const _ZennIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    final iconTheme = IconTheme.of(context);
+    final size = iconTheme.size ?? 24;
+
+    return SizedBox.square(
+      dimension: size,
+      child: CustomPaint(
+        painter: _ZennIconPainter(iconTheme.color ?? Colors.black),
+      ),
+    );
+  }
+}
+
+class _ZennIconPainter extends CustomPainter {
+  final Color color;
+
+  const _ZennIconPainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    canvas
+      ..save()
+      ..scale(size.width / 88.3, size.height / 88.3);
+
+    final firstPath = Path()
+      ..moveTo(3.9, 83.3)
+      ..relativeLineTo(17, 0)
+      ..relativeCubicTo(0.9, 0, 1.7, -0.5, 2.2, -1.2)
+      ..lineTo(69.9, 5.2)
+      ..relativeCubicTo(0.6, -1, -0.1, -2.2, -1.3, -2.2)
+      ..lineTo(52.5, 3)
+      ..relativeCubicTo(-0.8, 0, -1.5, 0.4, -1.9, 1.1)
+      ..lineTo(3.1, 81.9)
+      ..cubicTo(2.8, 82.5, 3.2, 83.3, 3.9, 83.3)
+      ..close();
+
+    final secondPath = Path()
+      ..moveTo(62.5, 82.1)
+      ..relativeLineTo(22.1, -35.5)
+      ..relativeCubicTo(0.7, -1.1, -0.1, -2.5, -1.4, -2.5)
+      ..lineTo(67.2, 44.1)
+      ..relativeCubicTo(-0.6, 0, -1.2, 0.3, -1.5, 0.8)
+      ..lineTo(43, 81.2)
+      ..relativeCubicTo(-0.6, 0.9, 0.1, 2.1, 1.2, 2.1)
+      ..lineTo(60.5, 83.3)
+      ..cubicTo(61.3, 83.3, 62.1, 82.9, 62.5, 82.1)
+      ..close();
+
+    canvas
+      ..drawPath(firstPath, paint)
+      ..drawPath(secondPath, paint)
+      ..restore();
+  }
+
+  @override
+  bool shouldRepaint(_ZennIconPainter oldDelegate) =>
+      color != oldDelegate.color;
 }

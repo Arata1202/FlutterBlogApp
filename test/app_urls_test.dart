@@ -23,24 +23,52 @@ void main() {
         AppUrls.isArticleUrl('https://realunivlog.com/articles/sample'),
         isTrue,
       );
-      expect(AppUrls.isPaginationUrl('https://realunivlog.com/p/2'), isTrue);
+      expect(AppUrls.isFixedPageUrl('https://realunivlog.com/profile'), isTrue);
+      expect(AppUrls.isFixedPageUrl('https://realunivlog.com/contact'), isTrue);
       expect(
-        AppUrls.isPaginationUrl('https://realunivlog.com/category/blog/p/2/'),
+        AppUrls.isSearchDestinationUrl('https://realunivlog.com/search?q=test'),
+        isTrue,
+      );
+      expect(
+        AppUrls.isSearchTopUrl('https://realunivlog.com/search?app=1'),
         isTrue,
       );
       expect(
         AppUrls.isSearchDestinationUrl('https://realunivlog.com/tag/flutter'),
         isTrue,
       );
+      expect(
+        AppUrls.isSearchDestinationUrl(
+          'https://realunivlog.com/archive/2026/05',
+        ),
+        isTrue,
+      );
     });
 
-    test('does not detect unrelated paths as pagination', () {
+    test('does not detect unrelated paths as fixed pages', () {
       expect(
-        AppUrls.isPaginationUrl('https://realunivlog.com/help/p'),
+        AppUrls.isFixedPageUrl('https://realunivlog.com/articles/sample'),
         isFalse,
       );
       expect(
-        AppUrls.isPaginationUrl('https://realunivlog.com/articles/p/sample'),
+        AppUrls.isFixedPageUrl('https://realunivlog.com/category/blog'),
+        isFalse,
+      );
+    });
+
+    test('does not detect unrelated paths as search destinations', () {
+      expect(
+        AppUrls.isSearchDestinationUrl(
+          'https://realunivlog.com/articles/sample',
+        ),
+        isFalse,
+      );
+      expect(
+        AppUrls.isSearchDestinationUrl('https://realunivlog.com/category/blog'),
+        isFalse,
+      );
+      expect(
+        AppUrls.isSearchTopUrl('https://realunivlog.com/search?q=test&app=1'),
         isFalse,
       );
     });

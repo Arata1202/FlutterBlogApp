@@ -47,20 +47,26 @@ class AppUrls {
         uri.pathSegments.first == 'articles';
   }
 
-  static bool isPaginationUrl(String url) {
+  static bool isFixedPageUrl(String url) {
     final uri = Uri.tryParse(url);
     if (uri == null || !isAppUrl(url)) {
       return false;
     }
 
-    final pathSegments =
-        uri.pathSegments.where((segment) => segment.isNotEmpty).toList();
-    if (pathSegments.length < 2 ||
-        pathSegments[pathSegments.length - 2] != 'p') {
+    final pathSegments = uri.pathSegments
+        .where((segment) => segment.isNotEmpty)
+        .toList();
+    if (pathSegments.length != 1) {
       return false;
     }
 
-    return int.tryParse(pathSegments.last) != null;
+    final firstSegment = pathSegments.first;
+    return firstSegment == 'profile' ||
+        firstSegment == 'privacy' ||
+        firstSegment == 'disclaimer' ||
+        firstSegment == 'copyright' ||
+        firstSegment == 'link' ||
+        firstSegment == 'contact';
   }
 
   static bool isSearchDestinationUrl(String url) {
@@ -70,10 +76,25 @@ class AppUrls {
     }
 
     final firstSegment = uri.pathSegments.first;
-    return firstSegment == 'category' ||
+    return firstSegment == 'search' ||
         firstSegment == 'tag' ||
-        firstSegment == 'archive' ||
-        firstSegment == 'search';
+        firstSegment == 'archive';
+  }
+
+  static bool isSearchTopUrl(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || !isAppUrl(url)) {
+      return false;
+    }
+
+    final pathSegments = uri.pathSegments
+        .where((segment) => segment.isNotEmpty)
+        .toList();
+    if (pathSegments.length != 1 || pathSegments.first != 'search') {
+      return false;
+    }
+
+    return (uri.queryParameters['q'] ?? '').trim().isEmpty;
   }
 
   static Uri withAppMode(Uri uri) {
@@ -105,20 +126,19 @@ class AppUrls {
     final queryParameters = Map<String, String>.from(uri.queryParameters)
       ..remove(_appModeParameter);
     final publicUri = Uri.parse(publicOrigin);
-    final publicUrl =
-        queryParameters.isEmpty
-            ? uri.replace(
-              scheme: publicUri.scheme,
-              host: publicUri.host,
-              port: publicUri.hasPort ? publicUri.port : null,
-              query: '',
-            )
-            : uri.replace(
-              scheme: publicUri.scheme,
-              host: publicUri.host,
-              port: publicUri.hasPort ? publicUri.port : null,
-              queryParameters: queryParameters,
-            );
+    final publicUrl = queryParameters.isEmpty
+        ? uri.replace(
+            scheme: publicUri.scheme,
+            host: publicUri.host,
+            port: publicUri.hasPort ? publicUri.port : null,
+            query: '',
+          )
+        : uri.replace(
+            scheme: publicUri.scheme,
+            host: publicUri.host,
+            port: publicUri.hasPort ? publicUri.port : null,
+            queryParameters: queryParameters,
+          );
 
     if (queryParameters.isEmpty) {
       return publicUrl.toString().replaceFirstMapped(

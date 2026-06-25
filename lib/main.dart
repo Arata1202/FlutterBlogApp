@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'config/app_config.dart';
 import 'config/app_version.dart';
 import 'layout/main/index.dart';
@@ -27,6 +28,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  _initializeMobileAds();
 
   runApp(const MyApp());
 }
@@ -112,6 +114,22 @@ void _initializeOneSignal() {
     }
   } catch (error, stackTrace) {
     _reportAppError('OneSignal initialization failed', error, stackTrace);
+  }
+}
+
+void _initializeMobileAds() {
+  if (!AppPlatform.isIOS || !AppConfig.isAdMobEnabled) {
+    return;
+  }
+
+  unawaited(_initializeMobileAdsOrReport());
+}
+
+Future<void> _initializeMobileAdsOrReport() async {
+  try {
+    await MobileAds.instance.initialize();
+  } catch (error, stackTrace) {
+    _reportAppError('Mobile Ads initialization failed', error, stackTrace);
   }
 }
 

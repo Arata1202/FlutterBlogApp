@@ -22,6 +22,7 @@ dependencies:
   url_launcher: ^6.3.2
   webview_flutter: ^4.13.0
   webview_flutter_wkwebview: ^3.23.0
+  google_mobile_ads: ^6.0.0
 
 dev_dependencies:
   flutter_test:

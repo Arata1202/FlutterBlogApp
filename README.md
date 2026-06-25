@@ -92,10 +92,23 @@ flutter pub get
 # CocoaPodsのインストール
 cd ios && pod install && cd ..
 
-# OneSignal App IDはソースに書かず、ローカルIDE設定またはCIの環境変数から渡す
-flutter run --dart-define=ONESIGNAL_APP_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+# AdMob/OneSignalのIDはローカルファイルだけに書く（Git管理外）
+cp dart_defines.dev.example.json dart_defines.dev.json
+cp dart_defines.prod.example.json dart_defines.prod.json
+# ADMOB_IOS_APP_ID は「~」区切りのiOSアプリID
+# ADMOB_IOS_BANNER_AD_UNIT_ID は「/」区切りのiOSバナー広告ユニットID
+ruby scripts/generate_admob_xcconfig.rb --environment dev
+flutter run --dart-define-from-file=dart_defines.dev.json
 
-# Xcodeから起動する場合は、Runner.xcodeprojではなくworkspaceを開く
+# dev/prodを明示して起動する場合
+ruby scripts/generate_admob_xcconfig.rb --environment prod
+flutter run --dart-define-from-file=dart_defines.prod.json
+
+# リリースビルド
+ruby scripts/generate_admob_xcconfig.rb --environment prod
+flutter build ios --release --dart-define-from-file=dart_defines.prod.json
+
+# Xcodeから起動する場合も、Debugはdev、Profile/Releaseはprodを使います
 open ios/Runner.xcworkspace
 ```
 

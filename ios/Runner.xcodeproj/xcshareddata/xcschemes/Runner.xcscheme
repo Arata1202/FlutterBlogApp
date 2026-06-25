@@ -5,6 +5,24 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Generate AdMob xcconfig"
+               scriptText = "set -euo pipefail&#10;case &quot;${CONFIGURATION:-Debug}&quot; in&#10;  Debug) APP_ENV=dev ;;&#10;  *) APP_ENV=prod ;;&#10;esac&#10;ruby &quot;${PROJECT_DIR}/../scripts/generate_admob_xcconfig.rb&quot; --environment &quot;${APP_ENV}&quot; --dart-defines &quot;${PROJECT_DIR}/../dart_defines.${APP_ENV}.json&quot; --output &quot;${PROJECT_DIR}/Flutter/AdMob.generated.xcconfig&quot;&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "97C146ED1CF9000F007C117D"
+                     BuildableName = "Runner.app"
+                     BlueprintName = "Runner"
+                     ReferencedContainer = "container:Runner.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"

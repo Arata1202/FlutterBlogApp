@@ -68,3 +68,10 @@ key.properties
 *.mobileprovision
 *.provisionprofile
 *.xcuserstate
+
+ios/Flutter/AdMob.local.xcconfig
+ios/Flutter/AdMob.*.local.xcconfig
+ios/Flutter/AdMob.generated.xcconfig
+dart_define*.json
+dart_defines*.json
+!dart_defines.*.example.json

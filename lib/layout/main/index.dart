@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../app/search/index.dart';
 import '../../app/menu/index.dart';
 import '../../app/home/index.dart';
+import '../../common/admob/banner/index.dart';
 import '../../layout/footer/index.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -37,15 +38,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(), // 横スクロールを禁止
-        onPageChanged: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        children: const <Widget>[Home(), Search(), Menu()],
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              children: const <Widget>[Home(), Search(), Menu()],
+            ),
+          ),
+          const AppBannerAd(),
+        ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: selectedIndex,

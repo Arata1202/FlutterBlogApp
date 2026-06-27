@@ -92,6 +92,12 @@ void main() {
         ),
         'https://realunivlog.com/articles/sample?utm_source=x',
       );
+      expect(
+        AppUrls.toPublicUrl(
+          'https://realunivlog.com/articles/sample?app=1#toc',
+        ),
+        'https://realunivlog.com/articles/sample#toc',
+      );
     });
   });
 }

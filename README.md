@@ -98,6 +98,7 @@ cp dart_defines.prod.example.json dart_defines.prod.json
 # ADMOB_IOS_APP_ID は「~」区切りのiOSアプリID
 # ADMOB_IOS_BANNER_AD_UNIT_ID は「/」区切りのiOSバナー広告ユニットID
 # WEB_BASE_URL はWebViewで表示するWebのURL。ローカル検証ではNextBlogAppを起動して http://localhost:3000 を指定
+# REMOTE_CONFIG_DEBUG_FORCE_UPDATE / REMOTE_CONFIG_DEBUG_MAINTENANCE_MODE はDebugビルドだけ有効
 ruby scripts/generate_admob_xcconfig.rb --environment dev
 flutter run --dart-define-from-file=dart_defines.dev.json
 

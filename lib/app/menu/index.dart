@@ -28,6 +28,7 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  static const _iosAppStoreId = '6590619103';
   final InAppReview _inAppReview = InAppReview.instance;
   String _appVersion = '';
 
@@ -73,9 +74,9 @@ class _MenuState extends State<Menu> {
                         backgroundColor: CupertinoColors.systemGrey6,
                         children: [
                           _menuItem(
-                            "レビューを送信",
+                            "App Storeでレビュー",
                             CupertinoIcons.star,
-                            _requestReview,
+                            _openReviewPage,
                           ),
                           _menuItem("アプリをシェア", CupertinoIcons.share, _shareApp),
                         ],
@@ -156,7 +157,7 @@ class _MenuState extends State<Menu> {
                       ]),
                       _buildListSection([
                         _menuItem("レビューを送信", Icons.star, () {
-                          _requestReview();
+                          _openReviewPage();
                         }),
                         _menuItem("アプリをシェア", Icons.share, () {
                           _shareApp();
@@ -263,9 +264,7 @@ class _MenuState extends State<Menu> {
     AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 
-  void _requestReview() async {
-    if (await _inAppReview.isAvailable()) {
-      _inAppReview.requestReview();
-    }
+  void _openReviewPage() {
+    unawaited(_inAppReview.openStoreListing(appStoreId: _iosAppStoreId));
   }
 }

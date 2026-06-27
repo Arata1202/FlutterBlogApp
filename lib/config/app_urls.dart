@@ -53,9 +53,8 @@ class AppUrls {
       return false;
     }
 
-    final pathSegments = uri.pathSegments
-        .where((segment) => segment.isNotEmpty)
-        .toList();
+    final pathSegments =
+        uri.pathSegments.where((segment) => segment.isNotEmpty).toList();
     if (pathSegments.length != 1) {
       return false;
     }
@@ -87,9 +86,8 @@ class AppUrls {
       return false;
     }
 
-    final pathSegments = uri.pathSegments
-        .where((segment) => segment.isNotEmpty)
-        .toList();
+    final pathSegments =
+        uri.pathSegments.where((segment) => segment.isNotEmpty).toList();
     if (pathSegments.length != 1 || pathSegments.first != 'search') {
       return false;
     }
@@ -126,25 +124,23 @@ class AppUrls {
     final queryParameters = Map<String, String>.from(uri.queryParameters)
       ..remove(_appModeParameter);
     final publicUri = Uri.parse(publicOrigin);
-    final publicUrl = queryParameters.isEmpty
-        ? uri.replace(
-            scheme: publicUri.scheme,
-            host: publicUri.host,
-            port: publicUri.hasPort ? publicUri.port : null,
-            query: '',
-          )
-        : uri.replace(
-            scheme: publicUri.scheme,
-            host: publicUri.host,
-            port: publicUri.hasPort ? publicUri.port : null,
-            queryParameters: queryParameters,
-          );
+    final publicUrl =
+        queryParameters.isEmpty
+            ? uri.replace(
+              scheme: publicUri.scheme,
+              host: publicUri.host,
+              port: publicUri.hasPort ? publicUri.port : null,
+              query: '',
+            )
+            : uri.replace(
+              scheme: publicUri.scheme,
+              host: publicUri.host,
+              port: publicUri.hasPort ? publicUri.port : null,
+              queryParameters: queryParameters,
+            );
 
     if (queryParameters.isEmpty) {
-      return publicUrl.toString().replaceFirstMapped(
-        RegExp(r'\?(#|$)'),
-        (match) => match.group(1) ?? '',
-      );
+      return publicUrl.toString().replaceFirst('?', '');
     }
 
     return publicUrl.toString();

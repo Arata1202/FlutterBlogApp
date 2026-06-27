@@ -48,6 +48,12 @@ Future<_StartupDestination> _loadStartupDestination() async {
 
 Future<_StartupDestination> _resolveStartupDestination() async {
   try {
+    final debugStartupDestination = _debugStartupDestinationOverride();
+    if (debugStartupDestination != null) {
+      _initializeOneSignal();
+      return debugStartupDestination;
+    }
+
     if (!await _initializeFirebase()) {
       _initializeOneSignal();
       return _StartupDestination.app;
@@ -86,6 +92,22 @@ Future<_StartupDestination> _resolveStartupDestination() async {
     _reportAppError('Startup destination resolution failed', error, stackTrace);
     return _StartupDestination.app;
   }
+}
+
+_StartupDestination? _debugStartupDestinationOverride() {
+  if (!kDebugMode) {
+    return null;
+  }
+
+  if (AppConfig.debugMaintenanceMode) {
+    return _StartupDestination.maintenance;
+  }
+
+  if (AppConfig.debugForceUpdate) {
+    return _StartupDestination.updateRequired;
+  }
+
+  return null;
 }
 
 Future<bool> _initializeFirebase() async {

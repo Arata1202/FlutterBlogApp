@@ -3,5 +3,7 @@
   "WEB_BASE_URL": "https://realunivlog.com",
   "ADMOB_IOS_APP_ID": "ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx",
   "ADMOB_IOS_BANNER_AD_UNIT_ID": "ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx",
-  "ONESIGNAL_APP_ID": ""
+  "ONESIGNAL_APP_ID": "",
+  "REMOTE_CONFIG_DEBUG_FORCE_UPDATE": "false",
+  "REMOTE_CONFIG_DEBUG_MAINTENANCE_MODE": "false"
 }

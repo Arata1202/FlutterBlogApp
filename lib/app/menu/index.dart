@@ -54,6 +54,10 @@ class _MenuState extends State<Menu> {
       return AppPageScaffold(
         child: Column(
           children: [
+            const ColoredBox(
+              color: CupertinoColors.white,
+              child: SizedBox(width: double.infinity, height: 8),
+            ),
             Expanded(
               child: Container(
                 color: CupertinoColors.systemGrey6,

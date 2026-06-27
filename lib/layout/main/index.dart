@@ -38,22 +38,26 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
-              children: const <Widget>[Home(), Search(), Menu()],
+      backgroundColor: Colors.white,
+      body: ColoredBox(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (index) {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+                children: const <Widget>[Home(), Search(), Menu()],
+              ),
             ),
-          ),
-          const AppBannerAd(),
-        ],
+            const AppBannerAd(),
+          ],
+        ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: selectedIndex,

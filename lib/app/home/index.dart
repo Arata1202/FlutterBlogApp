@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../common/page_scaffold/index.dart';
 import '../../common/web_view/index.dart';
 import '../../config/app_urls.dart';
 import '../../util/navigation/index.dart';
@@ -42,12 +43,24 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
       initialIndex: 0,
       length: _tabs.length,
-      child: Column(
-        children: [
+      child:
           AppPlatform.isIOS
-              ? _buildNavigationHeader(context)
-              : _buildMaterialHeader(context),
-          Material(
+              ? AppPageScaffold(child: _buildContent())
+              : Column(
+                children: [
+                  _buildMaterialHeader(context),
+                  Expanded(child: _buildContent()),
+                ],
+              ),
+    );
+  }
+
+  Widget _buildContent() {
+    return Column(
+      children: [
+        ColoredBox(
+          color: Colors.white,
+          child: Material(
             color: Colors.white,
             child: TabBar(
               indicatorColor: CupertinoColors.activeBlue,
@@ -57,37 +70,19 @@ class _HomeState extends State<Home> {
               onTap: _onTabTapped,
             ),
           ),
-          Expanded(
-            child: IndexedStack(
-              index: _currentIndex,
-              children: [
-                for (var index = 0; index < _tabs.length; index++)
-                  _loadedIndexes.contains(index)
-                      ? _HomeWebView(initialUrl: _tabs[index].url)
-                      : const SizedBox.shrink(),
-              ],
-            ),
+        ),
+        Expanded(
+          child: IndexedStack(
+            index: _currentIndex,
+            children: [
+              for (var index = 0; index < _tabs.length; index++)
+                _loadedIndexes.contains(index)
+                    ? _HomeWebView(initialUrl: _tabs[index].url)
+                    : const SizedBox.shrink(),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavigationHeader(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: CupertinoColors.white,
-        border: Border(
-          bottom: BorderSide(color: CupertinoColors.separator, width: 0),
         ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-        child: SizedBox(
-          height: 52,
-          child: Center(child: Image.asset('assets/title.webp', height: 28)),
-        ),
-      ),
+      ],
     );
   }
 
@@ -121,8 +116,8 @@ class _HomeWebView extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppWebView(
       initialUrl: initialUrl,
-      onNavigationRequest: (request) =>
-          _handleNavigationRequest(context, request),
+      onNavigationRequest:
+          (request) => _handleNavigationRequest(context, request),
     );
   }
 

@@ -28,6 +28,15 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
   _initializeMobileAds();
 
   runApp(const MyApp());
@@ -308,13 +317,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'リアル大学生',
       theme: ThemeData(
+        brightness: Brightness.light,
         scaffoldBackgroundColor: Colors.white,
+        canvasColor: Colors.white,
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: Colors.blue,
           secondary: Colors.blueAccent,
         ),
         useMaterial3: true,
       ),
+      builder:
+          (context, child) =>
+              ColoredBox(color: Colors.white, child: child ?? const SizedBox()),
       home: const _StartupGate(),
     );
   }
@@ -338,17 +352,13 @@ class _StartupGateState extends State<_StartupGate> {
       builder: (context, snapshot) {
         final destination = snapshot.data;
 
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
+        return ColoredBox(
+          color: Colors.white,
           child: switch (destination) {
-            _StartupDestination.app => const MyHomePage(key: ValueKey('home')),
-            _StartupDestination.updateRequired => const UpdateRequiredScreen(
-              key: ValueKey('update-required'),
-            ),
-            _StartupDestination.maintenance => const MaintenanceModeScreen(
-              key: ValueKey('maintenance'),
-            ),
-            null => const SplashView(key: ValueKey('splash')),
+            _StartupDestination.app => const MyHomePage(),
+            _StartupDestination.updateRequired => const UpdateRequiredScreen(),
+            _StartupDestination.maintenance => const MaintenanceModeScreen(),
+            null => const SplashView(),
           },
         );
       },
